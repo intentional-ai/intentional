@@ -7,17 +7,25 @@ run_pylint() {
     # Check if the second-level directory exists
     if [[ -d "$dir" ]]; then
       # Run pylint in the second-level directory
-      pylint -sn -rn --rcfile=$dir/../../pyproject.toml "$dir"
+      echo "Running pylint in $dir"
+      pylint -sn -rn --rcfile=$dir/pyproject.toml "$dir"
     fi
   done
 }
 
+
+
 if [[ $1 == "all" ]]; then
-  # If argument is 'all', find all second-level directories that match the criteria
-  all_dirs=$(find . -type d | grep '^\./intentional' | grep '/src/' | grep -v ".egg-info" | awk -F'/' '{print $1"/"$2"/"$3"/"$4}' | sort -u)
+  # If the first argument is 'all', find all the folders
+  echo "Running pylint in ./intentional-core"
+  pylint -sn -rn --rcfile=intentional-core/pyproject.toml intentional-core
+  cd plugins/
+  all_dirs=$(find . -type d | grep '^\./intentional' | grep '/src/' | grep -v ".egg-info" | awk -F'/' '{print $1"/"$2}' | sort -u)
   run_pylint "$all_dirs"
 else
-  # Otherwise, get the list of changed files and extract their second-level directories
-  changed_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^intentional' | grep -v '/tests' | awk -F'/' '{print $1"/"$2"/"$3}' | sort -u)
+  # Get the list of changed files and extract the directory they're in
+  changed_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^intentional' | awk -F'/' '{print $1}' | sort -u)
+  run_pylint "$changed_dirs"
+  changed_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^plugins/intentional' | awk -F'/' '{print $1"/"$2}' | sort -u)
   run_pylint "$changed_dirs"
 fi

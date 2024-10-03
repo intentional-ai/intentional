@@ -23,6 +23,7 @@ plugins:
       - .venv/*
       - README.md
       - intentional-core/README.md
+      - plugins/README.md
 - redirects:
       redirect_maps:
         'index.md': 'docs/home.md'

@@ -1,0 +1,15 @@
+name:
+    type: str
+    help: What tool or technique are you writing a plugin for?
+
+description:
+    type: str
+    help: What is the description of the plugin you are writing?
+
+package_name:
+    type: str
+    help: What is the package name you are writing a plugin for (it will be prefixed with "intentional-")?
+
+module_name:
+    type: str
+    help: What is the module name you are writing a plugin for (it will be prefixed with "intentional_")?
