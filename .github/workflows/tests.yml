@@ -1,18 +1,15 @@
-name: pre-commit
+name: Tests
 
 on:
   pull_request:
   push:
     branches: [main]
 
-env:
-  SKIP: pytest
-
 jobs:
-  pre-commit:
+  tests:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v3
-    - run: pip install intentional-core/[dev]
-    - uses: pre-commit/action@v3.0.1
+    - run: pip install intentional-core/[test]
+    - run: ./.pre-commit-pytest.sh all
