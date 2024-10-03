@@ -46,7 +46,7 @@ docs = [
   "mkdocs-include-markdown-plugin",
 ]
 dev = [
-  "intentional[test,docs]",
+  "intentional-core[test,docs]",
   "black",
   "pre-commit",
   "ruff",
