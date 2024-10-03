@@ -1,0 +1,76 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "intentional-core"
+dynamic = ["version"]
+description = 'TBD'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "AGPL-3.0-or-later"
+license-files = { paths = ["LICENSE.txt"] }
+keywords = []
+authors = [
+  { name = "ZanSara", email = "github@zansara.dev" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/intentional-ai/intentional#readme"
+Issues = "https://github.com/intentional-ai/intentional/issues"
+Source = "https://github.com/intentional-ai/intentional"
+
+[tool.hatch.version]
+path = "src/intentional_core/__about__.py"
+
+dependencies = [
+  "networkx",
+  "requests",
+  "pyyaml",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-asyncio",
+]
+docs = [
+  "mkdocs-material",
+  "mkdocstrings[python]",
+  "mkdocs-same-dir",
+  "mkdocs-exclude",
+  "mkdocs-redirects",
+  "mkdocs-include-markdown-plugin",
+]
+dev = [
+  "intentional[test,docs]",
+  "black",
+  "pre-commit",
+  "ruff",
+  "pylint",
+  "isort",
+]
+
+[tool.black]
+line-length = 120
+fast = true
+
+[tool.pylint]
+disable=[
+  "fixme"
+]
+
+[tool.pylint.format]
+max-line-length = 120

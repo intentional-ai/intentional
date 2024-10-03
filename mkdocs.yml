@@ -1,0 +1,43 @@
+site_name: Intentional
+repo_url: https://github.com/intentional-ai/intentional
+site_dir: ../site
+docs_dir: "."
+theme:
+  name: material
+
+nav:
+   - 'Home': docs/home.md
+   - 'Contribute': CONTRIBUTING.md
+   - 'API Reference': docs/reference.md
+
+markdown_extensions:
+  - toc:
+      permalink: "#"
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+plugins:
+- exclude:
+    glob:
+      - .venv/*
+      - README.md
+      - intentional-core/README.md
+- redirects:
+      redirect_maps:
+        'index.md': 'docs/home.md'
+- search
+- same-dir
+- include-markdown
+- mkdocstrings:
+    handlers:
+      python:
+        options:
+          show_submodules: true
+
+validation:
+  omitted_files: warn
+  links:
+    absolute_links: relative_to_docs
+    anchors: warn
+    unrecognized_links: warn
