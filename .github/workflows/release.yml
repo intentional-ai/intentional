@@ -1,12 +1,7 @@
-name: Release
+name: Release Core
 
 on:
   workflow_dispatch:
-    inputs:
-      folder:
-        description: 'The full path to the folder name of the package to release'
-        required: true
-        default: 'intentional-core/'
   push:
     tags:
     - "v*.*.*"
@@ -19,19 +14,29 @@ jobs:
     permissions:
       id-token: write
     steps:
-
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - run: pip install intentional-core/
+      - run: pip install hatch intentional/ intentional-core/
 
       - name: Build wheels
-        run: python setup.py sdist bdist_wheel
+        run: |
+          cd intentional/
+          hatch build
+          cd ../intentional-core/
+          hatch build
 
-      - name: Publish package distributions to TestPyPI
+      - name: Publish intentional-core to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
+          packages-dir: intentional-core/dist/
+
+      - name: Publish intentional to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: intentional/dist/
