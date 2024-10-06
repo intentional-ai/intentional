@@ -2,6 +2,11 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      folder:
+        description: 'The full path to the folder name of the package to release'
+        required: true
+        default: 'intentional-core/'
   push:
     tags:
     - "v*.*.*"
