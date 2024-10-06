@@ -22,6 +22,7 @@ plugins:
     glob:
       - .venv/*
       - README.md
+      - intentional/README.md
       - intentional-core/README.md
       - plugins/README.md
 - redirects:

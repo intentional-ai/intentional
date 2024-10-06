@@ -9,7 +9,6 @@ description = 'TBD'
 readme = "README.md"
 requires-python = ">=3.8"
 license = "AGPL-3.0-or-later"
-license-files = { paths = ["LICENSE.txt"] }
 keywords = []
 authors = [
   { name = "ZanSara", email = "github@zansara.dev" },

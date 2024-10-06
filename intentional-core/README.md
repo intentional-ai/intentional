@@ -1,7 +1,7 @@
 # Intentional - Core package
 
-[![PyPI - Version](https://img.shields.io/pypi/v/intentional.svg)](https://pypi.org/project/intentional)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/intentional.svg)](https://pypi.org/project/intentional)
+[![PyPI - Version](https://img.shields.io/pypi/v/intentional-core.svg)](https://pypi.org/project/intentional-core)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/intentional-core.svg)](https://pypi.org/project/intentional-core)
 
 -----
 
