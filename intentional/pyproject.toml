@@ -43,6 +43,7 @@ docs = [
   "mkdocs-include-markdown-plugin",
 ]
 lint = [
+  "intentional[docs]",  # There's a precommit hook checking that the docs build
   "black",
   "pre-commit",
   "ruff",
