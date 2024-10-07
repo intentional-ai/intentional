@@ -42,14 +42,16 @@ docs = [
   "mkdocs-redirects",
   "mkdocs-include-markdown-plugin",
 ]
-dev = [
-  "intentional[test,docs]",
+lint = [
   "black",
   "pre-commit",
   "ruff",
   "pylint",
   "isort",
-  "cookiecutter",
+  "copier",
+]
+dev = [
+  "intentional[test,docs,lint]",
 ]
 
 [project.urls]

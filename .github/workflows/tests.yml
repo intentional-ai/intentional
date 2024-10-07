@@ -17,5 +17,12 @@ jobs:
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.version }}
-    - run: pip install intentional-core/[test]
+
+    - name: Install intentional and all plugins
+      run: |
+        pip install intentional/[test]
+        for plugin in $(ls -d plugins/*/); do
+          pip install $plugin
+        done
+
     - run: ./.pre-commit-pytest.sh all

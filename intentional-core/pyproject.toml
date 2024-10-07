@@ -31,29 +31,6 @@ dependencies = [
   "pyyaml",
 ]
 
-[project.optional-dependencies]
-test = [
-  "pytest",
-  "pytest-asyncio",
-]
-docs = [
-  "mkdocs-material",
-  "mkdocstrings[python]",
-  "mkdocs-same-dir",
-  "mkdocs-exclude",
-  "mkdocs-redirects",
-  "mkdocs-include-markdown-plugin",
-]
-dev = [
-  "intentional-core[test,docs]",
-  "black",
-  "pre-commit",
-  "ruff",
-  "pylint",
-  "isort",
-  "cookiecutter",
-]
-
 [project.urls]
 Documentation = "https://github.com/intentional-ai/intentional#readme"
 Issues = "https://github.com/intentional-ai/intentional/issues"
