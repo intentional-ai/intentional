@@ -20,6 +20,7 @@ jobs:
 
     - name: Install intentional and all plugins
       run: |
+        pip install intentional-core/
         pip install intentional/[test]
         for plugin in $(ls -d plugins/*/); do
           pip install $plugin
