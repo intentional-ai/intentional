@@ -21,6 +21,6 @@ jobs:
 
       - uses: actions/setup-python@v5
 
-      - run: pip install intentional/[docs]
+      - run: pip install intentional-core/ intentional/[docs]
 
       - run: mkdocs gh-deploy --force

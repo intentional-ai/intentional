@@ -49,7 +49,6 @@ lint = [
   "ruff",
   "pylint",
   "isort",
-  "copier",
 ]
 dev = [
   "intentional[test,docs,lint]",
