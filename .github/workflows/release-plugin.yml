@@ -1,0 +1,43 @@
+name: Release Plugin
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+    - "**-v*.*.*"  # plugin-name-v0.0.1
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-latest
+    environment: PyPI Publisher
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Get plugin path
+        id: plugin_path
+        shell: python
+        run: |
+          import os
+          path = "${{ github.ref_name }}".rsplit("-", maxsplit=1)[0]
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            print(f'plugin_path=plugins/{path}', file=f)
+
+      - run: pip install hatch ${{ steps.plugin_path.outputs.plugin_path }}
+
+      - name: Build wheels for ${{ steps.plugin_path.outputs.plugin_path }}
+        run: |
+          cd ${{ steps.plugin_path.outputs.plugin_path }}
+          hatch build
+
+      - name: Publish ${{ steps.plugin_path.outputs.plugin_path }} to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: ${{ steps.plugin_path.outputs.plugin_path }}/dist/
