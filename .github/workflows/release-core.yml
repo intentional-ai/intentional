@@ -20,13 +20,13 @@ jobs:
         with:
           python-version: '3.12'
 
-      - run: pip install hatch intentional/ intentional-core/
+      - run: pip install hatch intentional-core/ intentional/
 
       - name: Build wheels
         run: |
-          cd intentional/
+          cd intentional-core/
           hatch build
-          cd ../intentional-core/
+          cd ../intentional/
           hatch build
 
       - name: Publish intentional-core to TestPyPI

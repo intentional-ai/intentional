@@ -26,7 +26,21 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 
-dependencies = []
+dependencies = [
+  "intentional"
+]
+
+[project.optional-dependencies]
+test = [
+  "intentional[test]"
+]
+lint = [
+  "intentional[lint]"
+]
+dev = [
+  "intentional[test,lint]"
+]
+
 
 [project.urls]
 Documentation = "https://github.com/intentional-ai/intentional#readme"
