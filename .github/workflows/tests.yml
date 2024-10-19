@@ -34,7 +34,7 @@ jobs:
 
       - name: "Print affected folders list"
         run: |
-          echo "${{ steps.folders.outputs.value }}" | jq
+          echo "${{ steps.folders.outputs.value }}"
 
   run-tests:
     needs:
