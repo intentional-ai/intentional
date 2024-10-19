@@ -13,15 +13,21 @@ jobs:
     outputs:
       matrix: ${{ steps.matrix.outputs.value }}
     steps:
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Get the affected folders list
         id: folders
         run: |
           changed_main_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^intentional' | awk -F'/' '{print $1}' | sort -u | jq -R . | jq -s .)
           changed_plugins_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^plugins/intentional' | awk -F'/' '{print $1"/"$2}' | sort -u | jq -R . | jq -s .)
           changed_dirs=$(jq -n --argjson list1 "$changed_main_dirs" --argjson list2 "$changed_plugins_dirs" '$list1 + $list2')
-          echo $changed_dirs | jq >> $GITHUB_OUTPUT
-      - run: |
-          echo "${{ steps.folders.outputs.value }}"
+          echo $changed_dirs >> $GITHUB_OUTPUT
+
+      - name: "Print affected folders list"
+        run: |
+          echo "${{ steps.folders.outputs.value }}" | jq
 
   run-tests:
     needs:
@@ -34,7 +40,9 @@ jobs:
         version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.version }}
