@@ -20,7 +20,7 @@ jobs:
       - name: Get the affected folders list
         id: folders
         run: |
-          git fetch origin/main
+          git fetch origin main
 
           if git diff --quiet origin/main HEAD; then
             changed_main_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^intentional' | awk -F'/' '{print $1}' | sort -u | jq -R . | jq -s .)
