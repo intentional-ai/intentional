@@ -9,6 +9,8 @@ nav:
    - 'Home': docs/home.md
    - 'Contribute': CONTRIBUTING.md
    - 'API Reference': docs/reference.md
+   - 'Plugins':
+     - 'OpenAI': plugins/intentional-openai/README.md
 
 markdown_extensions:
   - toc:
