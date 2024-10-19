@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install uv
-        uv pip install --system  pip install intentional-core/ intentional/[dev]
+        uv pip install --system intentional-core/ intentional/[dev]
 
     - name: Run pre-commit hooks
       run: pre-commit run --all
