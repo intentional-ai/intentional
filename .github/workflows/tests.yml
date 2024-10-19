@@ -20,10 +20,15 @@ jobs:
       - name: Get the affected folders list
         id: folders
         run: |
-          changed_main_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^intentional' | awk -F'/' '{print $1}' | sort -u | jq -R . | jq -s .)
-          changed_plugins_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^plugins/intentional' | awk -F'/' '{print $1"/"$2}' | sort -u | jq -R . | jq -s .)
-          changed_dirs=$(jq -n --argjson list1 "$changed_main_dirs" --argjson list2 "$changed_plugins_dirs" '$list1 + $list2')
-          echo "value=$changed_dirs" >> $GITHUB_OUTPUT
+          if git diff --quiet origin/main HEAD; then
+            changed_main_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^intentional' | awk -F'/' '{print $1}' | sort -u | jq -R . | jq -s .)
+            changed_plugins_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^plugins/intentional' | awk -F'/' '{print $1"/"$2}' | sort -u | jq -R . | jq -s .)
+            changed_dirs=$(jq -n --argjson list1 "$changed_main_dirs" --argjson list2 "$changed_plugins_dirs" '$list1 + $list2')
+            echo "value=$changed_dirs" >> $GITHUB_OUTPUT
+          else
+            changed_dirs="$(cd plugins && ls -d intentional*/ | jq -R -s 'split("\n") | map(select(length > 0))')"
+            echo "value=$changed_dirs" >> $GITHUB_OUTPUT
+          fi
 
       - name: "Print affected folders list"
         run: |
@@ -51,6 +56,12 @@ jobs:
       run: |
         pip install uv
         uv pip install --system intentional-core/ intentional/[test] ${{ matrix.value }}[test]
+
+    - name: Run main tests
+      run: pytest intentional/
+
+    - name: Run core tests
+      run: pytest intentional-core/
 
     - name: Run tests for ${{ matrix.value }}
       run: pytest ${{ matrix.value }}
