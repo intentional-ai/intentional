@@ -20,7 +20,13 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
       - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-      - run: pip install intentional-core/ intentional/[docs]
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system intentional-core/ intentional/[docs]
 
-      - run: mkdocs gh-deploy --force
+      - name: Deploy docs
+        run: mkdocs gh-deploy --force

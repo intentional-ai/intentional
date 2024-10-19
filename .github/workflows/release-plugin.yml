@@ -29,7 +29,10 @@ jobs:
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
             print(f'plugin_path=plugins/{path}', file=f)
 
-      - run: pip install hatch ${{ steps.plugin_path.outputs.plugin_path }}
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system hatch ${{ steps.plugin_path.outputs.plugin_path }}
 
       - name: Build wheels for ${{ steps.plugin_path.outputs.plugin_path }}
         run: |

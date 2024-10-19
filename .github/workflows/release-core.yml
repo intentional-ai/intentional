@@ -20,7 +20,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - run: pip install hatch intentional-core/ intentional/
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system hatch intentional-core/ intentional/
 
       - name: Build wheels
         run: |
