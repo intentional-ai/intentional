@@ -5,6 +5,11 @@ on:
   push:
     branches:
       - main
+  # workflow_dispatch:
+  #   inputs:
+  #     folders:
+  #       description: 'JSON list of folders to test. Do not include the "plugins/" prefix'
+  #       required: true
 
 jobs:
 
@@ -47,10 +52,10 @@ jobs:
       with:
         python-version: ${{ matrix.version }}
 
-    - name: Install intentional and ${{ matrix.folder }}
+    - name: Install packages
       run: |
         pip install uv
-        uv pip install --system intentional-core/ intentional/[test] ${{ matrix.folder }}[test]
+        uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test]
 
     - name: Run main tests
       run: pytest intentional/
@@ -59,4 +64,4 @@ jobs:
       run: pytest intentional-core/
 
     - name: Run tests for ${{ matrix.folder }}
-      run: pytest ${{ matrix.folder }}
+      run: pytest plugins/${{ matrix.folder }}
