@@ -13,7 +13,57 @@ on:
 
 jobs:
 
-  find:
+  run-main:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.version }}
+
+    - name: Install packages
+      run: |
+        pip install uv
+        uv pip install --system intentional-core/ intentional/[test]
+
+    - name: Run tests
+      run: pytest intentional/
+
+  run-core:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.version }}
+
+    - name: Install packages
+      run: |
+        pip install uv
+        uv pip install --system intentional-core/ intentional/[test]
+
+    - name: Run tests
+      run: pytest intentional-core/
+
+  find-plugins:
     runs-on: ubuntu-latest
     outputs:
       folders: ${{ steps.folders.outputs.value }}
@@ -32,15 +82,15 @@ jobs:
         run: |
           echo "${{ steps.folders.outputs.value }}"
 
-  run:
+  run-plugins:
     needs:
-      - find
+      - find-plugins
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        folder: ${{fromJSON(needs.find.outputs.folders)}}
-        version: ["3.8"] #, "3.9", "3.10", "3.11", "3.12"]
+        folder: ${{fromJSON(needs.find-plugins.outputs.folders)}}
+        version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - name: Checkout repo
@@ -56,12 +106,6 @@ jobs:
       run: |
         pip install uv
         uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test]
-
-    - name: Run main tests
-      run: pytest intentional/
-
-    - name: Run core tests
-      run: pytest intentional-core/
 
     - name: Run tests for ${{ matrix.folder }}
       run: pytest plugins/${{ matrix.folder }}
