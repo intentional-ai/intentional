@@ -47,10 +47,10 @@ jobs:
       with:
         python-version: ${{ matrix.version }}
 
-    - name: Install intentional and ${{ matrix.value }}
+    - name: Install intentional and ${{ matrix.folder }}
       run: |
         pip install uv
-        uv pip install --system intentional-core/ intentional/[test] ${{ matrix.value }}[test]
+        uv pip install --system intentional-core/ intentional/[test] ${{ matrix.folder }}[test]
 
     - name: Run main tests
       run: pytest intentional/
@@ -58,5 +58,5 @@ jobs:
     - name: Run core tests
       run: pytest intentional-core/
 
-    - name: Run tests for ${{ matrix.value }}
-      run: pytest ${{ matrix.value }}
+    - name: Run tests for ${{ matrix.folder }}
+      run: pytest ${{ matrix.folder }}
