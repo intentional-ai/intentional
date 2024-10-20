@@ -1,6 +1,6 @@
 #! /bin/bash
 
-if if [ "$(git branch --show-current)" = "main" ]; then
+if [ "$(git branch --show-current)" = "main" ]; then
     # We're on main
     changed_dirs="$(cd plugins && ls -d intentional*/ | jq -R -s -c 'split("\n") | map(select(length > 0))')"
     echo $changed_dirs
