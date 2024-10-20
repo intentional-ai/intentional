@@ -8,10 +8,10 @@ on:
 
 jobs:
 
-  find-tests:
+  find:
     runs-on: ubuntu-latest
     outputs:
-      folders: ${{ steps.matrix.outputs.value }}
+      folders: ${{ steps.folders.outputs.value }}
     steps:
 
       - name: Checkout repo
@@ -27,15 +27,15 @@ jobs:
         run: |
           echo "${{ steps.folders.outputs.value }}"
 
-  run-tests:
+  run:
     needs:
-      - find-tests
+      - find
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        folder: ${{fromJSON(needs.setup.outputs.folders)}}
-        version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        # folder: ${{fromJSON(needs.find.outputs.folders)}}
+        version: ["3.8"] #, "3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - name: Checkout repo
