@@ -3,12 +3,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "intentional-core"
+name = "intentional-websocket"
 dynamic = ["version"]
-description = 'TBD'
+description = "Plugin that makes Intentional bots able to work with models that accept a continuous stream of input data through a WebSocket connection, such as OpenAI's Realtime API."
 readme = "README.md"
 requires-python = ">=3.8"
 license = "AGPL-3.0-or-later"
+license-files = { paths = ["LICENSE.txt"] }
 keywords = []
 authors = [
   { name = "ZanSara", email = "github@zansara.dev" },
@@ -26,10 +27,20 @@ classifiers = [
 ]
 
 dependencies = [
-  "networkx",
-  "requests",
-  "pyyaml",
+  "intentional"
 ]
+
+[project.optional-dependencies]
+test = [
+  "intentional[test]"
+]
+lint = [
+  "intentional[lint]"
+]
+dev = [
+  "intentional[test,lint]"
+]
+
 
 [project.urls]
 Documentation = "https://github.com/intentional-ai/intentional#readme"
@@ -37,7 +48,7 @@ Issues = "https://github.com/intentional-ai/intentional/issues"
 Source = "https://github.com/intentional-ai/intentional"
 
 [tool.hatch.version]
-path = "src/intentional_core/__about__.py"
+path = "src/intentional_websocket/__about__.py"
 
 [tool.black]
 line-length = 120
@@ -45,8 +56,7 @@ fast = true
 
 [tool.pylint]
 disable=[
-  "fixme",
-  "too-few-public-methods",
+  "fixme"
 ]
 
 [tool.pylint.format]

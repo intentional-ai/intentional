@@ -27,7 +27,8 @@ classifiers = [
 ]
 
 dependencies = [
-  "intentional"
+  "intentional",
+  "openai",
 ]
 
 [project.optional-dependencies]
@@ -56,7 +57,11 @@ fast = true
 
 [tool.pylint]
 disable=[
-  "fixme"
+  "fixme",
+  "too-few-public-methods",
+  "too-many-instance-attributes",
+  "too-many-arguments",
+  "too-many-positional-arguments",
 ]
 
 [tool.pylint.format]

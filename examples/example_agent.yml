@@ -1,0 +1,13 @@
+plugins:
+- intentional_local
+- intentional_websocket
+- intentional_openai
+
+interface:
+  name: local
+
+bot:
+  type: websocket
+  llm:
+    client: openai
+    name: gpt-4o-realtime-preview-2024-10-01

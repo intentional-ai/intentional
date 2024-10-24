@@ -76,3 +76,6 @@ max-line-length = 120
 
 [tool.pylint.main]
 ignore = ["tests"]
+
+[project.scripts]
+intentional = "intentional.cli.main:main"
