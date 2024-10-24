@@ -1,3 +1,3 @@
-# API Reference
+# API Reference - Main Package
 
-::: intentional-core.src
+::: intentional

@@ -19,6 +19,12 @@ Intentional plugin for OpenAI.
 pip install intentional-openai
 ```
 
+To use the Realtime API:
+
+```
+sudo apt install ffmpeg portaudio19-dev
+```
+
 ## License
 
 `intentional` is distributed under the terms of the [AGPL](LICENSE.txt) license.
