@@ -16,10 +16,14 @@ import io
 import wave
 import queue
 import asyncio
+import logging
 import threading
 
 import pyaudio
 from pydub import AudioSegment
+
+
+logger = logging.getLogger(__name__)
 
 
 class AudioHandler:
@@ -99,7 +103,7 @@ class AudioHandler:
                 data = self.recording_stream.read(self.chunk)
                 self.frames.append(data)
             except Exception as e:  # pylint: disable=broad-except
-                print(f"Error recording: {e}")
+                logger.exception("Error recording audio: %s", e)
                 break
 
     def stop_recording(self) -> bytes:
@@ -149,7 +153,7 @@ class AudioHandler:
                 # Stream directly without trying to decode
                 await client_streaming_callback(data)
             except Exception as e:  # pylint: disable=broad-except
-                print(f"Error streaming: {e}")
+                logger.exception("Error streaming: %s", e)
                 break
             await asyncio.sleep(0.01)
 
@@ -213,7 +217,7 @@ class AudioHandler:
                 chunk = audio_data[i : i + chunk_size]
                 self.playback_stream.write(chunk)
         except Exception as e:  # pylint: disable=broad-except
-            print(f"Error playing audio chunk: {e}")
+            logger.exception("Error playing audio chunk: %s", e)
 
     def stop_playback_immediately(self):
         """Stop audio playback immediately."""

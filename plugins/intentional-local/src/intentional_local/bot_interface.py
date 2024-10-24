@@ -41,57 +41,72 @@ class LocalBotInterface(BotInterface):
         self.bot: BotStructure = load_bot_structure_from_dict(bot_structure_config)
 
         # Check the modality
-        self.modality = config.pop("modality", "auto")
+        self.modality = config.pop("modality", "audio_stream")
         logger.debug("Modality for LocalBotInterface is set to: %s", self.modality)
+
+        self.audio_handler = None
+        self.input_handler = None
 
     async def run(self) -> None:
         """
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
         if isinstance(self.bot, ContinuousStreamBotStructure):
-            if self.modality == "continuous_audio":
+            if self.modality == "audio_stream":
                 await self._run_audio_stream()
                 return
 
         if isinstance(self.bot, TurnBasedBotStructure):
-            if self.modality == "text":
+            if self.modality == "text_turns":
                 await self._run_text_turns()
                 return
 
-            if self.modality == "audio":
+            if self.modality == "audio_turns":
                 await self._run_audio_turns()
                 return
 
-        raise ValueError(f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots.")
+        raise ValueError(
+            f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
+            "Choose between 'text', 'audio', or 'continuous_audio'."
+        )
 
     async def _run_text_turns(self) -> None:
+        """
+        Runs the CLI interface for the text turns modality.
+        """
+        logger.debug("Running the LocalBotInterface in text turns mode.")
         raise NotImplementedError("Text turns are not yet supported for LocalBotInterface.")
 
     async def _run_audio_turns(self) -> None:
+        """
+        Runs the CLI interface for the audio turns modality.
+        """
+        logger.debug("Running the LocalBotInterface in audio turns mode.")
         raise NotImplementedError("Audio turns are not yet supported for LocalBotInterface.")
 
     async def _run_audio_stream(self) -> None:
         """
         Runs the CLI interface for the continuous audio streaming modality.
         """
-        # Create the handlers
-        audio_handler = AudioHandler()
-        input_handler = InputHandler()
-        input_handler.loop = asyncio.get_running_loop()
+        self.bot: ContinuousStreamBotStructure
+        logger.debug("Running the LocalBotInterface in continuous audio streaming mode.")
 
-        self.bot.event_handlers["response.text.delta"] = lambda event: print(
-            f"\nAssistant: {event['delta']}", end="", flush=True
-        )
-        self.bot.event_handlers["response.audio.delta"] = lambda event: audio_handler.play_audio(
-            base64.b64decode(event["delta"])
-        )
-        self.bot.event_handlers["user.interruption"] = audio_handler.stop_playback_immediately
+        # Create the handlers
+        self.audio_handler = AudioHandler()
+        self.input_handler = InputHandler()
+        self.input_handler.loop = asyncio.get_running_loop()
+
+        # Connect the event handlers
+        self.bot.add_event_handler("on_text_message", self.handle_text_messages)
+        self.bot.add_event_handler("on_audio_message", self.handle_audio_messages)
+        self.bot.add_event_handler("on_user_interruption", self.audio_handler.stop_playback_immediately)
 
         # Start keyboard listener in a separate thread
-        listener = keyboard.Listener(on_press=input_handler.on_press)
+        listener = keyboard.Listener(on_press=self.input_handler.on_press)
         listener.start()
 
         try:
+            logger.debug("Asking the bot to connect to the model...")
             await self.bot.connect()
             asyncio.create_task(self.bot.run())
 
@@ -101,11 +116,11 @@ class LocalBotInterface(BotInterface):
             print("")
 
             # Start continuous audio streaming
-            asyncio.create_task(audio_handler.start_streaming(self.bot.stream_data))
+            asyncio.create_task(self.audio_handler.start_streaming(self.bot.stream_data))
 
             # Simple input loop for quit command
             while True:
-                command, _ = await input_handler.command_queue.get()
+                command, _ = await self.input_handler.command_queue.get()
 
                 if command == "q":
                     break
@@ -113,6 +128,24 @@ class LocalBotInterface(BotInterface):
         except Exception as e:  # pylint: disable=broad-except
             logger.exception("An error occurred: %s", str(e))
         finally:
-            audio_handler.stop_streaming()
-            audio_handler.cleanup()
+            self.audio_handler.stop_streaming()
+            self.audio_handler.cleanup()
             await self.bot.disconnect()
+
+    async def handle_text_messages(self, event: Dict[str, Any]) -> None:
+        """
+        Prints to the console any text message from the bot.
+
+        Args:
+            event: The event dictionary containing the message.
+        """
+        print(f"\nAssistant: {event['delta']}", end="", flush=True)
+
+    async def handle_audio_messages(self, event: Dict[str, Any]) -> None:
+        """
+        Plays audio responses from the bot.
+
+        Args:
+            event: The event dictionary containing the audio message.
+        """
+        self.audio_handler.play_audio(base64.b64decode(event["delta"]))

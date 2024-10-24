@@ -10,7 +10,11 @@ This module is responsible for capturing keyboard input and translating it into 
 """
 
 import asyncio
+import logging
 from pynput import keyboard
+
+
+logger = logging.getLogger(__name__)
 
 
 class InputHandler:
@@ -54,5 +58,6 @@ class InputHandler:
                     self.text_input = self.text_input[:-1]
                 else:
                     self.text_input += key.char
-        except AttributeError:
-            pass
+
+        except AttributeError as e:
+            logger.exception("Error processing key event", exc_info=e)

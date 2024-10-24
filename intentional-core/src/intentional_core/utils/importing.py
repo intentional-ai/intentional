@@ -5,6 +5,7 @@ Module import functions to handle dynamic plugins import.
 """
 
 import logging
+import inspect
 import importlib
 
 
@@ -17,7 +18,11 @@ def import_plugin(name: str):
     """
     try:
         logger.debug("Importing module %s", name)
-        importlib.import_module(name)
+        module = importlib.import_module(name)
+        # Print all classes in the module
+        for _, obj in inspect.getmembers(module):
+            if inspect.isclass(obj):
+                logger.debug("Class found: %s", obj)
     except ModuleNotFoundError:
         logger.exception("Module '%s' not found for import, is it installed?", name)
 
@@ -33,5 +38,4 @@ def import_all_plugins():
         if path.name.startswith("intentional_"):
             with open(path / "top_level.txt", encoding="utf-8") as file:
                 for name in file.read().splitlines():
-                    logger.debug("Importing module '%s'", name)
-                    importlib.import_module(name)
+                    import_plugin(name)

@@ -3,10 +3,12 @@
 """
 Functions to load model client classes from config files.
 """
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Set
 
 import logging
-from abc import abstractmethod
+from abc import ABC, abstractmethod
+
+from intentional_core.utils import inheritors
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +28,7 @@ _MODELCLIENT_CLASSES = {}
 """ This is a global dictionary that maps model client names to their classes """
 
 
-class ModelClient:
+class ModelClient(ABC):
     """
     Tiny base class used to recognize Intentional model clients.
 
@@ -41,7 +43,7 @@ class ModelClient:
     """
 
 
-class TurnBasedModelClient:
+class TurnBasedModelClient(ModelClient):
     """
     Base class for model clients that support turn-based message exchanges, as opposed to continuous streaming of data.
     """
@@ -53,10 +55,14 @@ class TurnBasedModelClient:
         """
 
 
-class ContinuousStreamModelClient:
+class ContinuousStreamModelClient(ModelClient):
     """
     Base class for model clients that support continuous streaming of data, as opposed to turn-based message exchanges.
     """
+
+    def __init__(self):
+        super().__init__()
+        self.parent_event_handler = None
 
     @abstractmethod
     async def connect(self) -> None:
@@ -87,11 +93,10 @@ def load_model_client_from_dict(config: Dict[str, Any]) -> ModelClient:
     Returns:
         The ModelClient instance.
     """
-    # List all the subclasses of ModelClient for debugging purposes
-    logger.debug("Known model client classes: %s", ModelClient.__subclasses__())
-
     # Get all the subclasses of ModelClient
-    for subclass in ModelClient.__subclasses__():
+    subclasses: Set[ModelClient] = inheritors(ModelClient)
+    logger.debug("Known model client classes: %s", subclasses)
+    for subclass in subclasses:
         if not subclass.name:
             logger.error(
                 "Model client class '%s' does not have a name. This model client type will not be usable.", subclass

@@ -4,10 +4,12 @@
 Functions to load bot structure classes from config files.
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Set, Callable
 
 import logging
-from abc import abstractmethod
+from abc import ABC, abstractmethod
+
+from intentional_core.utils import inheritors
 
 
 logger = logging.getLogger(__name__)
@@ -17,7 +19,7 @@ _BOT_STRUCTURES = {}
 """ This is a global dictionary that maps bot structure names to their classes """
 
 
-class BotStructure:
+class BotStructure(ABC):
     """
     Tiny base class used to recognize Intentional bot structure classes.
 
@@ -34,16 +36,14 @@ class BotStructure:
     The name of this bot's structure. This should be a unique identifier for the bot structure type.
 
     The bot structure's name should directly recall the class name as much as possible. For example, the name of
-    "RealtimeAPIBotStructure" should be "realtime_api", the name of "AudioToTextBotStructure" should be "audio_to_text",
+    "WebsocketBotStructure" should be "websocket", the name of "AudioToTextBotStructure" should be "audio_to_text",
     etc.
     """
 
-    @property
-    @abstractmethod
-    def event_handlers(self):
-        """
-        Return a dictionary of event handlers for this bot structure.
-        """
+    supported_events: Dict[str, str] = {}
+
+    def __init__(self) -> None:
+        self.event_handlers: Dict[str, Callable] = {}
 
     @abstractmethod
     async def run(self) -> None:
@@ -51,23 +51,58 @@ class BotStructure:
         Main loop for the bot.
         """
 
-    @abstractmethod
-    async def handle_event(self, event: Dict[str, Any]) -> None:
+    def add_event_handler(self, event_name: str, handler: Callable) -> None:
         """
-        Handle different types of events that the bot or the user may generate.
+        Add an event handler for a specific event type.
+
+        Args:
+            event_name: The name of the event to handle.
+            handler: The handler function to call when the event is received.
         """
+        if event_name not in self.supported_events:
+            logger.info(
+                "Event type '%s' is not supported by this bot structure. "
+                "Unless you added a tool that generated this event, it will likely be ignored.",
+                event_name,
+            )
+        if event_name in self.event_handlers:
+            logger.warning(
+                "Event handler for '%s' already exists. The older handler will be replaced by the new one.",
+                event_name,
+            )
 
+        logger.debug("Adding event handler for event '%s'", event_name)
+        self.event_handlers[event_name] = handler
 
-class ContinuousStreamBotStructure:
-    """
-    Base class for structures that support continuous streaming of data, as opposed to turn-based message exchanges.
-    """
+    async def handle_event(self, event_name: str, event: Dict[str, Any]) -> None:
+        """
+        Handle different types of events that the model or the user may generate.
+        """
+        logger.debug("Received event '%s'", event_name)
 
-    @abstractmethod
+        if event_name in self.event_handlers:
+            logger.debug("Calling event handler for event '%s'", event_name)
+            await self.event_handlers[event_name](event)
+        else:
+            logger.debug("No event handler for event '%s', ignoring it.", event_name)
+
     async def connect(self) -> None:
         """
         Connect to the bot.
         """
+        logger.debug("Nothing needs to be done to connect to the bot.")
+
+    async def disconnect(self) -> None:
+        """
+        Disconnect from the bot.
+        """
+        logger.debug("Nothing needs to be done to disconnect from the bot.")
+
+
+class ContinuousStreamBotStructure(BotStructure):
+    """
+    Base class for structures that support continuous streaming of data, as opposed to turn-based message exchanges.
+    """
 
     @abstractmethod
     async def stream_data(self, data: bytes) -> None:
@@ -75,14 +110,8 @@ class ContinuousStreamBotStructure:
         Stream data to the bot.
         """
 
-    @abstractmethod
-    async def disconnect(self) -> None:
-        """
-        Disconnect from the bot.
-        """
 
-
-class TurnBasedBotStructure:
+class TurnBasedBotStructure(BotStructure):
     """
     Base class for structures that support turn-based message exchanges, as opposed to continuous streaming of data.
     """
@@ -104,11 +133,10 @@ def load_bot_structure_from_dict(config: Dict[str, Any]) -> BotStructure:
     Returns:
         The BotStructure instance.
     """
-    # List all the subclasses of BotStructure for debugging purposes
-    logger.debug("Known bot structure classes: %s", BotStructure.__subclasses__())
-
     # Get all the subclasses of Bot
-    for subclass in BotStructure.__subclasses__():
+    subclasses: Set[BotStructure] = inheritors(BotStructure)
+    logger.debug("Known bot structure classes: %s", subclasses)
+    for subclass in subclasses:
         if not subclass.name:
             logger.error(
                 "BotStructure class '%s' does not have a name. This bot structure type will not be usable.", subclass

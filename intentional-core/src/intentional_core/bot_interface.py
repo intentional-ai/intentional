@@ -4,16 +4,16 @@
 Functions to load bots from config files.
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Set
 
 import json
 import logging
 from pathlib import Path
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 import yaml
 
-from intentional_core.utils.importing import import_plugin
+from intentional_core.utils import import_plugin, inheritors
 
 
 logger = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ _BOT_INTERFACES = {}
 """ This is a global dictionary that maps bot interface names to their classes """
 
 
-class BotInterface:
+class BotInterface(ABC):
     """
     Tiny base class used to recognize Intentional bots interfaces.
 
@@ -89,11 +89,11 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
     for plugin in plugins:
         import_plugin(plugin)
 
-    # List found classes for debugging purposes
-    logger.debug("Known bot interface classes: %s", BotInterface.__subclasses__())
-
     # Get all the subclasses of Bot
-    for subclass in BotInterface.__subclasses__():
+    subclasses: Set[BotInterface] = inheritors(BotInterface)
+    logger.debug("Known bot interface classes: %s", subclasses)
+
+    for subclass in subclasses:
         if not subclass.name:
             logger.error("Bot interface class '%s' does not have a name. This bot type will not be usable.", subclass)
             continue

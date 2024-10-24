@@ -4,6 +4,6 @@
 Init file for `intentional_openai`.
 """
 
-from intentional_openai.model_client import OpenAIClient
+from intentional_openai.realtime_api import OpenAIRealtimeAPIClient
 
-__all__ = ["OpenAIClient"]
+__all__ = ["OpenAIRealtimeAPIClient"]

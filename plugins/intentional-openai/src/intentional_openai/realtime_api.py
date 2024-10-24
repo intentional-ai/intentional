@@ -8,7 +8,7 @@
 Client for OpenAI's Realtime API.
 """
 
-from typing import Optional, Callable, List, Dict, Any
+from typing import Optional, List, Dict, Any, Callable
 
 import io
 import os
@@ -18,74 +18,54 @@ import logging
 import websockets
 
 from pydub import AudioSegment
-from intentional_core import Tool
+from intentional_core import ContinuousStreamModelClient
 
 
 logger = logging.getLogger(__name__)
 
 
-class RealtimeAPIClient:
+class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
     """
     A client for interacting with the OpenAI Realtime API that lets you manage the WebSocket connection, send text and
     audio data, and handle responses and events.
     """
 
-    def __init__(
-        self,
-        api_key: str = os.environ.get("OPENAI_API_KEY", None),
-        model: str = "gpt-4o-realtime-preview-2024-10-01",
-        voice: str = "alloy",
-        instructions: str = "You are a helpful assistant. Start the conversation with a greeting.",
-        tools: Optional[List[Tool]] = None,
-        event_handlers: Dict[str, Callable[[Dict[str, Any]], None]] = None,
-    ):
+    name = "openai_realtime"
+
+    native_events_to_known_events = {
+        "response.text.delta": "on_text_message",
+        "response.audio.delta": "on_audio_message",
+        "user.interruption": "on_user_interruption",
+    }
+
+    def __init__(self, config: Dict[str, Any]):
         """
         A client for interacting with the OpenAI Realtime API that lets you manage the WebSocket connection, send text
         and audio data, and handle responses and events.
-
-        Args:
-            api_key (str):
-                The API key for authentication.
-            model (str):
-                The model to use for text and audio processing.
-            voice (str):
-                The voice to use for audio output.
-            instructions (str):
-                The instructions for the chatbot.
-            tools (List[Tool]):
-                The tools to use for function calling.
-            event_handlers:
-                After initialization you can add event handlers to this client to handle several types of events.
-                These event handlers are stored in the `event_handler` dictionary and will be invoked when the
-                corresponding event occurs.
-
-                Expected handlers:
-
-                - `response.text.delta` (Callable[[str], None]):
-                    Callback for text delta events, which mean that the model is sending text.
-                    Takes in a string and returns nothing.
-
-                - `response.audio.delta` (Callable[[bytes], None]):
-                    Callback for audio delta events, which mean that the model is sending an audio snippet.
-                    Takes in bytes and returns nothing.
-
-                - `user.interruption` (Callable[[], None]):
-                    Callback for user interrupt events, should be used to stop audio playback.
-
-                More event handlers can be added to handle events triggered by functions that process the event payload.
-
         """
-        self.api_key = api_key
-        self.model = model
-        self.voice = voice
-        self.instructions = instructions
-        self.tools = tools or []
-        self.event_handlers = {
-            "response.text.delta": None,
-            "response.audio.delta": None,
-            "interruption": None,
-            **(event_handlers or {}),
-        }
+        logger.debug("Loading OpenAIRealtimeAPIClient from config: %s", config)
+        super().__init__()
+
+        self.model_name = config.get("name")
+        if not self.model_name:
+            raise ValueError("OpenAIRealtimeAPIClient requires a 'name' configuration key to know which model to use.")
+        if "realtime" not in self.model_name:
+            raise ValueError(
+                "OpenAIRealtimeAPIClient requires a 'realtime' model to use the Realtime API. "
+                "To use any other OpenAI model, use the OpenAIClient instead."
+            )
+
+        self.api_key_name = config.get("api_key_name", "OPENAI_API_KEY")
+        if not os.environ.get(self.api_key_name):
+            raise ValueError(
+                "OpenAIRealtimeAPIClient requires an API key to authenticate with OpenAI. "
+                f"The provided environment variable name ({self.api_key_name}) is not set or is empty."
+            )
+        self.api_key = os.environ.get(self.api_key_name)
+
+        self.voice = config.get("voice", "alloy")
+        self.system_prompt = config.get("system_prompt", "You're a helpful assistant.")
+        self.tools = config.get("tools", [])
 
         self.ws = None
         self.base_url = "wss://api.openai.com/v1/realtime"
@@ -95,11 +75,16 @@ class RealtimeAPIClient:
         self._current_item_id = None
         self._is_responding = False
 
+        # Event handler of the parent's BotStructure class, if needed
+        self.parent_event_handler: Optional[Callable] = None
+
     async def connect(self) -> None:
         """
         Establish WebSocket connection with the Realtime API.
         """
-        url = f"{self.base_url}?model={self.model}"
+        logger.debug("Initializing websocket connection to OpenAI Realtime API")
+
+        url = f"{self.base_url}?model={self.model_name}"
         headers = {"Authorization": f"Bearer {self.api_key}", "OpenAI-Beta": "realtime=v1"}
         self.ws = await websockets.connect(url, extra_headers=headers)
 
@@ -111,7 +96,7 @@ class RealtimeAPIClient:
         await self._update_session(
             {
                 "modalities": ["text", "audio"],
-                "instructions": self.instructions,
+                "instructions": self.system_prompt,
                 "voice": self.voice,
                 "input_audio_format": "pcm16",
                 "output_audio_format": "pcm16",
@@ -134,10 +119,6 @@ class RealtimeAPIClient:
 
         This method is an infinite loop that listens for messages from the WebSocket connection and processes them
         accordingly. It also triggers the event handlers for the corresponding event types.
-
-        To react to a specific event, simply add a handler to the `event_handlers` dictionary with the event type as
-        the key. To see what events are being processed, enable debug logging or add a generic handler with a "*" key.
-        Keep in mind that this will run on all events and won't prevent any other event handler to run.
         """
         try:
             async for message in self.ws:
@@ -166,18 +147,24 @@ class RealtimeAPIClient:
                     logger.debug("Speech detected")
                     if self._is_responding:
                         await self._handle_interruption()
-                    if "user.interruption" in self.event_handlers:
-                        self.event_handlers["user.interruption"]()
 
                 elif event_type == "input_audio_buffer.speech_stopped":
                     logger.debug("Speech ended")
 
-                # Now run user defined event handlers
-                if "*" in self.event_handlers:
-                    self.event_handlers["*"](event)
+                # Call the bot's event handler in all cases, if defined
+                if self.parent_event_handler:
+                    self.parent_event_handler: Callable
 
-                if event_type in self.event_handlers:
-                    self.event_handlers[event_type](event)
+                    if event_type in self.native_events_to_known_events:
+                        logger.debug(
+                            "Translating event type %s to parent's event handler %s",
+                            event_type,
+                            self.native_events_to_known_events[event_type],
+                        )
+                        await self.parent_event_handler(self.native_events_to_known_events[event_type], event)
+                    else:
+                        logger.debug("Sending native event type %s to parent's event handler", event_type)
+                        await self.parent_event_handler(event_type, event)
 
         except websockets.exceptions.ConnectionClosed:
             logging.info("Connection closed")
@@ -230,6 +217,9 @@ class RealtimeAPIClient:
         # Commit the buffer
         commit_event = {"type": "input_audio_buffer.commit"}
         await self.ws.send(json.dumps(commit_event))
+
+    async def stream_data(self, data: bytes) -> None:
+        return await self._stream_audio(data)
 
     async def _stream_audio(self, audio_chunk: bytes) -> None:
         """
@@ -333,6 +323,11 @@ class RealtimeAPIClient:
     #     await self.send_function_result(call_id, str(tool_result))
 
     async def disconnect(self) -> None:
-        """Close the WebSocket connection."""
+        """
+        Close the WebSocket connection.
+        """
         if self.ws:
+            logger.debug("Disconnecting from OpenAI Realtime API")
             await self.ws.close()
+        else:
+            logger.debug("Attempted disconnection of a OpenAIRealtimeAPIClient that was never connected, nothing done.")
