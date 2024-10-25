@@ -72,7 +72,7 @@ class AudioHandler:
 
         # Playback attributes
         self.playback_stream = None
-        self.playback_start_time = None
+        self.playback_play_time = 0
         self.playback_buffer = queue.Queue()
         self.playback_event = threading.Event()
         self.playback_thread = None
@@ -176,12 +176,13 @@ class AudioHandler:
         Args:
             audio_data: The audio data to play.
         """
+        audio_segment = AudioSegment(audio_data, sample_width=2, frame_rate=24000, channels=1)
         try:
-            self.playback_buffer.put_nowait(audio_data)
+            self.playback_buffer.put_nowait(audio_segment)
         except queue.Full:
             # If the buffer is full, remove the oldest chunk and add the new one
             self.playback_buffer.get_nowait()
-            self.playback_buffer.put_nowait(audio_data)
+            self.playback_buffer.put_nowait(audio_segment)
 
         if not self.playback_thread or not self.playback_thread.is_alive():
             self.stop_playback = False
@@ -196,15 +197,13 @@ class AudioHandler:
         self.playback_stream = self.audio.open(
             format=self.audio_format, channels=self.channels, rate=self.rate, output=True, frames_per_buffer=self.chunk
         )
-
         while not self.stop_playback:
-            if not self.playback_start_time:
-                self.playback_start_time = datetime.datetime.now()
             try:
-                audio_chunk = self.playback_buffer.get(timeout=0.1)
-                self._play_audio_chunk(audio_chunk)
+                audio_segment = self.playback_buffer.get(timeout=0.1)
+                self.playback_play_time += len(audio_segment)
+                self._play_audio_chunk(audio_segment)
             except queue.Empty:
-                self.playback_start_time = None
+                self.playback_play_time = 0
                 continue
 
             if self.playback_event.is_set():
@@ -215,11 +214,8 @@ class AudioHandler:
             self.playback_stream.close()
             self.playback_stream = None
 
-    def _play_audio_chunk(self, audio_chunk):
+    def _play_audio_chunk(self, audio_segment: AudioSegment):
         try:
-            # Convert the audio chunk to the correct format
-            audio_segment = AudioSegment(audio_chunk, sample_width=2, frame_rate=24000, channels=1)
-
             # Ensure the audio is in the correct format for playback
             audio_data = audio_segment.raw_data
 
@@ -238,10 +234,10 @@ class AudioHandler:
         Stop audio playback immediately. Sets the relevant flags and empties the queue.
 
         """
-        played_milliseconds = None
-        if self.playback_start_time:
-            played_milliseconds = datetime.datetime.now() - self.playback_start_time
-            self.playback_start_time = None
+        played_milliseconds = 0
+        if self.playback_play_time:
+            played_milliseconds = self.playback_play_time
+            self.playback_play_time = 0
 
         self.stop_playback = True
         self.playback_buffer.queue.clear()  # Clear any pending audio

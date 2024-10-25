@@ -55,4 +55,4 @@ class WebsocketBotStructure(ContinuousStreamBotStructure):
         await self.model.disconnect()
 
     async def handle_interruption(self, lenght_to_interruption: int) -> None:
-        return self.model.handle_interruption(lenght_to_interruption)
+        await self.model.handle_interruption(lenght_to_interruption)

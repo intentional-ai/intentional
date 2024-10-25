@@ -11,6 +11,7 @@ Client for OpenAI's Realtime API.
 from typing import Optional, Dict, Any, Callable
 
 import os
+import math
 import json
 import base64
 import logging
@@ -261,7 +262,7 @@ class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
             "type": "conversation.item.truncate",
             "item_id": self._current_item_id,
             "content_index": 0,
-            "audio_end_ms": milliseconds_played,
+            "audio_end_ms": math.floor(milliseconds_played),
         }
         await self.ws.send(json.dumps(event))
 

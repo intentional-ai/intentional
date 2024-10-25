@@ -173,10 +173,12 @@ class LocalBotInterface(BotInterface):
 
         # Handle interruptions if it is the case
         played_milliseconds = self.audio_handler.stop_playback_immediately()
+        logging.debug("Played the response for %s milliseconds.", played_milliseconds)
 
         # If we're interrupting the bot, handle the interruption on the model side too
         if played_milliseconds:
-            await self.bot.handle_interruption(played_milliseconds.microseconds / 1000)
+            logging.info("Handling interruption...")
+            await self.bot.handle_interruption(played_milliseconds)
 
     async def speech_stopped(self, event: Dict[str, Any]) -> None:  # pylint: disable=unused-argument
         """

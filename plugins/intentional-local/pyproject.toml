@@ -27,7 +27,10 @@ classifiers = [
 ]
 
 dependencies = [
-  "intentional"
+  "intentional",
+  "pynput",
+  "pyaudio",
+  "pydub",
 ]
 
 [project.optional-dependencies]
