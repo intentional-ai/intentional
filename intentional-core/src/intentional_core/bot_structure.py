@@ -59,12 +59,6 @@ class BotStructure(ABC):
             event_name: The name of the event to handle.
             handler: The handler function to call when the event is received.
         """
-        if event_name not in self.supported_events:
-            logger.info(
-                "Event type '%s' is not supported by this bot structure. "
-                "Unless you added a tool that generated this event, it will likely be ignored.",
-                event_name,
-            )
         if event_name in self.event_handlers:
             logger.warning(
                 "Event handler for '%s' already exists. The older handler will be replaced by the new one.",
@@ -80,11 +74,15 @@ class BotStructure(ABC):
         """
         logger.debug("Received event '%s'", event_name)
 
+        if "*" in self.event_handlers:
+            logger.debug("Calling wildcard event handler for event '%s'", event_name)
+            await self.event_handlers["*"](event)
+
         if event_name in self.event_handlers:
             logger.debug("Calling event handler for event '%s'", event_name)
             await self.event_handlers[event_name](event)
         else:
-            logger.debug("No event handler for event '%s', ignoring it.", event_name)
+            logger.debug("No specific event handler for event '%s'.", event_name)
 
     async def connect(self) -> None:
         """
@@ -108,6 +106,17 @@ class ContinuousStreamBotStructure(BotStructure):
     async def stream_data(self, data: bytes) -> None:
         """
         Stream data to the bot.
+        """
+
+    @abstractmethod
+    async def handle_interruption(self, lenght_to_interruption: int) -> None:
+        """
+        Handle an interruption in the streaming.
+
+        Args:
+            lenght_to_interruption: The length of the data that was produced to the user before the interruption.
+                This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
+                depending on the bot structure that implements it.
         """
 
 

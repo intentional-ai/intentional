@@ -28,7 +28,6 @@ def inheritors(class_: Any, include_abstract: bool = False) -> Set[Any]:
         for child in parent.__subclasses__():
             if child not in subclasses:
                 to_process.append(child)
-                print(child, inspect.isabstract(child))
                 if not include_abstract and inspect.isabstract(child):
                     logger.debug(
                         "Skipping abstract class from inheritor's list: %s. Abstract methods: %s",

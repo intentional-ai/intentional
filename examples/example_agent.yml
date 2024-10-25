@@ -11,3 +11,4 @@ bot:
   llm:
     client: openai_realtime
     name: gpt-4o-realtime-preview-2024-10-01
+    system_prompt: Your goal is to count down from twenty to zero.

@@ -77,9 +77,26 @@ class ContinuousStreamModelClient(ModelClient):
         """
 
     @abstractmethod
+    async def run(self) -> None:
+        """
+        Handle events from the model.
+        """
+
+    @abstractmethod
     async def disconnect(self) -> None:
         """
         Disconnect from the model.
+        """
+
+    @abstractmethod
+    async def handle_interruption(self, lenght_to_interruption: int) -> None:
+        """
+        Handle an interruption in the streaming.
+
+        Args:
+            lenght_to_interruption: The length of the data that was produced to the user before the interruption.
+                This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
+                depending on the bot structure that implements it.
         """
 
 

@@ -41,7 +41,7 @@ class WebsocketBotStructure(ContinuousStreamBotStructure):
         """
         Main loop for the bot.
         """
-        await self.model.handle_messages()
+        await self.model.run()
 
     async def stream_data(self, data: bytes) -> None:
         await self.model.stream_data(data)
@@ -51,4 +51,8 @@ class WebsocketBotStructure(ContinuousStreamBotStructure):
         await self.model.connect()
 
     async def disconnect(self) -> None:
+        logger.debug("Disconnecting from the model.")
         await self.model.disconnect()
+
+    async def handle_interruption(self, lenght_to_interruption: int) -> None:
+        return self.model.handle_interruption(lenght_to_interruption)

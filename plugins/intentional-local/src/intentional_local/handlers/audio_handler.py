@@ -17,6 +17,7 @@ import wave
 import queue
 import asyncio
 import logging
+import datetime
 import threading
 
 import pyaudio
@@ -71,7 +72,8 @@ class AudioHandler:
 
         # Playback attributes
         self.playback_stream = None
-        self.playback_buffer = queue.Queue(maxsize=20)
+        self.playback_start_time = None
+        self.playback_buffer = queue.Queue()
         self.playback_event = threading.Event()
         self.playback_thread = None
         self.stop_playback = False
@@ -158,7 +160,9 @@ class AudioHandler:
             await asyncio.sleep(0.01)
 
     def stop_streaming(self):
-        """Stop audio streaming."""
+        """
+        Stop audio streaming.
+        """
         self.streaming = False
         if self.model_stream:
             self.model_stream.stop_stream()
@@ -166,7 +170,12 @@ class AudioHandler:
             self.model_stream = None
 
     def play_audio(self, audio_data: bytes):
-        """Add audio data to the buffer"""
+        """
+        Add audio data to the buffer
+
+        Args:
+            audio_data: The audio data to play.
+        """
         try:
             self.playback_buffer.put_nowait(audio_data)
         except queue.Full:
@@ -181,16 +190,21 @@ class AudioHandler:
             self.playback_thread.start()
 
     def _continuous_playback(self):
-        """Continuously play audio from the buffer"""
+        """
+        Continuously play audio from the buffer.
+        """
         self.playback_stream = self.audio.open(
             format=self.audio_format, channels=self.channels, rate=self.rate, output=True, frames_per_buffer=self.chunk
         )
 
         while not self.stop_playback:
+            if not self.playback_start_time:
+                self.playback_start_time = datetime.datetime.now()
             try:
                 audio_chunk = self.playback_buffer.get(timeout=0.1)
                 self._play_audio_chunk(audio_chunk)
             except queue.Empty:
+                self.playback_start_time = None
                 continue
 
             if self.playback_event.is_set():
@@ -219,15 +233,26 @@ class AudioHandler:
         except Exception as e:  # pylint: disable=broad-except
             logger.exception("Error playing audio chunk: %s", e)
 
-    def stop_playback_immediately(self):
-        """Stop audio playback immediately."""
+    def stop_playback_immediately(self) -> datetime.timedelta:
+        """
+        Stop audio playback immediately. Sets the relevant flags and empties the queue.
+
+        """
+        played_milliseconds = None
+        if self.playback_start_time:
+            played_milliseconds = datetime.datetime.now() - self.playback_start_time
+            self.playback_start_time = None
+
         self.stop_playback = True
         self.playback_buffer.queue.clear()  # Clear any pending audio
         self.currently_playing = False
         self.playback_event.set()
+        return played_milliseconds
 
     def cleanup(self):
-        """Clean up audio resources"""
+        """
+        Clean up audio resources.
+        """
         self.stop_playback_immediately()
 
         self.stop_playback = True

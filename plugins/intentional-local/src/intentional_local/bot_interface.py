@@ -97,9 +97,11 @@ class LocalBotInterface(BotInterface):
         self.input_handler.loop = asyncio.get_running_loop()
 
         # Connect the event handlers
+        self.bot.add_event_handler("*", self.check_for_transcripts)
         self.bot.add_event_handler("on_text_message", self.handle_text_messages)
         self.bot.add_event_handler("on_audio_message", self.handle_audio_messages)
-        self.bot.add_event_handler("on_user_interruption", self.audio_handler.stop_playback_immediately)
+        self.bot.add_event_handler("on_speech_started", self.speech_started)
+        self.bot.add_event_handler("on_speech_stopped", self.speech_stopped)
 
         # Start keyboard listener in a separate thread
         listener = keyboard.Listener(on_press=self.input_handler.on_press)
@@ -132,6 +134,16 @@ class LocalBotInterface(BotInterface):
             self.audio_handler.cleanup()
             await self.bot.disconnect()
 
+    async def check_for_transcripts(self, event: Dict[str, Any]) -> None:
+        """
+        Checks for transcripts from the bot.
+
+        Args:
+            event: The event dictionary containing the transcript.
+        """
+        if "transcript" in event:
+            print(f"[{event["type"]}] Transcript: {event['transcript']}")
+
     async def handle_text_messages(self, event: Dict[str, Any]) -> None:
         """
         Prints to the console any text message from the bot.
@@ -139,7 +151,7 @@ class LocalBotInterface(BotInterface):
         Args:
             event: The event dictionary containing the message.
         """
-        print(f"\nAssistant: {event['delta']}", end="", flush=True)
+        print(f"Assistant: {event['delta']}")
 
     async def handle_audio_messages(self, event: Dict[str, Any]) -> None:
         """
@@ -149,3 +161,28 @@ class LocalBotInterface(BotInterface):
             event: The event dictionary containing the audio message.
         """
         self.audio_handler.play_audio(base64.b64decode(event["delta"]))
+
+    async def speech_started(self, event: Dict[str, Any]) -> None:  # pylint: disable=unused-argument
+        """
+        Prints to the console when the bot starts speaking.
+
+        Args:
+            event: The event dictionary containing the speech start event.
+        """
+        print("[User is speaking]")
+
+        # Handle interruptions if it is the case
+        played_milliseconds = self.audio_handler.stop_playback_immediately()
+
+        # If we're interrupting the bot, handle the interruption on the model side too
+        if played_milliseconds:
+            await self.bot.handle_interruption(played_milliseconds.microseconds / 1000)
+
+    async def speech_stopped(self, event: Dict[str, Any]) -> None:  # pylint: disable=unused-argument
+        """
+        Prints to the console when the bot stops speaking.
+
+        Args:
+            event: The event dictionary containing the speech stop event.
+        """
+        print("[User stopped speaking]")
