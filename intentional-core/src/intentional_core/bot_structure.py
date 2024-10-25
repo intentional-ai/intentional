@@ -45,11 +45,46 @@ class BotStructure(ABC):
     def __init__(self) -> None:
         self.event_handlers: Dict[str, Callable] = {}
 
+
+class ContinuousStreamBotStructure(BotStructure):
+    """
+    Base class for structures that support continuous streaming of data, as opposed to turn-based message exchanges.
+    """
+
     @abstractmethod
     async def run(self) -> None:
         """
         Main loop for the bot.
         """
+
+    @abstractmethod
+    async def stream_data(self, data: bytes) -> None:
+        """
+        Stream data to the bot.
+        """
+
+    @abstractmethod
+    async def handle_interruption(self, lenght_to_interruption: int) -> None:
+        """
+        Handle an interruption in the streaming.
+
+        Args:
+            lenght_to_interruption: The length of the data that was produced to the user before the interruption.
+                This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
+                depending on the bot structure that implements it.
+        """
+
+    async def connect(self) -> None:
+        """
+        Connect to the bot.
+        """
+        logger.debug("Nothing needs to be done to connect to the bot.")
+
+    async def disconnect(self) -> None:
+        """
+        Disconnect from the bot.
+        """
+        logger.debug("Nothing needs to be done to disconnect from the bot.")
 
     def add_event_handler(self, event_name: str, handler: Callable) -> None:
         """
@@ -84,41 +119,6 @@ class BotStructure(ABC):
         else:
             logger.debug("No specific event handler for event '%s'.", event_name)
 
-    async def connect(self) -> None:
-        """
-        Connect to the bot.
-        """
-        logger.debug("Nothing needs to be done to connect to the bot.")
-
-    async def disconnect(self) -> None:
-        """
-        Disconnect from the bot.
-        """
-        logger.debug("Nothing needs to be done to disconnect from the bot.")
-
-
-class ContinuousStreamBotStructure(BotStructure):
-    """
-    Base class for structures that support continuous streaming of data, as opposed to turn-based message exchanges.
-    """
-
-    @abstractmethod
-    async def stream_data(self, data: bytes) -> None:
-        """
-        Stream data to the bot.
-        """
-
-    @abstractmethod
-    async def handle_interruption(self, lenght_to_interruption: int) -> None:
-        """
-        Handle an interruption in the streaming.
-
-        Args:
-            lenght_to_interruption: The length of the data that was produced to the user before the interruption.
-                This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
-                depending on the bot structure that implements it.
-        """
-
 
 class TurnBasedBotStructure(BotStructure):
     """
@@ -126,7 +126,7 @@ class TurnBasedBotStructure(BotStructure):
     """
 
     @abstractmethod
-    async def send_message(self, message: Dict[str, Any]) -> None:
+    async def send_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
         """
         Send a message to the bot.
         """

@@ -1,0 +1,12 @@
+plugins:
+- intentional_local
+- intentional_text_chat
+- intentional_openai
+
+interface: local
+modality: text_turns
+bot:
+  type: text_chat
+  llm:
+    client: openai
+    name: gpt-4o

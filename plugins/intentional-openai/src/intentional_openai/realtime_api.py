@@ -23,7 +23,7 @@ from intentional_core import ContinuousStreamModelClient
 logger = logging.getLogger(__name__)
 
 
-class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
+class RealtimeAPIClient(ContinuousStreamModelClient):
     """
     A client for interacting with the OpenAI Realtime API that lets you manage the WebSocket connection, send text and
     audio data, and handle responses and events.
@@ -43,22 +43,22 @@ class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
         A client for interacting with the OpenAI Realtime API that lets you manage the WebSocket connection, send text
         and audio data, and handle responses and events.
         """
-        logger.debug("Loading OpenAIRealtimeAPIClient from config: %s", config)
+        logger.debug("Loading RealtimeAPIClient from config: %s", config)
         super().__init__()
 
         self.model_name = config.get("name")
         if not self.model_name:
-            raise ValueError("OpenAIRealtimeAPIClient requires a 'name' configuration key to know which model to use.")
+            raise ValueError("RealtimeAPIClient requires a 'name' configuration key to know which model to use.")
         if "realtime" not in self.model_name:
             raise ValueError(
-                "OpenAIRealtimeAPIClient requires a 'realtime' model to use the Realtime API. "
+                "RealtimeAPIClient requires a 'realtime' model to use the Realtime API. "
                 "To use any other OpenAI model, use the OpenAIClient instead."
             )
 
         self.api_key_name = config.get("api_key_name", "OPENAI_API_KEY")
         if not os.environ.get(self.api_key_name):
             raise ValueError(
-                "OpenAIRealtimeAPIClient requires an API key to authenticate with OpenAI. "
+                "RealtimeAPIClient requires an API key to authenticate with OpenAI. "
                 f"The provided environment variable name ({self.api_key_name}) is not set or is empty."
             )
         self.api_key = os.environ.get(self.api_key_name)
@@ -73,7 +73,6 @@ class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
         # Track current response state
         self._current_response_id = None
         self._current_item_id = None
-        # self._is_responding = False
 
         # Event handler of the parent's BotStructure class, if needed
         self.parent_event_handler: Optional[Callable] = None
@@ -142,7 +141,6 @@ class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
                 # Track response state
                 elif event_type == "response.created":
                     self._current_response_id = event.get("response", {}).get("id")
-                    # self._is_responding = True
                     logger.debug("Agent strarted responding. Response created with ID: %s", self._current_response_id)
 
                 elif event_type == "response.output_item.added":
@@ -150,16 +148,11 @@ class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
                     logger.debug("Agent is responding. Added response item with ID: %s", self._current_item_id)
 
                 elif event_type == "response.done":
-                    # self._is_responding = False
-                    # self._current_response_id = None
-                    # self._current_item_id = None
                     logger.debug("Agent finished generating a response.")
 
                 # Handle interruptions
                 elif event_type == "input_audio_buffer.speech_started":
                     logger.debug("Speech detected, listening...")
-                    # if self._is_responding:
-                    # await self.handle_interruption()
 
                 elif event_type == "input_audio_buffer.speech_stopped":
                     logger.debug("Speech ended.")
@@ -219,9 +212,6 @@ class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
                 The length in milliseconds of the audio that was played to the user before the interruption.
                 May be zero if the interruption happened before any audio was played.
         """
-        # if not self._is_responding:
-        #     return
-
         logging.info("[Handling interruption at %s ms]", lenght_to_interruption)
 
         # Cancel the current response
@@ -238,10 +228,6 @@ class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
             print(f"[Truncating response at {lenght_to_interruption} ms]")
             await self._truncate_response(lenght_to_interruption)
 
-        # self._is_responding = False
-        # self._current_response_id = None
-        # self._current_item_id = None
-
     async def _cancel_response(self) -> None:
         """
         Cancel the current response.
@@ -255,7 +241,6 @@ class OpenAIRealtimeAPIClient(ContinuousStreamModelClient):
         Truncate the conversation item to match what was actually played.
         Necessary to correctly handle interruptions.
         """
-        # if self._current_item_id:
         print(f"[Truncating response at {milliseconds_played} ms]")
         logger.debug("Truncating the response due to a user's interruption at %s ms", milliseconds_played)
         event = {

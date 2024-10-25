@@ -3,7 +3,7 @@
 """
 Functions to load model client classes from config files.
 """
-from typing import Optional, Dict, Any, Set
+from typing import Optional, Dict, Any, Set, List
 
 import logging
 from abc import ABC, abstractmethod
@@ -12,16 +12,6 @@ from intentional_core.utils import inheritors
 
 
 logger = logging.getLogger(__name__)
-
-
-# class Modality(Enum):
-#     TEXT = "text"
-#     TEXT_STREAMING = "text_streaming"
-#     AUDIO = "audio"
-#     AUDIO_STREAMING = "audio_streaming"
-#     IMAGE = "image"
-#     VIDEO = "video"
-#     VIDEO_STREAMING = "video_streaming"
 
 
 _MODELCLIENT_CLASSES = {}
@@ -49,7 +39,7 @@ class TurnBasedModelClient(ModelClient):
     """
 
     @abstractmethod
-    async def send_message(self, message: Dict[str, Any]) -> None:
+    async def send_message(self, conversation: List[Dict[str, Any]]) -> None:
         """
         Send a message to the model.
         """

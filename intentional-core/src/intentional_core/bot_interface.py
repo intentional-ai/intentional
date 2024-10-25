@@ -109,10 +109,9 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
         _BOT_INTERFACES[subclass.name] = subclass
 
     # Identify the type of bot interface and see if it's known
-    interface_config = config.pop("interface")
-    interface_class_ = interface_config.pop("name", None)
+    interface_class_ = config.pop("interface", None)
     if not interface_class_:
-        raise ValueError("Bot interface configuration requires a 'name' key to know which interface to use.")
+        raise ValueError("Bot configuration must contain an 'interface' key to know which interface to use.")
 
     logger.debug("Creating bot interface of type '%s'", interface_class_)
     if interface_class_ not in _BOT_INTERFACES:

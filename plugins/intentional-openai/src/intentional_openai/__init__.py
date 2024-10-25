@@ -4,6 +4,7 @@
 Init file for `intentional_openai`.
 """
 
-from intentional_openai.realtime_api import OpenAIRealtimeAPIClient
+from intentional_openai.realtime_api import RealtimeAPIClient
+from intentional_openai.chatcompletion_api import ChatCompletionAPIClient
 
-__all__ = ["OpenAIRealtimeAPIClient"]
+__all__ = ["RealtimeAPIClient", "ChatCompletionAPIClient"]

@@ -41,7 +41,7 @@ class LocalBotInterface(BotInterface):
         self.bot: BotStructure = load_bot_structure_from_dict(bot_structure_config)
 
         # Check the modality
-        self.modality = config.pop("modality", "audio_stream")
+        self.modality = config.pop("modality")
         logger.debug("Modality for LocalBotInterface is set to: %s", self.modality)
 
         self.audio_handler = None
@@ -53,42 +53,51 @@ class LocalBotInterface(BotInterface):
         """
         if isinstance(self.bot, ContinuousStreamBotStructure):
             if self.modality == "audio_stream":
-                await self._run_audio_stream()
-                return
+                await self._run_audio_stream(self.bot)
+            else:
+                raise ValueError(
+                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
+                    "These are the supported modalities: 'audio_stream'."
+                )
 
         if isinstance(self.bot, TurnBasedBotStructure):
             if self.modality == "text_turns":
-                await self._run_text_turns()
-                return
+                await self._run_text_turns(self.bot)
+            else:
+                raise ValueError(
+                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
+                    "These are the supported modalities: 'text_turns'."
+                )
 
-            if self.modality == "audio_turns":
-                await self._run_audio_turns()
-                return
-
-        raise ValueError(
-            f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-            "Choose between 'text', 'audio', or 'continuous_audio'."
-        )
-
-    async def _run_text_turns(self) -> None:
+    async def _run_text_turns(self, bot: TurnBasedBotStructure) -> None:
         """
         Runs the CLI interface for the text turns modality.
         """
         logger.debug("Running the LocalBotInterface in text turns mode.")
-        raise NotImplementedError("Text turns are not yet supported for LocalBotInterface.")
 
-    async def _run_audio_turns(self) -> None:
-        """
-        Runs the CLI interface for the audio turns modality.
-        """
-        logger.debug("Running the LocalBotInterface in audio turns mode.")
-        raise NotImplementedError("Audio turns are not yet supported for LocalBotInterface.")
+        print("Chat is ready. Start typing!")
+        print("Press 'q' to quit")
+        print("")
 
-    async def _run_audio_stream(self) -> None:
+        while True:
+            user_message = input("User: ")
+
+            if user_message == "q":
+                break
+
+            response = await bot.send_message({"role": "user", "content": user_message})
+
+            print("Assistant: ", end="", flush=True)
+            async for delta in response:
+                print(delta.get("content", ""), end="", flush=True)
+            print("")
+
+        print("Chat is finished. Bye!")
+
+    async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
         """
         Runs the CLI interface for the continuous audio streaming modality.
         """
-        self.bot: ContinuousStreamBotStructure
         logger.debug("Running the LocalBotInterface in continuous audio streaming mode.")
 
         # Create the handlers
@@ -97,11 +106,11 @@ class LocalBotInterface(BotInterface):
         self.input_handler.loop = asyncio.get_running_loop()
 
         # Connect the event handlers
-        self.bot.add_event_handler("*", self.check_for_transcripts)
-        self.bot.add_event_handler("on_text_message", self.handle_text_messages)
-        self.bot.add_event_handler("on_audio_message", self.handle_audio_messages)
-        self.bot.add_event_handler("on_speech_started", self.speech_started)
-        self.bot.add_event_handler("on_speech_stopped", self.speech_stopped)
+        bot.add_event_handler("*", self.check_for_transcripts)
+        bot.add_event_handler("on_text_message", self.handle_text_messages)
+        bot.add_event_handler("on_audio_message", self.handle_audio_messages)
+        bot.add_event_handler("on_speech_started", self.speech_started)
+        bot.add_event_handler("on_speech_stopped", self.speech_stopped)
 
         # Start keyboard listener in a separate thread
         listener = keyboard.Listener(on_press=self.input_handler.on_press)
@@ -109,16 +118,15 @@ class LocalBotInterface(BotInterface):
 
         try:
             logger.debug("Asking the bot to connect to the model...")
-            await self.bot.connect()
-            asyncio.create_task(self.bot.run())
+            await bot.connect()
+            asyncio.create_task(bot.run())
 
-            print("Connected to OpenAI Realtime API!")
-            print("Audio streaming will start automatically.")
+            print("Chat is ready. Start speaking!")
             print("Press 'q' to quit")
             print("")
 
             # Start continuous audio streaming
-            asyncio.create_task(self.audio_handler.start_streaming(self.bot.stream_data))
+            asyncio.create_task(self.audio_handler.start_streaming(bot.stream_data))
 
             # Simple input loop for quit command
             while True:
@@ -132,7 +140,8 @@ class LocalBotInterface(BotInterface):
         finally:
             self.audio_handler.stop_streaming()
             self.audio_handler.cleanup()
-            await self.bot.disconnect()
+            await bot.disconnect()
+            print("Chat is finished. Bye!")
 
     async def check_for_transcripts(self, event: Dict[str, Any]) -> None:
         """
