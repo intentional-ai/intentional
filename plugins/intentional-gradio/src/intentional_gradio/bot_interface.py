@@ -1,0 +1,186 @@
+# SPDX-FileCopyrightText: 2024-present ZanSara <github@zansara.dev>
+# SPDX-License-Identifier: AGPL-3.0-or-later
+"""
+Gradio-based bot interface for Intentional.
+"""
+
+from typing import Any, Dict
+
+import logging
+
+import gradio
+from intentional_core import (
+    BotInterface,
+    BotStructure,
+    TurnBasedBotStructure,
+    load_bot_structure_from_dict,
+)
+
+
+logger = logging.getLogger(__name__)
+
+
+class GradioBotInterface(BotInterface):
+    """
+    Bot that uses a Gradio interface to interact with the user.
+    """
+
+    name = "gradio"
+
+    def __init__(self, config: Dict[str, Any]):
+        # Init the structure
+        bot_structure_config = config.pop("bot", None)
+        if not bot_structure_config:
+            raise ValueError("GradioBotInterface requires a 'bot' configuration key to know how to structure the bot.")
+        logger.debug("Creating bot structure of type '%s'", bot_structure_config)
+        self.bot: BotStructure = load_bot_structure_from_dict(bot_structure_config)
+
+        self.title = config.pop("title", "Intentional")
+        self.description = config.pop("description", "An AI assistant powered by Intentional.")
+
+        # Check the modality
+        self.modality = config.pop("modality")
+        logger.debug("Modality for GradioBotInterface is set to: %s", self.modality)
+
+    async def run(self) -> None:
+        """
+        Chooses the specific loop to use for this combination of bot and modality and kicks it off.
+        """
+        # if isinstance(self.bot, ContinuousStreamBotStructure):
+        #     if self.modality == "audio_stream":
+        #         await self._run_audio_stream(self.bot)
+        #     else:
+        #         raise ValueError(
+        #             f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
+        #             "These are the supported modalities: 'audio_stream'."
+        #         )
+
+        if isinstance(self.bot, TurnBasedBotStructure):
+            if self.modality == "text_turns":
+                await self._run_text_turns(self.bot)
+            else:
+                raise ValueError(
+                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
+                    "These are the supported modalities: 'text_turns'."
+                )
+
+    async def _run_text_turns(self, bot: TurnBasedBotStructure) -> None:
+        """
+        Runs the interface interface for the text turns modality.
+        """
+        logger.debug("Running the GradioBotInterface in text turns mode.")
+
+        async def send_message(message, _):
+            response = await bot.send_message({"role": "user", "content": message})
+            output = ""
+            async for delta in response:
+                output += delta.get("content", "")
+                yield output
+
+        gradio.ChatInterface(
+            send_message, type="messages", title=self.title, description=self.description, theme="soft"
+        ).launch()
+
+    # async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
+    #     """
+    #     Runs the CLI interface for the continuous audio streaming modality.
+    #     """
+    #     logger.debug("Running the LocalBotInterface in continuous audio streaming mode.")
+
+    #     # Create the handlers
+    #     self.audio_handler = AudioHandler()
+    #     self.input_handler = InputHandler()
+    #     self.input_handler.loop = asyncio.get_running_loop()
+
+    #     # Connect the event handlers
+    #     bot.add_event_handler("*", self.check_for_transcripts)
+    #     bot.add_event_handler("on_text_message", self.handle_text_messages)
+    #     bot.add_event_handler("on_audio_message", self.handle_audio_messages)
+    #     bot.add_event_handler("on_speech_started", self.speech_started)
+    #     bot.add_event_handler("on_speech_stopped", self.speech_stopped)
+
+    #     # Start keyboard listener in a separate thread
+    #     listener = keyboard.Listener(on_press=self.input_handler.on_press)
+    #     listener.start()
+
+    #     try:
+    #         logger.debug("Asking the bot to connect to the model...")
+    #         await bot.connect()
+    #         asyncio.create_task(bot.run())
+
+    #         print("Chat is ready. Start speaking!")
+    #         print("Press 'q' to quit")
+    #         print("")
+
+    #         # Start continuous audio streaming
+    #         asyncio.create_task(self.audio_handler.start_streaming(bot.stream_data))
+
+    #         # Simple input loop for quit command
+    #         while True:
+    #             command, _ = await self.input_handler.command_queue.get()
+
+    #             if command == "q":
+    #                 break
+
+    #     except Exception as e:  # pylint: disable=broad-except
+    #         logger.exception("An error occurred: %s", str(e))
+    #     finally:
+    #         self.audio_handler.stop_streaming()
+    #         self.audio_handler.cleanup()
+    #         await bot.disconnect()
+    #         print("Chat is finished. Bye!")
+
+    # async def check_for_transcripts(self, event: Dict[str, Any]) -> None:
+    #     """
+    #     Checks for transcripts from the bot.
+
+    #     Args:
+    #         event: The event dictionary containing the transcript.
+    #     """
+    #     if "transcript" in event:
+    #         print(f"[{event["type"]}] Transcript: {event['transcript']}")
+
+    # async def handle_text_messages(self, event: Dict[str, Any]) -> None:
+    #     """
+    #     Prints to the console any text message from the bot.
+
+    #     Args:
+    #         event: The event dictionary containing the message.
+    #     """
+    #     print(f"Assistant: {event['delta']}")
+
+    # async def handle_audio_messages(self, event: Dict[str, Any]) -> None:
+    #     """
+    #     Plays audio responses from the bot.
+
+    #     Args:
+    #         event: The event dictionary containing the audio message.
+    #     """
+    #     self.audio_handler.play_audio(base64.b64decode(event["delta"]))
+
+    # async def speech_started(self, event: Dict[str, Any]) -> None:  # pylint: disable=unused-argument
+    #     """
+    #     Prints to the console when the bot starts speaking.
+
+    #     Args:
+    #         event: The event dictionary containing the speech start event.
+    #     """
+    #     print("[User is speaking]")
+
+    #     # Handle interruptions if it is the case
+    #     played_milliseconds = self.audio_handler.stop_playback_immediately()
+    #     logging.debug("Played the response for %s milliseconds.", played_milliseconds)
+
+    #     # If we're interrupting the bot, handle the interruption on the model side too
+    #     if played_milliseconds:
+    #         logging.info("Handling interruption...")
+    #         await self.bot.handle_interruption(played_milliseconds)
+
+    # async def speech_stopped(self, event: Dict[str, Any]) -> None:  # pylint: disable=unused-argument
+    #     """
+    #     Prints to the console when the bot stops speaking.
+
+    #     Args:
+    #         event: The event dictionary containing the speech stop event.
+    #     """
+    #     print("[User stopped speaking]")

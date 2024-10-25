@@ -1,0 +1,13 @@
+plugins:
+- intentional_gradio
+- intentional_text_chat
+- intentional_openai
+
+interface: gradio
+title: My Bot
+modality: text_turns
+bot:
+  type: text_chat
+  llm:
+    client: openai
+    name: gpt-4o

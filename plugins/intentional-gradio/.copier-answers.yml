@@ -1,0 +1,6 @@
+# Changes here will be overwritten by Copier
+_src_path: .template/
+description: Plugin to add a Gradio interface to interact with Intentional bots.
+module_name: gradio
+name: Gradio
+package_name: gradio

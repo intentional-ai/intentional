@@ -20,9 +20,15 @@ def import_plugin(name: str):
         logger.debug("Importing module %s", name)
         module = importlib.import_module(name)
         # Print all classes in the module
+        class_found = False
         for _, obj in inspect.getmembers(module):
             if inspect.isclass(obj):
                 logger.debug("Class found: %s", obj)
+                class_found = True
+        if not class_found:
+            logger.debug(
+                "No classes found in module %s: are they imported in the top-level __init__ file of the plugin?", name
+            )
     except ModuleNotFoundError:
         logger.exception("Module '%s' not found for import, is it installed?", name)
 

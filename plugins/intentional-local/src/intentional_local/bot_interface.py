@@ -36,7 +36,7 @@ class LocalBotInterface(BotInterface):
         # Init the structure
         bot_structure_config = config.pop("bot", None)
         if not bot_structure_config:
-            raise ValueError("LocalBot requires a 'bot' configuration key to know how to structure the bot.")
+            raise ValueError("LocalBotInterface requires a 'bot' configuration key to know how to structure the bot.")
         logger.debug("Creating bot structure of type '%s'", bot_structure_config)
         self.bot: BotStructure = load_bot_structure_from_dict(bot_structure_config)
 
