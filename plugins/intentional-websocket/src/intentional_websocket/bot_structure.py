@@ -3,11 +3,16 @@
 """
 Websocket bot structure for Intentional.
 """
-from typing import Any, Dict
+from typing import Any, Dict, List
 import logging
 
-from intentional_core import ContinuousStreamBotStructure
-from intentional_core import ContinuousStreamModelClient, load_model_client_from_dict
+from intentional_core import (
+    ContinuousStreamBotStructure,
+    ContinuousStreamModelClient,
+    load_model_client_from_dict,
+    Tool,
+    load_tools_from_dict,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -36,6 +41,11 @@ class WebsocketBotStructure(ContinuousStreamBotStructure):
         self.model: ContinuousStreamModelClient = load_model_client_from_dict(llm_config)
 
         self.model.parent_event_handler = self.handle_event
+
+        # Collect the tools
+        tools_config = config.pop("tools", {})
+        logger.debug("Tools to load: %s", tools_config)
+        self.tools: List[Tool] = load_tools_from_dict(tools_config)
 
     async def run(self) -> None:
         """

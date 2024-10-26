@@ -8,7 +8,7 @@
 Client for OpenAI's Realtime API.
 """
 
-from typing import Optional, Dict, Any, Callable
+from typing import Optional, Dict, Any, Callable, List
 
 import os
 import math
@@ -17,10 +17,16 @@ import base64
 import logging
 import websockets
 
-from intentional_core import ContinuousStreamModelClient
+from intentional_core import ContinuousStreamModelClient, Tool, IntentRoutingTool
 
 
 logger = logging.getLogger(__name__)
+
+
+ROUTING_SYSTEM_PROMPTS = {
+    "gpt-4o-realtime-preview-2024-10-01": """Every time I say something call the 'classify_response' tool.
+Wait for the tool reply before doing anything else!""",
+}
 
 
 class RealtimeAPIClient(ContinuousStreamModelClient):
@@ -64,8 +70,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         self.api_key = os.environ.get(self.api_key_name)
 
         self.voice = config.get("voice", "alloy")
-        self.system_prompt = config.get("system_prompt", "You're a helpful assistant.")
-        self.tools = config.get("tools", [])
+        # self.system_prompt = config.get("system_prompt", "You're a helpful assistant.")
 
         self.ws = None
         self.base_url = "wss://api.openai.com/v1/realtime"
@@ -77,6 +82,12 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         # Event handler of the parent's BotStructure class, if needed
         self.parent_event_handler: Optional[Callable] = None
 
+        # Intent routering data
+        self.intent_router = IntentRoutingTool()
+        self.routing_system_prompt = ROUTING_SYSTEM_PROMPTS[self.model_name]
+        self.system_prompt = ""  # Fallback, shouldn't be needed
+        self.tools = {}
+
     async def connect(self) -> None:
         """
         Establish WebSocket connection with the Realtime API.
@@ -87,15 +98,11 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         headers = {"Authorization": f"Bearer {self.api_key}", "OpenAI-Beta": "realtime=v1"}
         self.ws = await websockets.connect(url, extra_headers=headers)
 
-        # Set up default session configuration
-        tools = [t.to_openai_tool()["function"] for t in self.tools]
-        for t in tools:
-            t["type"] = "function"  # TODO: OpenAI docs didn't say this was needed, but it was
-
+        # This initial session is setup to do routing by intent
         await self._update_session(
             {
                 "modalities": ["text", "audio"],
-                "instructions": self.system_prompt,
+                "instructions": self.routing_system_prompt,
                 "voice": self.voice,
                 "input_audio_format": "pcm16",
                 "output_audio_format": "pcm16",
@@ -106,8 +113,8 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                     "prefix_padding_ms": 500,
                     "silence_duration_ms": 200,
                 },
-                "tools": tools,
-                "tool_choice": "auto",
+                "tools": [self.intent_router.to_openai_tool()],  # For now we know we only need the intent router tool
+                "tool_choice": "required",
                 "temperature": 0.8,
             }
         )
@@ -122,7 +129,35 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         else:
             logger.debug("Attempted disconnection of a OpenAIRealtimeAPIClient that was never connected, nothing done.")
 
-    async def run(self) -> None:
+    async def update_system_prompt(self, new_prompt: str, new_tools: List[Tool]) -> None:
+        """
+        Update the system prompt to use in the conversation.
+
+        Args:
+            new_prompt (str):
+                The new system prompt to use.
+            new_tools (List[Tool]):
+                The new tools to use in the conversation.
+        """
+        logger.debug("Setting system prompt to: %s", new_prompt)
+        await self._update_session(
+            {"instructions": new_prompt, "tools": [t.to_openai_tool() for t in new_tools], "tool_choice": "auto"}
+        )
+
+    async def restore_routing_prompt(self) -> None:
+        """
+        Restores the routing prompt.
+        """
+        logger.debug("Restoring routing prompt.")
+        await self._update_session(
+            {
+                "instructions": self.routing_system_prompt,
+                "tools": [self.intent_router.to_openai_tool()],
+                "tool_choice": "required",
+            }
+        )
+
+    async def run(self) -> None:  # pylint: disable=too-many-branches
         """
         Handles events coming from the WebSocket connection.
 
@@ -139,6 +174,9 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                 if event_type == "error":
                     logger.error("An error response was returned: %s", event)
 
+                elif event_type == "session.updated":
+                    logger.debug("Session updated to the following configuration: %s", event)
+
                 # Track response state
                 elif event_type == "response.created":
                     self._current_response_id = event.get("response", {}).get("id")
@@ -150,6 +188,10 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
 
                 elif event_type == "response.done":
                     logger.debug("Agent finished generating a response.")
+                    await self.restore_routing_prompt()
+
+                elif event_type == "response.function_call_arguments.done":
+                    await self.call_tool(event)
 
                 # Handle interruptions
                 elif event_type == "input_audio_buffer.speech_started":
@@ -177,7 +219,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
             logging.info("Connection closed")
         except Exception as e:  # pylint: disable=broad-except
             logging.exception("Error in message handling: %s", str(e))
-        
+
         print("################### FINISHED RUNNING ##############################")
 
     async def stream_data(self, data: bytes) -> None:
@@ -254,20 +296,20 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         }
         await self.ws.send(json.dumps(event))
 
-    # async def _send_text(self, text: str) -> None:
-    #     """
-    #     Send text message to the API.
+    async def _send_text(self, text: str) -> None:
+        """
+        Send text message to the API.
 
-    #     Args:
-    #         text (str):
-    #             The text message to send.
-    #     """
-    #     event = {
-    #         "type": "conversation.item.create",
-    #         "item": {"type": "message", "role": "user", "content": [{"type": "input_text", "text": text}]},
-    #     }
-    #     await self.ws.send(json.dumps(event))
-    #     await self._create_response()
+        Args:
+            text (str):
+                The text message to send.
+        """
+        event = {
+            "type": "conversation.item.create",
+            "item": {"type": "message", "role": "user", "content": [{"type": "input_text", "text": text}]},
+        }
+        await self.ws.send(json.dumps(event))
+        await self._create_response()
 
     # async def _send_audio(self, audio_bytes: bytes) -> None:
     #     """
@@ -290,56 +332,66 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
     #     commit_event = {"type": "input_audio_buffer.commit"}
     #     await self.ws.send(json.dumps(commit_event))
 
-    # async def _send_function_result(self, call_id: str, result: Any) -> None:
-    #     """
-    #     Send function call result back to the API.
+    async def _send_function_result(self, call_id: str, result: Any) -> None:
+        """
+        Send function call result back to the API.
 
-    #     Args:
-    #         call_id (str):
-    #             The ID of the function call.
-    #         result (Any):
-    #             The result of the function call.
-    #     """
-    #     event = {
-    #         "type": "conversation.item.create",
-    #         "item": {"type": "function_call_output", "call_id": call_id, "output": result},
-    #     }
-    #     await self.ws.send(json.dumps(event))
+        Args:
+            call_id (str):
+                The ID of the function call.
+            result (Any):
+                The result of the function call.
+        """
+        event = {
+            "type": "conversation.item.create",
+            "item": {"type": "function_call_output", "call_id": call_id, "output": result},
+        }
+        await self.ws.send(json.dumps(event))
 
-    #     # functions need a manual response
-    #     await self._create_response()
+        # functions need a manual response
+        await self._create_response()
 
-    # async def _create_response(self, functions: Optional[List[Dict[str, Any]]] = None) -> None:
-    #     """
-    #     Request a response from the API.
-    #     Needed for all messages that are not streamed in a continuous flow like the audio.
+    async def _create_response(self, functions: Optional[List[Dict[str, Any]]] = None) -> None:
+        """
+        Request a response from the API.
+        Needed for all messages that are not streamed in a continuous flow like the audio.
 
-    #     Args:
-    #         functions (Optional[List[Dict[str, Any]]]):
-    #             The functions to call on the response, if any.
-    #     """
-    #     event = {"type": "response.create", "response": {"modalities": ["text", "audio"]}}
-    #     if functions:
-    #         event["response"]["tools"] = functions
-    #     await self.ws.send(json.dumps(event))
+        Args:
+            functions (Optional[List[Dict[str, Any]]]):
+                The functions to call on the response, if any.
+        """
+        event = {"type": "response.create", "response": {"modalities": ["text", "audio"]}}
+        if functions:
+            event["response"]["tools"] = functions
+        await self.ws.send(json.dumps(event))
 
-    # async def call_tool(self, event: Dict[str, Any] ) -> None:
-    #     call_id = event["call_id"]
-    #     tool_name = event['name']
-    #     tool_arguments = json.loads(event['arguments'])
+    async def call_tool(self, event: Dict[str, Any]) -> None:
+        """
+        Calls the tool requested by the model
 
-    #     tool_selection = ToolSelection(
-    #         tool_id="tool_id",
-    #         tool_name=tool_name,
-    #         tool_kwargs=tool_arguments
-    #     )
+        Args:
+            event (Dict[str, Any]):
+                The event containing the tool call information.
+        """
+        call_id = event["call_id"]
+        tool_name = event["name"]
+        tool_arguments = json.loads(event["arguments"])
+        logger.debug("Calling tool %s with arguments %s (call_id: %s)", tool_name, tool_arguments, call_id)
 
-    #     # avoid blocking the event loop with sync tools
-    #     # by using asyncio.to_thread
-    #     tool_result = await asyncio.to_thread(
-    #         call_tool_with_selection,
-    #         tool_selection,
-    #         self.tools,
-    #         verbose=True
-    #     )
-    #     await self.send_function_result(call_id, str(tool_result))
+        # Check if it's the router
+        if tool_name == "classify_response":
+            self.system_prompt, self.tools = await self.intent_router.run(tool_arguments)
+            await self.update_system_prompt(self.system_prompt, self.tools)
+            await self._send_function_result(event["call_id"], "OK")
+            return
+
+        # Make sure the tool actually exists
+        if tool_name not in self.tools:
+            logger.error("Tool %s not found in the list of available tools.", tool_name)
+            await self._send_function_result(call_id, f"Error: Tool {tool_name} not found")
+
+        # Invoke the tool
+        result = await self.tools.get(tool_name).run(tool_arguments)
+        logger.debug("Tool %s returned: %s", tool_name, result)
+
+        await self._send_function_result(call_id, str(result))

@@ -113,7 +113,6 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
     if not interface_class_:
         raise ValueError("Bot configuration must contain an 'interface' key to know which interface to use.")
 
-    logger.debug("Creating bot interface of type '%s'", interface_class_)
     if interface_class_ not in _BOT_INTERFACES:
         raise ValueError(
             f"Unknown bot interface type '{interface_class_}'. Available types: {list(_BOT_INTERFACES)}. "
@@ -121,4 +120,5 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
         )
 
     # Handoff to the subclass' init
+    logger.debug("Creating bot interface of type '%s'", interface_class_)
     return _BOT_INTERFACES[interface_class_](config)

@@ -6,15 +6,12 @@ Gradio-based bot interface for Intentional.
 
 from typing import Any, Dict
 
-import io
 import asyncio
 import base64
-from functools import partial
 import threading
-from pynput import keyboard
-import numpy as np
 import logging
-import librosa
+
+import numpy as np
 from pydub import AudioSegment
 
 import gradio
@@ -56,6 +53,8 @@ class GradioBotInterface(BotInterface):
         # Check the modality
         self.modality = config.pop("modality")
         logger.debug("Modality for GradioBotInterface is set to: %s", self.modality)
+
+        self.recording_thread = None
 
     async def run(self) -> None:
         """
@@ -99,14 +98,8 @@ class GradioBotInterface(BotInterface):
                 with gradio.Column(scale=2, min_width=300):
                     gradio.ChatInterface(send_message, type="messages", theme="soft")
                 with gradio.Column(scale=1, min_width=300):
-                    gradio.Markdown(f"### Current System Prompt\n\n TDB")
+                    gradio.Markdown("### Current System Prompt\n\n TDB")
         demo.launch()
-
-
-
-
-
-
 
     async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
         """
@@ -124,7 +117,7 @@ class GradioBotInterface(BotInterface):
 
         #     print(stream[1].shape)
         #     return audio, stream
-        
+
         # def play_again(stream):
         #     time.sleep(0.5)
         #     print("----", stream[1].shape)
@@ -135,25 +128,24 @@ class GradioBotInterface(BotInterface):
         #     mic = gradio.Audio(sources=['microphone'], type="numpy", streaming=True)
         #     out = gradio.Audio(label="Output Audio", type="numpy", autoplay=True, streaming=True, interactive=False)
         #     mic.stream(
-        #         add_to_stream, 
-        #         [mic, stream], 
+        #         add_to_stream,
+        #         [mic, stream],
         #         [out, stream],
         #     )
         #     mic.stop_recording(play_again, stream, out)
 
         # demo.launch()
 
-
-
-
-
         try:
+
             async def stream_to_model(audio_data, input_state):
                 # print(audio_data, audio_data[1].shape)
                 try:
 
                     audio = np.array([audio_data[1][:, 0]])
-                    sound = AudioSegment(audio.tobytes(), frame_rate=audio_data[0], sample_width=audio_data[1].dtype.itemsize, channels=1)
+                    sound = AudioSegment(
+                        audio.tobytes(), frame_rate=audio_data[0], sample_width=audio_data[1].dtype.itemsize, channels=1
+                    )
                     sound = sound.set_frame_rate(24000)
                     numpy_sound = np.array([sound.get_array_of_samples()]).T
 
@@ -166,14 +158,15 @@ class GradioBotInterface(BotInterface):
                     else:
                         input_state = (sound_to_store[0], np.concatenate((input_state[1], sound_to_store[1])))
                     return input_state
-                
+
                 except Exception as e:  # pylint: disable=broad-except
                     logger.exception("Error streaming: %s", e)
                     return
-                    
+
             def get_audio_from_state(state):
                 if state:
                     return state.pop(0)
+                return None
 
             def play_recording(state):
                 print("Playing recording!")
@@ -181,36 +174,31 @@ class GradioBotInterface(BotInterface):
                 # Save the audio to a file
                 with open("audio.wav", "wb") as f:
                     f.write(state[1].tobytes())
-                
+
                 return gradio.Audio(label="Recording", type="numpy", value=state)
-                
+
             with gradio.Blocks(analytics_enabled=False) as demo:
                 input_state = gradio.State()
                 output_state = gradio.State()
 
                 mic = gradio.Audio(
-                    sources=['microphone'], 
-                    type="numpy", 
+                    sources=["microphone"],
+                    type="numpy",
                     streaming=True,
                     every=0.5,
                 )
-                out = gradio.Audio(
-                    label="Output", 
-                    type="numpy", 
-                    autoplay=True, 
-                    streaming=True, 
+                _ = gradio.Audio(
+                    label="Output",
+                    type="numpy",
+                    autoplay=True,
+                    streaming=True,
                     interactive=False,
                     value=get_audio_from_state,
-                    inputs=[output_state]
+                    inputs=[output_state],
                 )
                 out2 = gradio.Audio(label="Recording", type="numpy")
-                mic.stream(
-                    stream_to_model, 
-                    [mic, input_state],
-                    [input_state]
-                )
-                mic.stop_recording(play_recording, input_state, out2)
-
+                mic.stream(stream_to_model, [mic, input_state], [input_state])  # pylint: disable=no-member
+                mic.stop_recording(play_recording, input_state, out2)  # pylint: disable=no-member
 
             async def queue_audio_from_model(event, output_state):
                 print("Playing response!")
@@ -222,16 +210,17 @@ class GradioBotInterface(BotInterface):
             bot.add_event_handler("on_audio_message", lambda event: queue_audio_from_model(event, output_state))
             bot.add_event_handler("on_speech_started", self.speech_started)
             bot.add_event_handler("on_speech_stopped", self.speech_stopped)
-                
+
             logger.debug("Asking the bot to connect to the model...")
             await bot.connect()
             logger.debug("############# Connected to the model!")
 
-            self.recording_thread = threading.Thread(target=lambda: asyncio.run(bot.run()))
+            self.recording_thread = threading.Thread(
+                target=lambda: asyncio.run(bot.run())
+            )  # pylint: disable=attribute-defined-outside-init
             self.recording_thread.start()
 
             demo.launch()
-            
 
         except Exception as e:  # pylint: disable=broad-except
             logger.exception("An error occurred: %s", str(e))
@@ -239,111 +228,97 @@ class GradioBotInterface(BotInterface):
             await bot.disconnect()
             print("Chat is finished. Bye!")
 
+    # try:
+    #     with gradio.Blocks() as demo:
+    #         with gradio.Row():
+    #             with gradio.Column():
+    #                 input_audio = gradio.Audio(label="Input", sources="microphone", type="numpy", streaming=True)
+    #                 # gradio.Interface(fn=…, inputs=gradio.Image(streaming=True), output="plot", live=True)
+    #             with gradio.Column():
+    #                 output_audio = gradio.Audio(label="Output Audio", streaming=True, autoplay=True, type="filepath")
 
+    #         async def stream_data(data):
+    #             try:
+    #                 # Stream directly without trying to decode
+    #                 sampling_rate, audio_array = data
 
+    #                 # # Save the audio to a file
+    #                 from pydub import AudioSegment
 
+    #                 audio_buffer = io.BytesIO()
+    #                 segment = AudioSegment(
+    #                     audio_array.tobytes(),
+    #                     frame_rate=sampling_rate,
+    #                     sample_width=audio_array.dtype.itemsize,
+    #                     channels=(1 if len(audio_array.shape) == 1 else audio_array.shape[1]),
+    #                 )
+    #                 segment.export(audio_buffer, format="wav")
 
+    #                 await bot.stream_data(audio_buffer.getvalue())
 
+    #                 # with open("audio.wav", "wb") as f:
+    #                 #     f.write(audio_buffer.getvalue())
 
+    #             except Exception as e:  # pylint: disable=broad-except
+    #                 logger.exception("Error streaming: %s", e)
+    #                 return
 
+    #         stream = input_audio.stream(
+    #             stream_data,
+    #             [input_audio],
+    #             [output_audio],
+    #             stream_every=0.1,
+    #             time_limit=3600,
+    #             show_progress=False
+    #         )
 
+    #     async def play_response(event):
+    #         print("Playing response!")
+    #         print(event["delta"])
+    #         # await output_audio.play(base64.b64decode(event["delta"]))
 
+    #     # Connect the event handlers
+    #     bot.add_event_handler("*", self.check_for_transcripts)
+    #     bot.add_event_handler("on_audio_message", play_response)
+    #     bot.add_event_handler("on_speech_started", self.speech_started)
+    #     bot.add_event_handler("on_speech_stopped", self.speech_stopped)
 
-        
-        # try:
-        #     with gradio.Blocks() as demo:
-        #         with gradio.Row():
-        #             with gradio.Column():
-        #                 input_audio = gradio.Audio(label="Input Audio", sources="microphone", type="numpy", streaming=True)
-        #                 # gradio.Interface(fn=…, inputs=gradio.Image(streaming=True), output="plot", live=True)
-        #             with gradio.Column():
-        #                 output_audio = gradio.Audio(label="Output Audio", streaming=True, autoplay=True, type="filepath")
+    #     logger.debug("Asking the bot to connect to the model...")
+    #     await bot.connect()
+    #     logger.debug("############# Connected to the model!")
 
-        #         async def stream_data(data):
-        #             try:
-        #                 # Stream directly without trying to decode
-        #                 sampling_rate, audio_array = data
+    #     self.recording_thread = threading.Thread(target=lambda: asyncio.run(bot.run()))
+    #     self.recording_thread.start()
 
-        #                 # # Save the audio to a file
-        #                 from pydub import AudioSegment
-                        
-        #                 audio_buffer = io.BytesIO()
-        #                 segment = AudioSegment(
-        #                     audio_array.tobytes(),
-        #                     frame_rate=sampling_rate,
-        #                     sample_width=audio_array.dtype.itemsize,
-        #                     channels=(1 if len(audio_array.shape) == 1 else audio_array.shape[1]),
-        #                 )
-        #                 segment.export(audio_buffer, format="wav")
+    #     demo.launch()
+    #     # self.recording_thread = threading.Thread(target=demo.launch)
+    #     # self.recording_thread.start()
 
+    #     # # print("About to run bot!")
+    #     # # await bot.run()
 
-        #                 await bot.stream_data(audio_buffer.getvalue())
+    #     # # logger.debug("############# After run()")
 
-        #                 # with open("audio.wav", "wb") as f:
-        #                 #     f.write(audio_buffer.getvalue())
+    #     # logger.debug("Asking the bot to connect to the model...")
+    #     # await bot.connect()
+    #     # asyncio.create_task(bot.run())
 
+    #     # print("Chat is ready. Start speaking!")
+    #     # print("Press 'q' to quit")
+    #     # print("")
 
-        #             except Exception as e:  # pylint: disable=broad-except
-        #                 logger.exception("Error streaming: %s", e)
-        #                 return
+    #     # # # Start continuous audio streaming
+    #     # # asyncio.create_task(self.audio_handler.start_streaming(bot.stream_data))
 
-        #         stream = input_audio.stream(
-        #             stream_data,
-        #             [input_audio],
-        #             [output_audio],
-        #             stream_every=0.1,
-        #             time_limit=3600,
-        #             show_progress=False
-        #         )
+    #     # # Simple input loop for quit command
+    #     # while True:
+    #     #     await asyncio.sleep(1)
 
-        #     async def play_response(event):
-        #         print("Playing response!")
-        #         print(event["delta"])
-        #         # await output_audio.play(base64.b64decode(event["delta"]))
-
-        #     # Connect the event handlers
-        #     bot.add_event_handler("*", self.check_for_transcripts)
-        #     bot.add_event_handler("on_audio_message", play_response)
-        #     bot.add_event_handler("on_speech_started", self.speech_started)
-        #     bot.add_event_handler("on_speech_stopped", self.speech_stopped)
-                
-        #     logger.debug("Asking the bot to connect to the model...")
-        #     await bot.connect()
-        #     logger.debug("############# Connected to the model!")
-
-        #     self.recording_thread = threading.Thread(target=lambda: asyncio.run(bot.run()))
-        #     self.recording_thread.start()
-
-        #     demo.launch()
-        #     # self.recording_thread = threading.Thread(target=demo.launch)
-        #     # self.recording_thread.start()
-
-        #     # # print("About to run bot!")
-        #     # # await bot.run()
-
-        #     # # logger.debug("############# After run()")
-
-
-        #     # logger.debug("Asking the bot to connect to the model...")
-        #     # await bot.connect()
-        #     # asyncio.create_task(bot.run())
-
-        #     # print("Chat is ready. Start speaking!")
-        #     # print("Press 'q' to quit")
-        #     # print("")
-
-        #     # # # Start continuous audio streaming
-        #     # # asyncio.create_task(self.audio_handler.start_streaming(bot.stream_data))
-
-        #     # # Simple input loop for quit command
-        #     # while True:
-        #     #     await asyncio.sleep(1)
-
-        # except Exception as e:  # pylint: disable=broad-except
-        #     logger.exception("An error occurred: %s", str(e))
-        # finally:
-        #     await bot.disconnect()
-        #     print("Chat is finished. Bye!")
+    # except Exception as e:  # pylint: disable=broad-except
+    #     logger.exception("An error occurred: %s", str(e))
+    # finally:
+    #     await bot.disconnect()
+    #     print("Chat is finished. Bye!")
 
     async def check_for_transcripts(self, event: Dict[str, Any]) -> None:
         """
@@ -375,7 +350,7 @@ class GradioBotInterface(BotInterface):
         print("[User is speaking]")
 
         # Handle interruptions if it is the case
-        played_milliseconds = self.audio_handler.stop_playback_immediately()
+        played_milliseconds = self.audio_handler.stop_playback_immediately()  # pylint: disable=no-member
         logging.debug("Played the response for %s milliseconds.", played_milliseconds)
 
         # If we're interrupting the bot, handle the interruption on the model side too
