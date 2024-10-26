@@ -108,33 +108,33 @@ class AudioHandler:
                 logger.exception("Error recording audio: %s", e)
                 break
 
-    def stop_recording(self) -> bytes:
-        """Stop recording and return the recorded audio as bytes"""
-        if not self.recording:
-            return b""
+    # def stop_recording(self) -> bytes:
+    #     """Stop recording and return the recorded audio as bytes"""
+    #     if not self.recording:
+    #         return b""
 
-        self.recording = False
-        if self.recording_thread:
-            self.recording_thread.join()
+    #     self.recording = False
+    #     if self.recording_thread:
+    #         self.recording_thread.join()
 
-        # Clean up recording stream
-        if self.recording_stream:
-            self.recording_stream.stop_stream()
-            self.recording_stream.close()
-            self.recording_stream = None
+    #     # Clean up recording stream
+    #     if self.recording_stream:
+    #         self.recording_stream.stop_stream()
+    #         self.recording_stream.close()
+    #         self.recording_stream = None
 
-        # Convert frames to WAV format in memory
-        wav_buffer = io.BytesIO()
-        with wave.open(wav_buffer, "wb") as wf:
-            wf: wave.Wave_write
-            wf.setnchannels(self.channels)
-            wf.setsampwidth(self.audio.get_sample_size(self.audio_format))
-            wf.setframerate(self.rate)
-            wf.writeframes(b"".join(self.frames))
+    #     # Convert frames to WAV format in memory
+    #     wav_buffer = io.BytesIO()
+    #     with wave.open(wav_buffer, "wb") as wf:
+    #         wf: wave.Wave_write
+    #         wf.setnchannels(self.channels)
+    #         wf.setsampwidth(self.audio.get_sample_size(self.audio_format))
+    #         wf.setframerate(self.rate)
+    #         wf.writeframes(b"".join(self.frames))
 
-        # Get the WAV data
-        wav_buffer.seek(0)
-        return wav_buffer.read()
+    #     # Get the WAV data
+    #     wav_buffer.seek(0)
+    #     return wav_buffer.read()
 
     async def start_streaming(self, client_streaming_callback):
         """Start continuous audio streaming."""

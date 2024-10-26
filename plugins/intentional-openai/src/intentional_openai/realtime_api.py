@@ -129,6 +129,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         This method is an infinite loop that listens for messages from the WebSocket connection and processes them
         accordingly. It also triggers the event handlers for the corresponding event types.
         """
+        print("Running!!")
         try:
             async for message in self.ws:
                 event = json.loads(message)
@@ -176,6 +177,8 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
             logging.info("Connection closed")
         except Exception as e:  # pylint: disable=broad-except
             logging.exception("Error in message handling: %s", str(e))
+        
+        print("################### FINISHED RUNNING ##############################")
 
     async def stream_data(self, data: bytes) -> None:
         return await self._stream_audio(data)

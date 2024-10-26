@@ -1,9 +1,10 @@
 plugins:
-- intentional_local
+- intentional_gradio
 - intentional_websocket
 - intentional_openai
 
-interface: local
+interface: gradio
+title: My Bot
 modality: audio_stream
 bot:
   type: websocket
