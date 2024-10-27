@@ -126,6 +126,7 @@ class TextualUIBotInterface(BotInterface):
             asyncio.create_task(self.audio_handler.start_streaming(bot.stream_data))
 
             self.app = AudioStreamInterface()
+            self.app.run()
 
             self.app._loop = asyncio.get_running_loop()
             self.app._thread_id = threading.get_ident()
@@ -144,7 +145,6 @@ class TextualUIBotInterface(BotInterface):
 
         except Exception as e:  # pylint: disable=broad-except
             raise e
-
         finally:
             self.audio_handler.stop_streaming()
             self.audio_handler.cleanup()
