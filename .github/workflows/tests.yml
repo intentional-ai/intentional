@@ -32,6 +32,7 @@ jobs:
 
     - name: Install packages
       run: |
+        sudo apt-get install portaudio19-dev
         pip install uv
         uv pip install --system intentional-core/ intentional/[test]
 
