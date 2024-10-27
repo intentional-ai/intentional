@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "intentional-text-chat"
+name = "intentional-transcribed-audio"
 dynamic = ["version"]
-description = "Plugin that makes Intentional bots able to communicate through a turn-based text chat."
+description = "Plugin the implements the VAD-STT-LLM-TTS architecture for Intentional bots. This architecture create voice bots from text-based models by transcribing the audio, processing it with the LLM and then reading the response out loud to the user."
 readme = "README.md"
 requires-python = ">=3.8"
 license = "AGPL-3.0-or-later"
@@ -27,7 +27,7 @@ classifiers = [
 ]
 
 dependencies = [
-  "intentional-core"
+  "intentional"
 ]
 
 [project.optional-dependencies]
@@ -48,7 +48,7 @@ Issues = "https://github.com/intentional-ai/intentional/issues"
 Source = "https://github.com/intentional-ai/intentional"
 
 [tool.hatch.version]
-path = "src/intentional_text_chat/__about__.py"
+path = "src/intentional_transcribed_audio/__about__.py"
 
 [tool.black]
 line-length = 120

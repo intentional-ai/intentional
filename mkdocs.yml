@@ -20,6 +20,12 @@ nav:
      - 'Text Chat':
         - 'Getting Started': plugins/intentional-text-chat/README.md
         - 'API Reference': plugins/intentional-text-chat/docs/reference.md
+     - 'Transcribed Audio':
+        - 'Getting Started': plugins/intentional-transcribed-audio/README.md
+        - 'API Reference': plugins/intentional-transcribed-audio/docs/reference.md
+     - 'Silero':
+        - 'Getting Started': plugins/intentional-silero/README.md
+        - 'API Reference': plugins/intentional-silero/docs/reference.md
      - 'WebSocket':
         - 'Getting Started': plugins/intentional-websocket/README.md
         - 'API Reference': plugins/intentional-websocket/docs/reference.md

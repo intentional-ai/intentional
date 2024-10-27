@@ -1,0 +1,7 @@
+# Changes here will be overwritten by Copier
+_src_path: .template/
+description: Adds support for Silero models in Intentional, such as their Voice Activity
+    Detection (VAD) component.
+module_name: silero
+name: Silero
+package_name: silero

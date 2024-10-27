@@ -19,6 +19,9 @@ from intentional_core.bot_structure import (
 )
 from intentional_core.tools import Tool, load_tools_from_dict
 from intentional_core.intent_routing import IntentRouter
+from intentional_core.vad import VADClient, load_vad_from_dict
+from intentional_core.stt import STTClient, load_stt_from_dict
+from intentional_core.tts import TTSClient, load_tts_from_dict
 
 __all__ = [
     "BotInterface",
@@ -35,4 +38,10 @@ __all__ = [
     "Tool",
     "IntentRouter",
     "load_tools_from_dict",
+    "VADClient",
+    "load_vad_from_dict",
+    "STTClient",
+    "load_stt_from_dict",
+    "TTSClient",
+    "load_tts_from_dict",
 ]

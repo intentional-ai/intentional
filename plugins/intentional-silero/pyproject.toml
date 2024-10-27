@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "intentional-text-chat"
+name = "intentional-silero"
 dynamic = ["version"]
-description = "Plugin that makes Intentional bots able to communicate through a turn-based text chat."
+description = "Adds support for Silero models in Intentional, such as their Voice Activity Detection (VAD) component."
 readme = "README.md"
 requires-python = ">=3.8"
 license = "AGPL-3.0-or-later"
@@ -27,7 +27,8 @@ classifiers = [
 ]
 
 dependencies = [
-  "intentional-core"
+  "intentional-core",
+  "silero-vad",
 ]
 
 [project.optional-dependencies]
@@ -48,7 +49,7 @@ Issues = "https://github.com/intentional-ai/intentional/issues"
 Source = "https://github.com/intentional-ai/intentional"
 
 [tool.hatch.version]
-path = "src/intentional_text_chat/__about__.py"
+path = "src/intentional_silero/__about__.py"
 
 [tool.black]
 line-length = 120
