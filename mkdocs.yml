@@ -11,6 +11,9 @@ nav:
    - 'API Reference - Main Package': docs/reference.md
    - 'API Reference - Core Package': docs/core-reference.md
    - 'Plugins':
+     - 'Gradio':
+        - 'Getting Started': plugins/intentional-gradio/README.md
+        - 'API Reference': plugins/intentional-gradio/docs/reference.md
      - 'Local CLI':
         - 'Getting Started': plugins/intentional-local/README.md
         - 'API Reference': plugins/intentional-local/docs/reference.md
