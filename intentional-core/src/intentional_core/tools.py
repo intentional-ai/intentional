@@ -45,26 +45,8 @@ class Tool(ABC):
         Run the tool.
         """
 
-    def to_openai_tool(self):
-        """
-        The tool definition required by OpenAI.
-        """
-        return {
-            "type": "function",
-            "name": self.name,
-            "description": self.description,
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    param.name: {"description": param.description, "type": param.type, "default": param.default}
-                    for param in self.parameters
-                },
-                "required": [param.name for param in self.parameters if param.required],
-            },
-        }
 
-
-def load_tools_from_dict(config: List[Dict[str, Any]]) -> List[Tool]:
+def load_tools_from_dict(config: List[Dict[str, Any]]) -> Dict[str, Tool]:
     """
     Load a list of tools from a dictionary configuration.
 
@@ -75,24 +57,25 @@ def load_tools_from_dict(config: List[Dict[str, Any]]) -> List[Tool]:
         A list of Tool instances.
     """
     # Get all the subclasses of Tool
-    subclasses: Set[Tool] = inheritors(Tool)
-    logger.debug("Known tool classes: %s", subclasses)
-    for subclass in subclasses:
-        if not subclass.name:
-            logger.error("Tool class '%s' does not have a name. This tool will not be usable.", subclass)
-            continue
+    if not _TOOL_CLASSES:
+        subclasses: Set[Tool] = inheritors(Tool)
+        logger.debug("Known tool classes: %s", subclasses)
+        for subclass in subclasses:
+            if not subclass.name:
+                logger.error("Tool class '%s' does not have a name. This tool will not be usable.", subclass)
+                continue
 
-        if subclass.name in _TOOL_CLASSES:
-            logger.warning(
-                "Duplicate tool '%s' found. The older class (%s) will be replaced by the newly imported one (%s).",
-                subclass.name,
-                _TOOL_CLASSES[subclass.name],
-                subclass,
-            )
-        _TOOL_CLASSES[subclass.name] = subclass
+            if subclass.name in _TOOL_CLASSES:
+                logger.warning(
+                    "Duplicate tool '%s' found. The older class (%s) will be replaced by the newly imported one (%s).",
+                    subclass.name,
+                    _TOOL_CLASSES[subclass.name],
+                    subclass,
+                )
+            _TOOL_CLASSES[subclass.name] = subclass
 
     # Initialize the tools
-    tools = []
+    tools = {}
     for tool_config in config:
         class_ = tool_config.pop("name")
         logger.debug("Creating tool of type '%s'", class_)
@@ -102,6 +85,6 @@ def load_tools_from_dict(config: List[Dict[str, Any]]) -> List[Tool]:
                 "Did you forget to install a plugin?"
             )
         tool_instance = _TOOL_CLASSES[class_](**tool_config)
-        tools.append(tool_instance)
+        tools[tool_instance.name] = tool_instance
 
     return tools

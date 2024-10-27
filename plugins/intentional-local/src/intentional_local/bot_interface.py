@@ -17,6 +17,7 @@ from intentional_core import (
     ContinuousStreamBotStructure,
     TurnBasedBotStructure,
     load_bot_structure_from_dict,
+    IntentRouter,
 )
 
 from intentional_local.handlers import InputHandler, AudioHandler
@@ -32,13 +33,13 @@ class LocalBotInterface(BotInterface):
 
     name = "local"
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any], intent_router: IntentRouter):
         # Init the structure
         bot_structure_config = config.pop("bot", None)
         if not bot_structure_config:
             raise ValueError("LocalBotInterface requires a 'bot' configuration key to know how to structure the bot.")
         logger.debug("Creating bot structure of type '%s'", bot_structure_config)
-        self.bot: BotStructure = load_bot_structure_from_dict(bot_structure_config)
+        self.bot: BotStructure = load_bot_structure_from_dict(bot_structure_config, intent_router)
 
         # Check the modality
         self.modality = config.pop("modality")
@@ -85,7 +86,7 @@ class LocalBotInterface(BotInterface):
             if user_message == "q":
                 break
 
-            response = await bot.send_message({"role": "user", "content": user_message})
+            response = bot.send_message({"role": "user", "content": user_message})
 
             print("Assistant: ", end="", flush=True)
             async for delta in response:

@@ -18,7 +18,7 @@ from intentional_core.bot_structure import (
     load_bot_structure_from_dict,
 )
 from intentional_core.tools import Tool, load_tools_from_dict
-from intentional_core.intent_routing import IntentRoutingTool
+from intentional_core.intent_routing import IntentRouter
 
 __all__ = [
     "BotInterface",
@@ -33,6 +33,6 @@ __all__ = [
     "TurnBasedBotStructure",
     "load_bot_structure_from_dict",
     "Tool",
-    "IntentRoutingTool",
+    "IntentRouter",
     "load_tools_from_dict",
 ]

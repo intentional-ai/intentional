@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024-present ZanSara <github@zansara.dev>
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-# Inspired from
+# Inspired by
 # https://github.com/run-llama/openai_realtime_client/blob/main/openai_realtime_client/client/realtime_client.py
 # Original is MIT licensed.
 """
@@ -17,16 +17,11 @@ import base64
 import logging
 import websockets
 
-from intentional_core import ContinuousStreamModelClient, Tool, IntentRoutingTool
+from intentional_core import ContinuousStreamModelClient, Tool
+from intentional_openai.tools import to_openai_tool
 
 
 logger = logging.getLogger(__name__)
-
-
-ROUTING_SYSTEM_PROMPTS = {
-    "gpt-4o-realtime-preview-2024-10-01": """Every time I say something call the 'classify_response' tool.
-Wait for the tool reply before doing anything else!""",
-}
 
 
 class RealtimeAPIClient(ContinuousStreamModelClient):
@@ -83,9 +78,8 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         self.parent_event_handler: Optional[Callable] = None
 
         # Intent routering data
-        self.intent_router = IntentRoutingTool()
-        self.routing_system_prompt = ROUTING_SYSTEM_PROMPTS[self.model_name]
-        self.system_prompt = ""  # Fallback, shouldn't be needed
+        self.intent_router = None
+        self.system_prompt = config.get("system_prompt", "")
         self.tools = {}
 
     async def connect(self) -> None:
@@ -99,10 +93,14 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         self.ws = await websockets.connect(url, extra_headers=headers)
 
         # This initial session is setup to do routing by intent
+        if self.intent_router:
+            self.system_prompt, self.tools = await self.intent_router.run(None)
+            self.tools.append(to_openai_tool(self.intent_router))
+
         await self._update_session(
             {
                 "modalities": ["text", "audio"],
-                "instructions": self.routing_system_prompt,
+                "instructions": self.system_prompt,
                 "voice": self.voice,
                 "input_audio_format": "pcm16",
                 "output_audio_format": "pcm16",
@@ -113,8 +111,8 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                     "prefix_padding_ms": 500,
                     "silence_duration_ms": 200,
                 },
-                "tools": [self.intent_router.to_openai_tool()],  # For now we know we only need the intent router tool
-                "tool_choice": "required",
+                "tools": self.tools,
+                "tool_choice": "auto",
                 "temperature": 0.8,
             }
         )
@@ -140,21 +138,9 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                 The new tools to use in the conversation.
         """
         logger.debug("Setting system prompt to: %s", new_prompt)
+        logger.debug("Setting tools to: %s", [t.name for t in new_tools])
         await self._update_session(
-            {"instructions": new_prompt, "tools": [t.to_openai_tool() for t in new_tools], "tool_choice": "auto"}
-        )
-
-    async def restore_routing_prompt(self) -> None:
-        """
-        Restores the routing prompt.
-        """
-        logger.debug("Restoring routing prompt.")
-        await self._update_session(
-            {
-                "instructions": self.routing_system_prompt,
-                "tools": [self.intent_router.to_openai_tool()],
-                "tool_choice": "required",
-            }
+            {"instructions": new_prompt, "tools": [to_openai_tool(t) for t in new_tools], "tool_choice": "auto"}
         )
 
     async def run(self) -> None:  # pylint: disable=too-many-branches
@@ -180,7 +166,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                 # Track response state
                 elif event_type == "response.created":
                     self._current_response_id = event.get("response", {}).get("id")
-                    logger.debug("Agent strarted responding. Response created with ID: %s", self._current_response_id)
+                    logger.debug("Agent started responding. Response created with ID: %s", self._current_response_id)
 
                 elif event_type == "response.output_item.added":
                     self._current_item_id = event.get("item", {}).get("id")
@@ -188,7 +174,6 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
 
                 elif event_type == "response.done":
                     logger.debug("Agent finished generating a response.")
-                    await self.restore_routing_prompt()
 
                 elif event_type == "response.function_call_arguments.done":
                     await self.call_tool(event)
@@ -379,10 +364,10 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         logger.debug("Calling tool %s with arguments %s (call_id: %s)", tool_name, tool_arguments, call_id)
 
         # Check if it's the router
-        if tool_name == "classify_response":
+        if tool_name == self.intent_router.name:
             self.system_prompt, self.tools = await self.intent_router.run(tool_arguments)
             await self.update_system_prompt(self.system_prompt, self.tools)
-            await self._send_function_result(event["call_id"], "OK")
+            await self._send_function_result(event["call_id"], "ok")
             return
 
         # Make sure the tool actually exists

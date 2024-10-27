@@ -12,6 +12,7 @@ from intentional_core import (
     load_model_client_from_dict,
     Tool,
     load_tools_from_dict,
+    IntentRouter,
 )
 
 
@@ -25,7 +26,7 @@ class WebsocketBotStructure(ContinuousStreamBotStructure):
 
     name = "websocket"
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any], intent_router: IntentRouter):
         """
         Args:
             config:
@@ -41,6 +42,7 @@ class WebsocketBotStructure(ContinuousStreamBotStructure):
         self.model: ContinuousStreamModelClient = load_model_client_from_dict(llm_config)
 
         self.model.parent_event_handler = self.handle_event
+        self.model.intent_router = intent_router
 
         # Collect the tools
         tools_config = config.pop("tools", {})

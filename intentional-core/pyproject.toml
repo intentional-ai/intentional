@@ -29,6 +29,7 @@ dependencies = [
   "networkx",
   "requests",
   "pyyaml",
+  "networkx",
 ]
 
 [project.urls]

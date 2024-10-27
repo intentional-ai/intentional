@@ -3,7 +3,7 @@
 """
 Functions to load model client classes from config files.
 """
-from typing import Optional, Dict, Any, Set, List
+from typing import Optional, Dict, Any, Set, AsyncGenerator
 
 import logging
 from abc import ABC, abstractmethod
@@ -39,7 +39,7 @@ class TurnBasedModelClient(ModelClient):
     """
 
     @abstractmethod
-    async def send_message(self, conversation: List[Dict[str, Any]]) -> None:
+    async def send_message(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
         """
         Send a message to the model.
         """

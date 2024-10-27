@@ -14,6 +14,7 @@ from abc import ABC, abstractmethod
 import yaml
 
 from intentional_core.utils import import_plugin, inheritors
+from intentional_core.intent_routing import IntentRouter
 
 
 logger = logging.getLogger(__name__)
@@ -89,6 +90,9 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
     for plugin in plugins:
         import_plugin(plugin)
 
+    # Initialize the intent router
+    intent_router = IntentRouter(config.pop("conversation", {}))
+
     # Get all the subclasses of Bot
     subclasses: Set[BotInterface] = inheritors(BotInterface)
     logger.debug("Known bot interface classes: %s", subclasses)
@@ -121,4 +125,4 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
 
     # Handoff to the subclass' init
     logger.debug("Creating bot interface of type '%s'", interface_class_)
-    return _BOT_INTERFACES[interface_class_](config)
+    return _BOT_INTERFACES[interface_class_](config, intent_router)

@@ -12,8 +12,6 @@ When playing audio, it uses a buffer to store audio data and plays it continuous
 """
 from typing import Optional
 
-import io
-import wave
 import queue
 import asyncio
 import logging

@@ -3,11 +3,10 @@
 """
 Bot structure to support text chat for Intentional.
 """
-from typing import Any, Dict
+from typing import Any, Dict, AsyncGenerator
 
 import logging
-from intentional_core import TurnBasedBotStructure
-from intentional_core import TurnBasedModelClient, load_model_client_from_dict
+from intentional_core import TurnBasedBotStructure, TurnBasedModelClient, load_model_client_from_dict, IntentRouter
 
 
 logger = logging.getLogger(__name__)
@@ -20,7 +19,7 @@ class TextChatBotStructure(TurnBasedBotStructure):
 
     name = "text_chat"
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: Dict[str, Any], intent_router: IntentRouter):
         """
         Args:
             config:
@@ -34,10 +33,9 @@ class TextChatBotStructure(TurnBasedBotStructure):
         if not llm_config:
             raise ValueError("TextChatBotStructure requires a 'llm' configuration key to know which model to use.")
         self.model: TurnBasedModelClient = load_model_client_from_dict(llm_config)
+        self.model.intent_router = intent_router
 
-        self.conversation = []
-
-    async def send_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
+    async def send_message(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
         """
         Sends a message to the model and forward the response.
 
@@ -45,11 +43,5 @@ class TextChatBotStructure(TurnBasedBotStructure):
             message:
                 The message to send to the model in OpenAI format, like {"role": "user", "content": "Hello!"}
         """
-
-        async def unwrap(response):
-            async for r in response:
-                yield r.to_dict()["choices"][0]["delta"]
-
-        self.conversation.append(message)
-        response = await self.model.send_message(self.conversation)
-        return unwrap(response)
+        async for chunk in self.model.send_message(message):
+            yield chunk

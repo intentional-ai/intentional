@@ -10,6 +10,7 @@ import logging
 from abc import ABC, abstractmethod
 
 from intentional_core.utils import inheritors
+from intentional_core.intent_routing import IntentRouter
 
 
 logger = logging.getLogger(__name__)
@@ -40,16 +41,17 @@ class BotStructure(ABC):
     etc.
     """
 
-    supported_events: Dict[str, str] = {}
-
-    def __init__(self) -> None:
-        self.event_handlers: Dict[str, Callable] = {}
-
 
 class ContinuousStreamBotStructure(BotStructure):
     """
     Base class for structures that support continuous streaming of data, as opposed to turn-based message exchanges.
     """
+
+    def __init__(self) -> None:
+        """
+        Initialize the bot structure.
+        """
+        self.event_handlers: Dict[str, Callable] = {}
 
     @abstractmethod
     async def run(self) -> None:
@@ -132,7 +134,7 @@ class TurnBasedBotStructure(BotStructure):
         """
 
 
-def load_bot_structure_from_dict(config: Dict[str, Any]) -> BotStructure:
+def load_bot_structure_from_dict(config: Dict[str, Any], intent_router: IntentRouter) -> BotStructure:
     """
     Load a bot structure from a dictionary configuration.
 
@@ -172,4 +174,4 @@ def load_bot_structure_from_dict(config: Dict[str, Any]) -> BotStructure:
         )
 
     # Handoff to the subclass' init
-    return _BOT_STRUCTURES[class_](config)
+    return _BOT_STRUCTURES[class_](config, intent_router)
