@@ -15,6 +15,10 @@ Plugin that makes Intentional able to use a local CLI to communicate
 
 ## Installation
 
+```
+sudo apt install portaudio19-dev
+```
+
 ```console
 pip install intentional-local
 ```

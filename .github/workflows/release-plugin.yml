@@ -31,6 +31,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get install portaudio19-dev
           pip install uv
           uv pip install --system hatch ${{ steps.plugin_path.outputs.plugin_path }}
 
