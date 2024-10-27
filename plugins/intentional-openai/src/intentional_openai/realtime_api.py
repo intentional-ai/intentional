@@ -82,6 +82,8 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         self.system_prompt = config.get("system_prompt", "")
         self.tools = {}
 
+        self.conversation_ended = False
+
     async def connect(self) -> None:
         """
         Establish WebSocket connection with the Realtime API.
@@ -95,7 +97,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         # This initial session is setup to do routing by intent
         if self.intent_router:
             self.system_prompt, self.tools = await self.intent_router.run(None)
-            self.tools.append(to_openai_tool(self.intent_router))
+            self.tools[self.intent_router.name] = to_openai_tool(self.intent_router)
 
         await self._update_session(
             {
@@ -111,7 +113,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                     "prefix_padding_ms": 500,
                     "silence_duration_ms": 200,
                 },
-                "tools": self.tools,
+                "tools": list(self.tools.values()),
                 "tool_choice": "auto",
                 "temperature": 0.8,
             }
@@ -140,7 +142,11 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         logger.debug("Setting system prompt to: %s", new_prompt)
         logger.debug("Setting tools to: %s", [t.name for t in new_tools])
         await self._update_session(
-            {"instructions": new_prompt, "tools": [to_openai_tool(t) for t in new_tools], "tool_choice": "auto"}
+            {
+                "instructions": new_prompt,
+                "tools": [to_openai_tool(t) for t in new_tools.values()],
+                "tool_choice": "auto",
+            }
         )
 
     async def run(self) -> None:  # pylint: disable=too-many-branches
@@ -200,11 +206,16 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                         logger.debug("Sending native event type %s to parent's event handler", event_type)
                         await self.parent_event_handler(event_type, event)
 
+                if self.conversation_ended:
+                    logger.debug("Conversation ended.")
+                    break
+
         except websockets.exceptions.ConnectionClosed:
             logging.info("Connection closed")
         except Exception as e:  # pylint: disable=broad-except
             logging.exception("Error in message handling: %s", str(e))
 
+        await self.disconnect()
         print("################### FINISHED RUNNING ##############################")
 
     async def stream_data(self, data: bytes) -> None:
@@ -368,6 +379,11 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
             self.system_prompt, self.tools = await self.intent_router.run(tool_arguments)
             await self.update_system_prompt(self.system_prompt, self.tools)
             await self._send_function_result(event["call_id"], "ok")
+            return
+
+        # Check if it's end conversation
+        if tool_name == "end_conversation":
+            self.conversation_ended = True
             return
 
         # Make sure the tool actually exists

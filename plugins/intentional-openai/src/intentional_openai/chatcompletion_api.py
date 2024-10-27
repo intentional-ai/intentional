@@ -56,11 +56,16 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         self.client = openai.AsyncOpenAI(api_key=self.api_key)
         self.conversation: List[Dict[str, Any]] = []
         self.intent_router = None
+        self.conversation_ended = False
 
     async def send_message(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
         """
         Send a message to the model.
         """
+        if self.conversation_ended:
+            yield None
+            return
+
         if self.intent_router and not self.system_prompt:
             self.system_prompt, self.tools = await self.intent_router.run({})
             logger.debug("Setting initial system prompt: %s", self.system_prompt)
@@ -95,7 +100,6 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
                 assistant_response += delta.get("content") or ""
 
             else:
-
                 # TODO handle multiple parallel function calls
                 if delta["tool_calls"][0]["index"] > 0 or len(delta["tool_calls"]) > 1:
                     logger.error("TODO: Multiple parallel function calls not supported yet. Please open an issue.")
@@ -131,8 +135,13 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             # We don't append the message in order to avoid message duplication in the history.
             async for chunk in self.send_message(message):
                 yield chunk
-
             return
+
+        # TODO # End conversation function call
+        # if function_name == "end_conversation":
+        #     self.conversation_ended = True
+        #     yield ""
+        #     return
 
         # Handle a regular function call - this one shows up in the history as normal
         # so we start by appending the user message
@@ -169,8 +178,10 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         """
         Print the conversation history.
         """
-        logger.debug("----------------------")
+        logger.debug("---------------------------------")
         logger.debug("Conversation history:")
         for msg in self.conversation:
             logger.debug("%s: %s %s", msg["role"], msg.get("content", ""), msg.get("tool_calls", ""))
-        logger.debug("----------------------")
+        if self.conversation_ended:
+            logger.debug("-----Conversation has ended.-----")
+        logger.debug("---------------------------------")

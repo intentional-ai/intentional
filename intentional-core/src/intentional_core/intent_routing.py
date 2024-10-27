@@ -153,7 +153,7 @@ class IntentRouter(Tool):
         Return a list of all the stages that can be reached from the current stage.
         """
         return [
-            stage
+            name
             for name, stage in self.stages.items()
             if (
                 (self.current_stage_name in stage.accessible_from or "_all_" in stage.accessible_from)
