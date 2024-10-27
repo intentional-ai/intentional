@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "intentional-{{ package_name }}"
+name = "intentional-text-chat"
 dynamic = ["version"]
-description = "{{ description }}"
+description = "Plugin that makes Intentional bots able to communicate through a turn-based text chat."
 readme = "README.md"
 requires-python = ">=3.8"
 license = "AGPL-3.0-or-later"
@@ -48,7 +48,7 @@ Issues = "https://github.com/intentional-ai/intentional/issues"
 Source = "https://github.com/intentional-ai/intentional"
 
 [tool.hatch.version]
-path = "src/intentional_{{ module_name }}/__about__.py"
+path = "src/intentional_text_chat/__about__.py"
 
 [tool.black]
 line-length = 120

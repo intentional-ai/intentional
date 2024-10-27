@@ -1,0 +1,13 @@
+plugins:
+- intentional_gradio
+- intentional_websocket
+- intentional_openai
+
+interface: gradio
+title: My Bot
+modality: audio_stream
+bot:
+  type: websocket
+  llm:
+    client: openai_realtime
+    name: gpt-4o-realtime-preview-2024-10-01

@@ -29,6 +29,7 @@ dependencies = [
   "networkx",
   "requests",
   "pyyaml",
+  "networkx",
 ]
 
 [project.urls]
@@ -45,7 +46,8 @@ fast = true
 
 [tool.pylint]
 disable=[
-  "fixme"
+  "fixme",
+  "too-few-public-methods",
 ]
 
 [tool.pylint.format]

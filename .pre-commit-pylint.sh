@@ -8,7 +8,7 @@ run_pylint() {
     if [[ -d "$dir" ]]; then
       # Run pylint in the second-level directory
       echo "Running pylint in $dir"
-      pylint -sn -rn --rcfile=$dir/pyproject.toml "$dir" || exit 1
+      pylint -sn -rn --rcfile=$dir/pyproject.toml "$dir"/src || exit 1
     fi
   done
 }
@@ -29,7 +29,7 @@ else
   echo "Affected main directories: $changed_dirs"
   run_pylint "$changed_dirs"
 
-  echo "Affected plugin directories: $changed_dirs"
   changed_dirs=$(git diff --name-only main...HEAD && git diff --name-only --cached | grep '^plugins/intentional' | awk -F'/' '{print $1"/"$2}' | sort -u)
+  echo "Affected plugin directories: $changed_dirs"
   run_pylint "$changed_dirs"
 fi

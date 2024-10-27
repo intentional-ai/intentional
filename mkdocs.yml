@@ -8,9 +8,21 @@ theme:
 nav:
    - 'Home': docs/home.md
    - 'Contribute': CONTRIBUTING.md
-   - 'API Reference': docs/reference.md
+   - 'API Reference - Main Package': docs/reference.md
+   - 'API Reference - Core Package': docs/core-reference.md
    - 'Plugins':
-     - 'OpenAI': plugins/intentional-openai/README.md
+     - 'Local CLI':
+        - 'Getting Started': plugins/intentional-local/README.md
+        - 'API Reference': plugins/intentional-local/docs/reference.md
+     - 'OpenAI':
+        - 'Getting Started': plugins/intentional-openai/README.md
+        - 'API Reference': plugins/intentional-openai/docs/reference.md
+     - 'Text Chat':
+        - 'Getting Started': plugins/intentional-text-chat/README.md
+        - 'API Reference': plugins/intentional-text-chat/docs/reference.md
+     - 'WebSocket':
+        - 'Getting Started': plugins/intentional-websocket/README.md
+        - 'API Reference': plugins/intentional-websocket/docs/reference.md
 
 markdown_extensions:
   - toc:

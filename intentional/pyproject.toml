@@ -68,7 +68,8 @@ fast = true
 
 [tool.pylint]
 disable=[
-  "fixme"
+  "fixme",
+  "too-few-public-methods",
 ]
 
 [tool.pylint.format]
@@ -76,3 +77,6 @@ max-line-length = 120
 
 [tool.pylint.main]
 ignore = ["tests"]
+
+[project.scripts]
+intentional = "intentional.cli:main"
