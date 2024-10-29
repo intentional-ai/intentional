@@ -32,7 +32,6 @@ jobs:
 
     - name: Install packages
       run: |
-        sudo apt-get install portaudio19-dev
         pip install uv
         uv pip install --system intentional-core/ intentional/[test]
 
@@ -76,6 +75,7 @@ jobs:
       - name: Get the affected folders list
         id: folders
         run: |
+          sudo apt-get install portaudio19-dev
           git fetch origin main
           echo "value=$(./.github/workflows/scripts/get_affected_folders.sh)" >> $GITHUB_OUTPUT
 
