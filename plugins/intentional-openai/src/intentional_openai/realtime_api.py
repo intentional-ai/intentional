@@ -95,7 +95,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         # This initial session is setup to do routing by intent
         if self.intent_router:
             self.system_prompt, self.tools = await self.intent_router.run(None)
-            self.tools.append(to_openai_tool(self.intent_router))
+            self.tools[self.intent_router.name] = to_openai_tool(self.intent_router)
 
         await self._update_session(
             {
@@ -111,7 +111,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                     "prefix_padding_ms": 500,
                     "silence_duration_ms": 200,
                 },
-                "tools": self.tools,
+                "tools": list(self.tools.values()),
                 "tool_choice": "auto",
                 "temperature": 0.8,
             }
@@ -138,9 +138,9 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                 The new tools to use in the conversation.
         """
         logger.debug("Setting system prompt to: %s", new_prompt)
-        logger.debug("Setting tools to: %s", [t.name for t in new_tools])
+        logger.debug("Setting tools to: %s", [t for t in new_tools])
         await self._update_session(
-            {"instructions": new_prompt, "tools": [to_openai_tool(t) for t in new_tools], "tool_choice": "auto"}
+            {"instructions": new_prompt, "tools": [to_openai_tool(t) for t in new_tools.values()], "tool_choice": "auto"}
         )
 
     async def run(self) -> None:  # pylint: disable=too-many-branches

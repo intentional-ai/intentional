@@ -6,6 +6,7 @@ Local bot interface for Intentional.
 
 from typing import Any, Dict
 
+import os
 import logging
 import asyncio
 import base64
@@ -76,17 +77,27 @@ class LocalBotInterface(BotInterface):
         """
         logger.debug("Running the LocalBotInterface in text turns mode.")
 
-        print("Chat is ready. Start typing!")
-        print("Press 'q' to quit")
-        print("")
-
+        os.system("cls||clear")
+        print(f"Current System Prompt:\n{self.bot.model.conversation[0]["content"] if self.bot.model.conversation else self.bot.model.system_prompt or ''}")
+        print("----------------------")
+        print("Conversation History:\n")
         while True:
-            user_message = input("User: ")
+            user_message = input("user: ")
 
             if user_message == "q":
                 break
 
             response = bot.send_message({"role": "user", "content": user_message})
+
+            os.system("cls||clear")
+            print(f"Current System Prompt:\n{self.bot.model.conversation[0]["content"] if self.bot.model.conversation else ''}")
+            print("----------------------")
+            print("Conversation History:\n")
+            print("User: ", user_message)
+
+            if self.bot.model.conversation:
+                for message in self.bot.model.conversation[1:]:
+                    print(f"{message['role']}: {message['content']}")
 
             print("Assistant: ", end="", flush=True)
             async for delta in response:
@@ -151,6 +162,9 @@ class LocalBotInterface(BotInterface):
         Args:
             event: The event dictionary containing the transcript.
         """
+        os.system("cls||clear")
+        print(f"Current System Prompt:\n{self.bot.model.system_prompt}")
+        print("----------------------")
         if "transcript" in event:
             print(f"[{event["type"]}] Transcript: {event['transcript']}")
 
@@ -161,7 +175,7 @@ class LocalBotInterface(BotInterface):
         Args:
             event: The event dictionary containing the message.
         """
-        print(f"Assistant: {event['delta']}")
+        # print(f"Assistant: {event['delta']}")
 
     async def handle_audio_messages(self, event: Dict[str, Any]) -> None:
         """
