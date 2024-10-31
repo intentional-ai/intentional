@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2024-present ZanSara <github@zansara.dev>
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Callable, Dict, List
-import logging
+from typing import Callable
 from textual import on
 from textual.app import App, ComposeResult
 from textual.containers import ScrollableContainer
@@ -13,11 +12,14 @@ from textual.widgets import Markdown, Input
 class ChatHistory(Markdown):
     pass
 
+
 class MessageBox(Input):
     pass
 
+
 class SystemPrompt(Markdown):
     pass
+
 
 class TextChatInterface(App):
     CSS_PATH = "example.tcss"
@@ -45,7 +47,7 @@ class TextChatInterface(App):
             Vertical(
                 ScrollableContainer(SystemPrompt()),
                 classes="column bordered",
-            )
+            ),
         )
 
     def on_mount(self) -> None:
@@ -72,9 +74,8 @@ class TextChatInterface(App):
             self.query_one(MessageBox).disable()
             self.query_one(MessageBox).placeholder = "Conversation has ended."
             self.query_one(MessageBox).focus()
-        
-        self.query_one(SystemPrompt).update("# System Prompt\n" + self.get_system_prompt())
 
+        self.query_one(SystemPrompt).update("# System Prompt\n" + self.get_system_prompt())
 
 
 if __name__ == "__main__":
