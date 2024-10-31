@@ -82,7 +82,8 @@ class TextualUIBotInterface(BotInterface):
         logger.debug("Running the TextualUIBotInterface in text turns mode.")
         app = TextChatInterface(
             send_message_callback=bot.send_message,
-            check_end_conversation=lambda: self.bot.model.conversation_ended,
+            check_end_conversation=lambda: bot.model.conversation_ended,
+            get_system_prompt=lambda: bot.model.system_prompt,
         )
         app._loop = asyncio.get_running_loop()
         app._thread_id = threading.get_ident()
