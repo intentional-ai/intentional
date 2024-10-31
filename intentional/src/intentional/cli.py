@@ -10,8 +10,6 @@ import argparse
 
 from intentional_core import load_configuration_file
 
-logging.basicConfig(filename="logs.log", filemode="w", level=logging.DEBUG)
-
 
 def main():
     """
