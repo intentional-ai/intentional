@@ -11,7 +11,7 @@ bot:
     client: openai_realtime
     name: gpt-4o-realtime-preview-2024-10-01
     voice: echo
-    
+
 conversation:
   background: "You're Jane, an interviewer calling a person to ask a few questions."
 

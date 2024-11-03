@@ -51,13 +51,12 @@ class ModelClient(ABC, EventEmitter):
     This string will be used in configuration files to identify the type of client to serve a model from.
     """
 
-    def __init__(self, parent: 'BotStructure', intent_router: IntentRouter) -> None:
+    def __init__(self, parent: "BotStructure", intent_router: IntentRouter) -> None:
         """
         Initialize the model client.
 
         Args:
             parent: The parent bot structure.
-            config: The configuration dictionary.
         """
         super().__init__(parent)
         self.intent_router = intent_router
@@ -88,12 +87,9 @@ class ModelClient(ABC, EventEmitter):
         """
 
     @abstractmethod
-    async def update_system_prompt(self, prompt: str) -> None:
+    async def update_system_prompt(self) -> None:
         """
         Update the system prompt in the model.
-
-        Args:
-            prompt: The new system prompt.
         """
 
     @abstractmethod
@@ -112,7 +108,6 @@ class TurnBasedModelClient(ModelClient):
     """
     Base class for model clients that support turn-based message exchanges, as opposed to continuous streaming of data.
     """
-    pass
 
 
 class ContinuousStreamModelClient(ModelClient):
@@ -121,7 +116,9 @@ class ContinuousStreamModelClient(ModelClient):
     """
 
 
-def load_model_client_from_dict(parent: 'BotStructure', intent_router: IntentRouter, config: Dict[str, Any]) -> ModelClient:
+def load_model_client_from_dict(
+    parent: "BotStructure", intent_router: IntentRouter, config: Dict[str, Any]
+) -> ModelClient:
     """
     Load a model client from a dictionary configuration.
 

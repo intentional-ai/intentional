@@ -8,7 +8,7 @@
 Client for OpenAI's Realtime API.
 """
 
-from typing import Optional, Dict, Any, Callable, List
+from typing import Dict, Any, Callable
 
 import os
 import math
@@ -17,7 +17,7 @@ import base64
 import logging
 import websockets
 
-from intentional_core import ContinuousStreamModelClient, Tool
+from intentional_core import ContinuousStreamModelClient
 from intentional_core.intent_routing import IntentRouter
 from intentional_openai.tools import to_openai_tool
 
@@ -203,10 +203,10 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         """
         if "audio_stream" in data:
             await self._send_audio_stream(data["audio_stream"])
-        if "audio_message" in data:
-            await self._send_audio(data["audio_message"])
-        if "text_message" in data:
-            await self._send_tex_message(data["text_message"])
+        # if "audio_message" in data:
+        #     await self._send_audio(data["audio_message"])
+        # if "text_message" in data:
+        #     await self._send_text_message(data["text_message"])
 
     async def update_system_prompt(self) -> None:
         """
@@ -252,7 +252,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                 "audio_end_ms": math.floor(lenght_to_interruption),
             }
             await self.ws.send(json.dumps(event))
-    
+
     async def _update_session(self, config: Dict[str, Any]) -> None:
         """
         Update session configuration.
@@ -262,7 +262,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                 The new session configuration.
         """
         event = {"type": "session.update", "session": config}
-        await self.ws.send(json.dumps(event))     
+        await self.ws.send(json.dumps(event))
 
     async def _send_tex_message(self, text: str) -> None:
         """
@@ -325,7 +325,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
     async def _request_response_from_model(self) -> None:
         """
         Asks the LLM for a response to the messages it just received.
-        You need to call this function right after sending a messages that is not streamed like the audio (where the 
+        You need to call this function right after sending a messages that is not streamed like the audio (where the
         model's VAD would decide when to reply instead).
         """
         event = {"type": "response.create", "response": {"modalities": ["text", "audio"]}}

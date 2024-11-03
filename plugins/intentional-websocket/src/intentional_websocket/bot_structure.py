@@ -3,7 +3,7 @@
 """
 Websocket bot structure for Intentional.
 """
-from typing import Any, Dict, List
+from typing import Any, Dict
 import logging
 
 from intentional_core import (

@@ -1,3 +1,9 @@
+# SPDX-FileCopyrightText: 2024-present ZanSara <github@zansara.dev>
+# SPDX-License-Identifier: AGPL-3.0-or-later
+"""
+Base class for very simplified event emitter and listener.
+"""
+
 import logging
 from typing import Dict, Any
 from abc import ABC, abstractmethod
@@ -20,7 +26,7 @@ class EventListener(ABC):
 
 class EventEmitter:
     """
-    Sends any event to the listener. 
+    Sends any event to the listener.
     TODO see if there's any scenario where we need more as this pattern is easy to extend but can get messy.
     """
 
@@ -36,4 +42,3 @@ class EventEmitter:
         """
         logger.debug("Emitting event %s", event_name)
         await self._events_listener.handle_event(event_name, event)
-    

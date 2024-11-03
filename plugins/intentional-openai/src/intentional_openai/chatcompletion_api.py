@@ -13,8 +13,8 @@ import logging
 
 import openai
 from intentional_core import TurnBasedModelClient
-from intentional_openai.tools import to_openai_tool
 from intentional_core.intent_routing import IntentRouter
+from intentional_openai.tools import to_openai_tool
 
 if TYPE_CHECKING:
     from intentional_core.bot_structure import BotStructure
@@ -30,7 +30,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
 
     name: str = "openai"
 
-    def __init__(self, parent: 'BotStructure', intent_router: IntentRouter, config: Dict[str, Any]):
+    def __init__(self, parent: "BotStructure", intent_router: IntentRouter, config: Dict[str, Any]):
         """
         A client for interacting with the OpenAI Chat Completion API.
 
@@ -74,9 +74,6 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
     async def update_system_prompt(self) -> None:
         """
         Update the system prompt in the model.
-
-        Args:
-            prompt: The new system prompt.
         """
         self.conversation = [{"role": "system", "content": self.system_prompt}] + self.conversation[1:]
         await self.emit("on_system_prompt_updated", {"prompt": self.system_prompt})
@@ -151,8 +148,10 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             tool_choice="auto",
             n=1,
         )
-    
-    async def _handle_function_call(self, message: Dict[str, Any], call_id: str, function_name: str, function_args: str):
+
+    async def _handle_function_call(
+        self, message: Dict[str, Any], call_id: str, function_name: str, function_args: str
+    ):
         """
         Handle a function call from the model.
         """
@@ -165,7 +164,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             # Send the same message again with the new system prompt and no trace of the routing call.
             # We don't append the user message to the history in order to avoid message duplication.
             await self.send({"text_message": message})
-            
+
         else:
             # Handle a regular function call - this one shows up in the history as normal
             # so we start by appending the user message

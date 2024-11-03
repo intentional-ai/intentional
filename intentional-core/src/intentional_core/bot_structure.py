@@ -7,7 +7,7 @@ Functions to load bot structure classes from config files.
 from typing import Dict, Any, Optional, Set, Callable
 
 import logging
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 from intentional_core.utils import inheritors
 from intentional_core.intent_routing import IntentRouter
@@ -52,13 +52,11 @@ class BotStructure(EventListener):
         """
         Connect to the bot.
         """
-        pass
 
     async def disconnect(self) -> None:
         """
         Disconnect from the bot.
         """
-        pass
 
     @abstractmethod
     async def run(self) -> None:

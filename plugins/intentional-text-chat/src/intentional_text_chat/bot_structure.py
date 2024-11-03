@@ -48,15 +48,14 @@ class TextChatBotStructure(TurnBasedBotStructure):
         """
         await self.model.run()
 
-    async def send(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
+    async def send(self, data: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
         """
         Sends a message to the model and forward the response.
 
         Args:
-            message:
-                The message to send to the model in OpenAI format, like {"role": "user", "content": "Hello!"}
+            data: The message to send to the model in OpenAI format, like {"role": "user", "content": "Hello!"}
         """
-        await self.model.send({"text_message": message})
+        await self.model.send({"text_message": data})
 
     async def handle_interruption(self, lenght_to_interruption: int) -> None:
         """

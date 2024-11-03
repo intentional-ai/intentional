@@ -28,3 +28,6 @@ jobs:
 
     - name: Run pre-commit hooks
       run: pre-commit run --all -v
+
+    - name: Run pylint on all files
+      run: ./.pre-commit-pylint.sh all

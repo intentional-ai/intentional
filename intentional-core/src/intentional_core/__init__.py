@@ -37,5 +37,5 @@ __all__ = [
     "IntentRouter",
     "load_tools_from_dict",
     "EventEmitter",
-    "EventListener"
+    "EventListener",
 ]

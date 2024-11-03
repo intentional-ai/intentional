@@ -76,8 +76,8 @@ class LocalBotInterface(BotInterface):
         """
         logger.debug("Running the LocalBotInterface in text turns mode.")
         bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
-        bot.add_event_handler("on_model_starts_generating_response", self.handle_start_text_response) 
-        bot.add_event_handler("on_model_stops_generating_response", self.handle_finish_text_response) 
+        bot.add_event_handler("on_model_starts_generating_response", self.handle_start_text_response)
+        bot.add_event_handler("on_model_stops_generating_response", self.handle_finish_text_response)
         bot.add_event_handler("on_model_connection", self.handle_model_connection)
 
         await bot.connect()
@@ -141,21 +141,15 @@ class LocalBotInterface(BotInterface):
         if "transcript" in event:
             print(f"[{event["type"]}] Transcript: {event['transcript']}")
 
-    async def handle_start_text_response(self, event: Dict[str, Any]) -> None:
+    async def handle_start_text_response(self, _) -> None:
         """
         Prints to the console when the bot starts generating a text response.
-
-        Args:
-            event: The event dictionary containing the start text response event.
         """
         print("Assistant: ", end="")
-    
+
     async def handle_finish_text_response(self, _) -> None:
         """
         Prints to the console when the bot starts generating a text response.
-
-        Args:
-            event: The event dictionary containing the start text response event.
         """
         print("")
         await self.bot.send({"role": "user", "content": input("User: ")})
@@ -178,7 +172,7 @@ class LocalBotInterface(BotInterface):
             event: The event dictionary containing the message.
         """
         if event["delta"]:
-            print(event['delta'], end="", flush=True)
+            print(event["delta"], end="", flush=True)
 
     async def handle_audio_messages(self, event: Dict[str, Any]) -> None:
         """
