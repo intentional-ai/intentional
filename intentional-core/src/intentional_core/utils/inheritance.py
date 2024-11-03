@@ -32,7 +32,7 @@ def inheritors(class_: Any, include_abstract: bool = False) -> Set[Any]:
                     logger.debug(
                         "Skipping abstract class from inheritor's list: %s. Abstract methods: %s",
                         child,
-                        child.__abstractmethods__,
+                        list(child.__abstractmethods__),
                     )
                 else:
                     subclasses.add(child)
