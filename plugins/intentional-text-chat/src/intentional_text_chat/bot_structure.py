@@ -32,10 +32,23 @@ class TextChatBotStructure(TurnBasedBotStructure):
         llm_config = config.pop("llm", None)
         if not llm_config:
             raise ValueError("TextChatBotStructure requires a 'llm' configuration key to know which model to use.")
-        self.model: TurnBasedModelClient = load_model_client_from_dict(llm_config)
-        self.model.intent_router = intent_router
+        self.model: TurnBasedModelClient = load_model_client_from_dict(
+            parent=self, intent_router=intent_router, config=llm_config
+        )
 
-    async def send_message(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
+    async def connect(self) -> None:
+        await self.model.connect()
+
+    async def disconnect(self) -> None:
+        await self.model.disconnect()
+
+    async def run(self) -> None:
+        """
+        Main loop for the bot.
+        """
+        await self.model.run()
+
+    async def send(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
         """
         Sends a message to the model and forward the response.
 
@@ -43,5 +56,15 @@ class TextChatBotStructure(TurnBasedBotStructure):
             message:
                 The message to send to the model in OpenAI format, like {"role": "user", "content": "Hello!"}
         """
-        async for chunk in self.model.send_message(message):
-            yield chunk
+        await self.model.send({"text_message": message})
+
+    async def handle_interruption(self, lenght_to_interruption: int) -> None:
+        """
+        Handle an interruption in the streaming.
+
+        Args:
+            lenght_to_interruption: The length of the data that was produced to the user before the interruption.
+                This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
+                depending on the bot structure that implements it.
+        """
+        logger.warning("TODO! Interruption not yet supported in text chat bot structure.")

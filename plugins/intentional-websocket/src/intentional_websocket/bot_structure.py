@@ -10,8 +10,6 @@ from intentional_core import (
     ContinuousStreamBotStructure,
     ContinuousStreamModelClient,
     load_model_client_from_dict,
-    Tool,
-    load_tools_from_dict,
     IntentRouter,
 )
 
@@ -39,31 +37,20 @@ class WebsocketBotStructure(ContinuousStreamBotStructure):
         llm_config = config.pop("llm", None)
         if not llm_config:
             raise ValueError("WebsocketBotStructure requires a 'llm' configuration key to know which model to use.")
-        self.model: ContinuousStreamModelClient = load_model_client_from_dict(llm_config)
-
-        self.model.parent_event_handler = self.handle_event
-        self.model.intent_router = intent_router
-
-        # Collect the tools
-        tools_config = config.pop("tools", {})
-        logger.debug("Tools to load: %s", tools_config)
-        self.tools: List[Tool] = load_tools_from_dict(tools_config)
+        self.model: ContinuousStreamModelClient = load_model_client_from_dict(
+            parent=self, intent_router=intent_router, config=llm_config
+        )
 
     async def run(self) -> None:
-        """
-        Main loop for the bot.
-        """
         await self.model.run()
 
-    async def stream_data(self, data: bytes) -> None:
-        await self.model.stream_data(data)
+    async def send(self, data: Dict[str, Any]) -> None:
+        await self.model.send(data)
 
     async def connect(self) -> None:
-        logger.debug("Connecting to the model.")
         await self.model.connect()
 
     async def disconnect(self) -> None:
-        logger.debug("Disconnecting from the model.")
         await self.model.disconnect()
 
     async def handle_interruption(self, lenght_to_interruption: int) -> None:

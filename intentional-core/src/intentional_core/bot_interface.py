@@ -125,4 +125,4 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
 
     # Handoff to the subclass' init
     logger.debug("Creating bot interface of type '%s'", interface_class_)
-    return _BOT_INTERFACES[interface_class_](config, intent_router)
+    return _BOT_INTERFACES[interface_class_](intent_router=intent_router, config=config)

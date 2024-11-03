@@ -11,6 +11,7 @@ from abc import ABC, abstractmethod
 
 from intentional_core.utils import inheritors
 from intentional_core.intent_routing import IntentRouter
+from intentional_core.events import EventListener
 
 
 logger = logging.getLogger(__name__)
@@ -20,7 +21,7 @@ _BOT_STRUCTURES = {}
 """ This is a global dictionary that maps bot structure names to their classes """
 
 
-class BotStructure(ABC):
+class BotStructure(EventListener):
     """
     Tiny base class used to recognize Intentional bot structure classes.
 
@@ -41,17 +42,23 @@ class BotStructure(ABC):
     etc.
     """
 
-
-class ContinuousStreamBotStructure(BotStructure):
-    """
-    Base class for structures that support continuous streaming of data, as opposed to turn-based message exchanges.
-    """
-
     def __init__(self) -> None:
         """
         Initialize the bot structure.
         """
         self.event_handlers: Dict[str, Callable] = {}
+
+    async def connect(self) -> None:
+        """
+        Connect to the bot.
+        """
+        pass
+
+    async def disconnect(self) -> None:
+        """
+        Disconnect from the bot.
+        """
+        pass
 
     @abstractmethod
     async def run(self) -> None:
@@ -60,9 +67,9 @@ class ContinuousStreamBotStructure(BotStructure):
         """
 
     @abstractmethod
-    async def stream_data(self, data: bytes) -> None:
+    async def send(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Stream data to the bot.
+        Send a message to the bot.
         """
 
     @abstractmethod
@@ -75,18 +82,6 @@ class ContinuousStreamBotStructure(BotStructure):
                 This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
                 depending on the bot structure that implements it.
         """
-
-    async def connect(self) -> None:
-        """
-        Connect to the bot.
-        """
-        logger.debug("Nothing needs to be done to connect to the bot.")
-
-    async def disconnect(self) -> None:
-        """
-        Disconnect from the bot.
-        """
-        logger.debug("Nothing needs to be done to disconnect from the bot.")
 
     def add_event_handler(self, event_name: str, handler: Callable) -> None:
         """
@@ -107,7 +102,7 @@ class ContinuousStreamBotStructure(BotStructure):
 
     async def handle_event(self, event_name: str, event: Dict[str, Any]) -> None:
         """
-        Handle different types of events that the model or the user may generate.
+        Handle different types of events that the model may generate.
         """
         logger.debug("Received event '%s'", event_name)
 
@@ -118,8 +113,12 @@ class ContinuousStreamBotStructure(BotStructure):
         if event_name in self.event_handlers:
             logger.debug("Calling event handler for event '%s'", event_name)
             await self.event_handlers[event_name](event)
-        else:
-            logger.debug("No specific event handler for event '%s'.", event_name)
+
+
+class ContinuousStreamBotStructure(BotStructure):
+    """
+    Base class for structures that support continuous streaming of data, as opposed to turn-based message exchanges.
+    """
 
 
 class TurnBasedBotStructure(BotStructure):
@@ -127,14 +126,8 @@ class TurnBasedBotStructure(BotStructure):
     Base class for structures that support turn-based message exchanges, as opposed to continuous streaming of data.
     """
 
-    @abstractmethod
-    async def send_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Send a message to the bot.
-        """
 
-
-def load_bot_structure_from_dict(config: Dict[str, Any], intent_router: IntentRouter) -> BotStructure:
+def load_bot_structure_from_dict(intent_router: IntentRouter, config: Dict[str, Any]) -> BotStructure:
     """
     Load a bot structure from a dictionary configuration.
 

@@ -19,6 +19,7 @@ from intentional_core.bot_structure import (
 )
 from intentional_core.tools import Tool, load_tools_from_dict
 from intentional_core.intent_routing import IntentRouter
+from intentional_core.events import EventEmitter, EventListener
 
 __all__ = [
     "BotInterface",
@@ -35,4 +36,6 @@ __all__ = [
     "Tool",
     "IntentRouter",
     "load_tools_from_dict",
+    "EventEmitter",
+    "EventListener"
 ]
