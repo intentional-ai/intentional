@@ -59,6 +59,7 @@ class IntentRouter(Tool):
 
     def __init__(self, config: Dict[str, Any]) -> None:
         self.background = config.get("background", "You're a helpful assistant.")
+        self.initial_message = config.get("initial_message", None)
         self.graph = networkx.MultiDiGraph()
 
         # Init the stages
@@ -66,6 +67,7 @@ class IntentRouter(Tool):
         for stage_name, stage_config in config["stages"].items():
             logger.debug("Loading stage %s", stage_name)
             self.stages[stage_name] = Stage(stage_config)
+            self.stages[stage_name].tools[self.name] = self  # Add the intent router to the tools of each stage
             self.graph.add_node(stage_name)
 
         # Connect the stages
@@ -107,10 +109,6 @@ class IntentRouter(Tool):
         Returns:
             The new system prompt and the tools accessible in this stage.
         """
-        if not params:
-            # Initial prompt
-            return self.get_prompt(), self.current_stage.tools
-
         selected_outcome = params["outcome"]
         transitions = self.get_transitions()
 

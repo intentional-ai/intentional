@@ -3,12 +3,17 @@
 """
 Functions to load model client classes from config files.
 """
-from typing import Optional, Dict, Any, Set, AsyncGenerator
+from typing import Optional, Dict, Any, Set, TYPE_CHECKING
 
 import logging
 from abc import ABC, abstractmethod
 
 from intentional_core.utils import inheritors
+from intentional_core.events import EventEmitter
+from intentional_core.intent_routing import IntentRouter
+
+if TYPE_CHECKING:
+    from intentional_core.bot_structure import BotStructure
 
 
 logger = logging.getLogger(__name__)
@@ -17,8 +22,23 @@ logger = logging.getLogger(__name__)
 _MODELCLIENT_CLASSES = {}
 """ This is a global dictionary that maps model client names to their classes """
 
+KNOWN_MODEL_EVENTS = [
+    "*",
+    "on_error",
+    "on_model_connection",
+    "on_model_disconnection",
+    "on_system_prompt_updated",
+    "on_model_starts_generating_response",
+    "on_model_stops_generating_response",
+    "on_text_message_from_model",
+    "on_audio_message_from_model",
+    "on_vad_detects_user_speech_started",
+    "on_vad_detects_user_speech_ended",
+    "on_conversation_ended",
+]
 
-class ModelClient(ABC):
+
+class ModelClient(ABC, EventEmitter):
     """
     Tiny base class used to recognize Intentional model clients.
 
@@ -32,56 +52,51 @@ class ModelClient(ABC):
     This string will be used in configuration files to identify the type of client to serve a model from.
     """
 
-
-class TurnBasedModelClient(ModelClient):
-    """
-    Base class for model clients that support turn-based message exchanges, as opposed to continuous streaming of data.
-    """
-
-    @abstractmethod
-    async def send_message(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
+    def __init__(self, parent: "BotStructure", intent_router: IntentRouter) -> None:
         """
-        Send a message to the model.
+        Initialize the model client.
+
+        Args:
+            parent: The parent bot structure.
         """
+        super().__init__(parent)
+        self.intent_router = intent_router
 
-
-class ContinuousStreamModelClient(ModelClient):
-    """
-    Base class for model clients that support continuous streaming of data, as opposed to turn-based message exchanges.
-    """
-
-    def __init__(self):
-        super().__init__()
-        self.parent_event_handler = None
-
-    @abstractmethod
     async def connect(self) -> None:
         """
         Connect to the model.
         """
+        await self.emit("on_model_connection", {})
 
-    @abstractmethod
-    async def stream_data(self, data: bytes) -> None:
+    async def disconnect(self) -> None:
         """
-        Stream data to the model.
+        Disconnect from the model.
         """
+        await self.emit("on_model_disconnection", {})
 
     @abstractmethod
     async def run(self) -> None:
         """
-        Handle events from the model.
+        Handle events from the model by either processing them internally or by translating them into higher-level
+        events that the BotStructure class can understand, then re-emitting them.
         """
 
     @abstractmethod
-    async def disconnect(self) -> None:
+    async def send(self, data: Dict[str, Any]) -> None:
         """
-        Disconnect from the model.
+        Send a unit of data to the model. The response is streamed out as an async generator.
+        """
+
+    @abstractmethod
+    async def update_system_prompt(self) -> None:
+        """
+        Update the system prompt in the model.
         """
 
     @abstractmethod
     async def handle_interruption(self, lenght_to_interruption: int) -> None:
         """
-        Handle an interruption in the streaming.
+        Handle an interruption while rendering the output to the user.
 
         Args:
             lenght_to_interruption: The length of the data that was produced to the user before the interruption.
@@ -90,7 +105,21 @@ class ContinuousStreamModelClient(ModelClient):
         """
 
 
-def load_model_client_from_dict(config: Dict[str, Any]) -> ModelClient:
+class TurnBasedModelClient(ModelClient):
+    """
+    Base class for model clients that support turn-based message exchanges, as opposed to continuous streaming of data.
+    """
+
+
+class ContinuousStreamModelClient(ModelClient):
+    """
+    Base class for model clients that support continuous streaming of data, as opposed to turn-based message exchanges.
+    """
+
+
+def load_model_client_from_dict(
+    parent: "BotStructure", intent_router: IntentRouter, config: Dict[str, Any]
+) -> ModelClient:
     """
     Load a model client from a dictionary configuration.
 
@@ -130,4 +159,4 @@ def load_model_client_from_dict(config: Dict[str, Any]) -> ModelClient:
         )
 
     # Handoff to the subclass' init
-    return _MODELCLIENT_CLASSES[class_](config)
+    return _MODELCLIENT_CLASSES[class_](parent=parent, intent_router=intent_router, config=config)

@@ -33,13 +33,13 @@ class LocalBotInterface(BotInterface):
 
     name = "local"
 
-    def __init__(self, config: Dict[str, Any], intent_router: IntentRouter):
+    def __init__(self, intent_router: IntentRouter, config: Dict[str, Any]):
         # Init the structure
         bot_structure_config = config.pop("bot", None)
         if not bot_structure_config:
             raise ValueError("LocalBotInterface requires a 'bot' configuration key to know how to structure the bot.")
         logger.debug("Creating bot structure of type '%s'", bot_structure_config)
-        self.bot: BotStructure = load_bot_structure_from_dict(bot_structure_config, intent_router)
+        self.bot: BotStructure = load_bot_structure_from_dict(intent_router, bot_structure_config)
 
         # Check the modality
         self.modality = config.pop("modality")
@@ -75,28 +75,12 @@ class LocalBotInterface(BotInterface):
         Runs the CLI interface for the text turns modality.
         """
         logger.debug("Running the LocalBotInterface in text turns mode.")
+        bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
+        bot.add_event_handler("on_model_starts_generating_response", self.handle_start_text_response)
+        bot.add_event_handler("on_model_stops_generating_response", self.handle_finish_text_response)
+        bot.add_event_handler("on_model_connection", self.handle_model_connection)
 
-        print("Chat is ready. Start typing!")
-        print("Press 'q' to quit")
-        print("")
-
-        while True:
-            user_message = input("User: ")
-
-            if user_message == "q":
-                break
-
-            response = bot.send_message({"role": "user", "content": user_message})
-
-            print("Assistant: ", end="", flush=True)
-            async for delta in response:
-                print(delta.get("content", ""), end="", flush=True)
-            print("")
-
-            if self.bot.model.conversation_ended:
-                break
-
-        print("Chat is finished. Bye!")
+        await bot.connect()
 
     async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
         """
@@ -111,10 +95,10 @@ class LocalBotInterface(BotInterface):
 
         # Connect the event handlers
         bot.add_event_handler("*", self.check_for_transcripts)
-        bot.add_event_handler("on_text_message", self.handle_text_messages)
-        bot.add_event_handler("on_audio_message", self.handle_audio_messages)
-        bot.add_event_handler("on_speech_started", self.speech_started)
-        bot.add_event_handler("on_speech_stopped", self.speech_stopped)
+        # bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
+        bot.add_event_handler("on_audio_message_from_model", self.handle_audio_messages)
+        bot.add_event_handler("on_vad_detects_user_speech_started", self.speech_started)
+        bot.add_event_handler("on_vad_detects_user_speech_ended", self.speech_stopped)
 
         # Start keyboard listener in a separate thread
         listener = keyboard.Listener(on_press=self.input_handler.on_press)
@@ -130,7 +114,7 @@ class LocalBotInterface(BotInterface):
             print("")
 
             # Start continuous audio streaming
-            asyncio.create_task(self.audio_handler.start_streaming(bot.stream_data))
+            asyncio.create_task(self.audio_handler.start_streaming(bot.send))
 
             # Simple input loop for quit command
             while True:
@@ -157,6 +141,29 @@ class LocalBotInterface(BotInterface):
         if "transcript" in event:
             print(f"[{event["type"]}] Transcript: {event['transcript']}")
 
+    async def handle_start_text_response(self, _) -> None:
+        """
+        Prints to the console when the bot starts generating a text response.
+        """
+        print("Assistant: ", end="")
+
+    async def handle_finish_text_response(self, _) -> None:
+        """
+        Prints to the console when the bot starts generating a text response.
+        """
+        print("")
+        await self.bot.send({"role": "user", "content": input("User: ")})
+
+    async def handle_model_connection(self, event: Dict[str, Any]) -> None:
+        """
+        Prints to the console when the bot connects to the model.
+
+        Args:
+            event: The event dictionary containing the model connection event.
+        """
+        print("########## Chat is ready! ###########")
+        await self.handle_finish_text_response(event)
+
     async def handle_text_messages(self, event: Dict[str, Any]) -> None:
         """
         Prints to the console any text message from the bot.
@@ -164,7 +171,8 @@ class LocalBotInterface(BotInterface):
         Args:
             event: The event dictionary containing the message.
         """
-        print(f"Assistant: {event['delta']}")
+        if event["delta"]:
+            print(event["delta"], end="", flush=True)
 
     async def handle_audio_messages(self, event: Dict[str, Any]) -> None:
         """

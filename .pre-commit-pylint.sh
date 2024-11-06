@@ -16,11 +16,10 @@ run_pylint() {
 if [[ $1 == "all" ]]; then
   # If the first argument is 'all', find all the folders
   echo "Running pylint in ./intentional"
-  pylint -sn -rn --rcfile=intentional/pyproject.toml intentional || exit 1
+  pylint -sn -rn --rcfile=intentional/pyproject.toml intentional/src || exit 1
   echo "Running pylint in ./intentional-core"
-  pylint -sn -rn --rcfile=intentional-core/pyproject.toml intentional-core || exit 1
-  cd plugins/
-  all_dirs=$(find . -type d | grep '^\./intentional' | grep '/src/' | grep -v ".egg-info" | awk -F'/' '{print $1"/"$2}' | sort -u)
+  pylint -sn -rn --rcfile=intentional-core/pyproject.toml intentional-core/src || exit 1
+  all_dirs=$(find . -type d | grep '^\./plugins/intentional' | grep '/src/' | grep -v ".egg-info" | awk -F'/' '{print $2"/"$3}' | sort -u)
   run_pylint "$all_dirs"
 
 else

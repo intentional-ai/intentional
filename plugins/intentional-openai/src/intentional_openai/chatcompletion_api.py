@@ -5,7 +5,7 @@
 Client for OpenAI's Chat Completion API.
 """
 
-from typing import Any, Dict, List, AsyncGenerator
+from typing import Any, Dict, List, AsyncGenerator, TYPE_CHECKING
 
 import os
 import json
@@ -13,7 +13,11 @@ import logging
 
 import openai
 from intentional_core import TurnBasedModelClient
+from intentional_core.intent_routing import IntentRouter
 from intentional_openai.tools import to_openai_tool
+
+if TYPE_CHECKING:
+    from intentional_core.bot_structure import BotStructure
 
 
 logger = logging.getLogger(__name__)
@@ -26,12 +30,17 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
 
     name: str = "openai"
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, parent: "BotStructure", intent_router: IntentRouter, config: Dict[str, Any]):
         """
         A client for interacting with the OpenAI Chat Completion API.
+
+        Args:
+            parent: The parent bot structure.
+            intent_router: The intent router.
+            config: The configuration dictionary.
         """
         logger.debug("Loading ChatCompletionAPIClient from config: %s", config)
-        super().__init__()
+        super().__init__(parent, intent_router)
 
         self.model_name = config.get("name")
         if not self.model_name:
@@ -39,7 +48,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         if "realtime" in self.model_name:
             raise ValueError(
                 "ChatCompletionAPIClient doesn't support Realtime API. "
-                "To use the Realtime API, use RealtimeAPIClient instead."
+                "To use the Realtime API, use RealtimeAPIClient instead (client: openai_realtime)"
             )
 
         self.api_key_name = config.get("api_key_name", "OPENAI_API_KEY")
@@ -50,102 +59,143 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             )
         self.api_key = os.environ.get(self.api_key_name)
 
-        self.system_prompt = config.get("system_prompt", "")
-        self.tools = {}
-
         self.client = openai.AsyncOpenAI(api_key=self.api_key)
-        self.conversation: List[Dict[str, Any]] = []
-        self.intent_router = None
+
+        self.system_prompt = self.intent_router.get_prompt()
+        self.tools = self.intent_router.current_stage.tools
+        self.conversation: List[Dict[str, Any]] = [{"role": "system", "content": self.system_prompt}]
         self.conversation_ended = False
 
-    async def send_message(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
+    async def run(self) -> None:
+        """
+        Handle events from the model by either processing them internally or by translating them into higher-level
+        events that the BotStructure class can understand, then re-emitting them.
+        """
+        logger.debug("ChatCompletionAPIClient.run() is no-op for now")
+
+    async def update_system_prompt(self) -> None:
+        """
+        Update the system prompt in the model.
+        """
+        self.conversation = [{"role": "system", "content": self.system_prompt}] + self.conversation[1:]
+        await self.emit("on_system_prompt_updated", {"prompt": self.system_prompt})
+
+    async def handle_interruption(self, lenght_to_interruption: int) -> None:
+        """
+        Handle an interruption while rendering the output to the user.
+
+        Args:
+            lenght_to_interruption: The length of the data that was produced to the user before the interruption.
+                This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
+                depending on the bot structure that implements it.
+        """
+        logger.warning("TODO! Implement handle_interruption in ChatCompletionAPIClient")
+
+    async def send(self, data: Dict[str, Any]) -> None:
         """
         Send a message to the model.
         """
         if self.conversation_ended:
-            yield None
+            self.emit("on_conversation_ended", {})
             return
 
-        if self.intent_router and not self.system_prompt:
-            self.system_prompt, self.tools = await self.intent_router.run({})
-            logger.debug("Setting initial system prompt: %s", self.system_prompt)
-            logger.debug("Setting initial tools: %s", [t.name for t in self.tools])
-            self.conversation.append({"role": "system", "content": self.system_prompt})
+        await self.emit("on_model_starts_generating_response", {})
 
         # Generate a response
-        response = await self.client.chat.completions.create(
-            model=self.model_name,
-            messages=self.conversation + [message],
-            stream=True,
-            tools=[{"type": "function", "function": to_openai_tool(t)} for t in self.tools.values()]
-            + [{"type": "function", "function": to_openai_tool(self.intent_router)}],
-            tool_choice="auto",
-            n=1,
-        )
+        message = data["text_message"]
+        response = await self._send_message(message)
 
+        # Unwrap the response to make sure it contains no function calls to handle
         call_id = ""
         function_name = ""
         function_args = ""
         assistant_response = ""
-
         async for r in response:
             if not call_id:
                 call_id = r.to_dict()["id"]
-
             delta = r.to_dict()["choices"][0]["delta"]
 
-            # If this is not a function call, just stream out
             if "tool_calls" not in delta:
-                yield delta
+                # If this is not a function call, just stream out
+                await self.emit("on_text_message_from_model", {"delta": delta.get("content")})
                 assistant_response += delta.get("content") or ""
-
             else:
                 # TODO handle multiple parallel function calls
                 if delta["tool_calls"][0]["index"] > 0 or len(delta["tool_calls"]) > 1:
                     logger.error("TODO: Multiple parallel function calls not supported yet. Please open an issue.")
-
                 # Consume the response to understand which tool to call with which parameters
                 for tool_call in delta["tool_calls"]:
-                    # if not call_id:
-                    #     call_id = tool_call["function"].get("id")
                     if not function_name:
                         function_name = tool_call["function"].get("name")
                     function_args += tool_call["function"]["arguments"]
 
-        # If there was no function call, update the conversation history and return
         if not function_name:
+            # If there was no function call, update the conversation history and return
             self.conversation.append(message)
             self.conversation.append({"role": "assistant", "content": assistant_response})
-            self.print_conversation_history()
-            return
+        else:
+            # Otherwise deal with the function call
+            await self._handle_function_call(message, call_id, function_name, function_args)
 
-        # Otherwise deal with the function call
+        await self.emit("on_model_stops_generating_response", {})
+
+    async def _send_message(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
+        """
+        Generate a response to a message.
+
+        Args:
+            message: The message to respond to.
+        """
+        return await self.client.chat.completions.create(
+            model=self.model_name,
+            messages=self.conversation + [message],
+            stream=True,
+            tools=[{"type": "function", "function": to_openai_tool(t)} for t in self.tools.values()],
+            tool_choice="auto",
+            n=1,
+        )
+
+    async def _handle_function_call(
+        self, message: Dict[str, Any], call_id: str, function_name: str, function_args: str
+    ):
+        """
+        Handle a function call from the model.
+        """
         logger.debug("Function call detected: %s with args: %s", function_name, function_args)
         function_args = json.loads(function_args)
 
         # Routing function call - this is special because it should not be recorded in the conversation history
         if function_name == self.intent_router.name:
-            self.system_prompt, self.tools = await self.intent_router.run(function_args)
-            self.conversation = [{"role": "system", "content": self.system_prompt}] + self.conversation[1:]
-            logger.debug("Setting system prompt: %s", self.system_prompt)
-            logger.debug("Setting tools: %s", list(self.tools.keys()))
-            self.print_conversation_history()
-
+            await self._route(function_args)
             # Send the same message again with the new system prompt and no trace of the routing call.
-            # We don't append the message in order to avoid message duplication in the history.
-            async for chunk in self.send_message(message):
-                yield chunk
-            return
+            # We don't append the user message to the history in order to avoid message duplication.
+            await self.send({"text_message": message})
 
-        # TODO # End conversation function call
-        # if function_name == "end_conversation":
-        #     self.conversation_ended = True
-        #     yield ""
-        #     return
+        else:
+            # Handle a regular function call - this one shows up in the history as normal
+            # so we start by appending the user message
+            self.conversation.append(message)
+            output = await self._call_tool(call_id, function_name, function_args)
+            await self.send({"text_message": {"role": "tool", "content": json.dumps(output), "tool_call_id": call_id}})
 
-        # Handle a regular function call - this one shows up in the history as normal
-        # so we start by appending the user message
-        self.conversation.append(message)
+    async def _route(self, routing_info: Dict[str, Any]) -> None:
+        """
+        Runs the router to determine the next system prompt and tools to use.
+        """
+        self.system_prompt, self.tools = await self.intent_router.run(routing_info)
+        await self.update_system_prompt()
+        logger.debug("System prompt updated to: %s", self.system_prompt)
+        logger.debug("Tools updated to: %s", self.tools)
+
+    async def _call_tool(self, call_id, function_name, function_args):
+        """
+        Call a tool with the given arguments.
+
+        Args:
+            call_id: The ID of the tool call.
+            function_name: The name of the tool function to call.
+            function_args: The arguments to pass to the tool
+        """
         # Record the tool invocation in the conversation
         self.conversation.append(
             {
@@ -159,29 +209,12 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
                 ],
             }
         )
-        self.print_conversation_history()
-
-        # Get the tools output
-        logging.debug(
-            "Calling tool %s with args %s. Picking from %s", function_name, function_args, list(self.tools.keys())
-        )
+        # Get the tool output
+        logger.debug("Available tools: %s", self.tools)
         if function_name not in self.tools:
             output = f"Tool {function_name} not found."
         else:
+            logger.debug("Calling tool %s with args %s.", function_name, function_args)
             output = await self.tools[function_name].run(function_args)
         logger.debug("Tool output: %s", output)
-
-        async for chunk in self.send_message({"role": "tool", "content": json.dumps(output), "tool_call_id": call_id}):
-            yield chunk
-
-    def print_conversation_history(self):
-        """
-        Print the conversation history.
-        """
-        logger.debug("---------------------------------")
-        logger.debug("Conversation history:")
-        for msg in self.conversation:
-            logger.debug("%s: %s %s", msg["role"], msg.get("content", ""), msg.get("tool_calls", ""))
-        if self.conversation_ended:
-            logger.debug("-----Conversation has ended.-----")
-        logger.debug("---------------------------------")
+        return output
