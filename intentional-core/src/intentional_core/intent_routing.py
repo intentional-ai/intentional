@@ -113,7 +113,10 @@ class IntentRouter(Tool):
         transitions = self.get_transitions()
 
         if selected_outcome not in self.current_stage.outcomes and selected_outcome not in transitions:
-            raise ValueError(f"Unknown outcome {params['outcome']}")
+            raise ValueError(
+                f"Unknown outcome {params['outcome']}. "
+                f"Known outcomes: {list(self.current_stage.outcomes.keys()) + transitions}"
+            )
 
         if selected_outcome in self.current_stage.outcomes:
             next_stage = self.current_stage.outcomes[params["outcome"]]["move_to"]

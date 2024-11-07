@@ -78,7 +78,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         Update the system prompt in the model.
         """
         self.conversation = [{"role": "system", "content": self.system_prompt}] + self.conversation[1:]
-        await self.emit("on_system_prompt_updated", {"prompt": self.system_prompt})
+        await self.emit("on_system_prompt_updated", {"system_prompt": self.system_prompt})
 
     async def handle_interruption(self, lenght_to_interruption: int) -> None:
         """
