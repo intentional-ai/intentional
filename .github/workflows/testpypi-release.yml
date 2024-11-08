@@ -51,7 +51,7 @@ jobs:
           cd intentional-core/
           hatch build
           hatch version ${{ steps.version.outputs.value }}
-          hatch publish --repository test
+          hatch publish --repo test
 
       # - name: Publish intentional-core to TestPyPI
       #   uses: pypa/gh-action-pypi-publish@release/v1
