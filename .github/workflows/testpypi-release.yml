@@ -93,8 +93,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install uv
-          uv pip install --system hatch
-          uv pip install --system --index-url https://test.pypi.org/simple/ ${{ matrix.plugin }}
+          uv pip install --system hatch ${{ matrix.plugin }}
 
       - name: Build plugin wheel
         run: |
