@@ -5,11 +5,6 @@ on:
   push:
     branches:
       - main
-  # workflow_dispatch:
-  #   inputs:
-  #     folders:
-  #       description: 'JSON list of folders to test. Do not include the "plugins/" prefix'
-  #       required: true
 
 jobs:
 
@@ -106,7 +101,7 @@ jobs:
       run: |
         sudo apt-get install portaudio19-dev
         pip install uv
-        uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test]
+        uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test] --index-url=./plugins/ --extra-index-url=https://pypi.org/simple
 
     - name: Run tests for ${{ matrix.folder }}
       run: pytest plugins/${{ matrix.folder }}
