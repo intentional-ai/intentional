@@ -20,7 +20,7 @@ from intentional_core import (
     IntentRouter,
 )
 
-from intentional_local.handlers import InputHandler, AudioHandler
+from intentional_terminal.handlers import InputHandler, AudioHandler
 
 
 logger = logging.getLogger(__name__)

@@ -1,5 +1,5 @@
 plugins:
-- intentional_local
+- intentional_terminal
 - intentional_textual_ui
 - intentional_websocket
 - intentional_openai

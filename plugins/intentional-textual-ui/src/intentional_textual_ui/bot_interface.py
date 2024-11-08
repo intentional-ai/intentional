@@ -18,7 +18,7 @@ from intentional_core import (
     load_bot_structure_from_dict,
     IntentRouter,
 )
-from intentional_local.handlers import AudioHandler
+from intentional_terminal.handlers import AudioHandler
 
 from intentional_textual_ui.audio_stream_ui import AudioStreamInterface
 from intentional_textual_ui.text_chat_ui import TextChatInterface

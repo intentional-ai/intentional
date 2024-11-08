@@ -12,8 +12,8 @@ nav:
    - 'API Reference - Core Package': docs/core-reference.md
    - 'Plugins':
      - 'Local CLI':
-        - 'Getting Started': plugins/intentional-local/README.md
-        - 'API Reference': plugins/intentional-local/docs/reference.md
+        - 'Getting Started': plugins/intentional-terminal/README.md
+        - 'API Reference': plugins/intentional-terminal/docs/reference.md
      - 'OpenAI':
         - 'Getting Started': plugins/intentional-openai/README.md
         - 'API Reference': plugins/intentional-openai/docs/reference.md

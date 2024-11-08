@@ -28,7 +28,7 @@ classifiers = [
 
 dependencies = [
   "intentional-core",
-  "intentional-local",
+  "intentional-terminal",
   "textual",
 ]
 

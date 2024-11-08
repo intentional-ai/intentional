@@ -12,7 +12,7 @@ from textual.containers import ScrollableContainer
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Markdown
 from intentional_core import ContinuousStreamBotStructure
-from intentional_local.handlers import AudioHandler
+from intentional_terminal.handlers import AudioHandler
 
 
 logger = logging.getLogger(__name__)
