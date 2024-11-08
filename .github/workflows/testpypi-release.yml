@@ -13,8 +13,29 @@ jobs:
     environment: PyPI Publisher
     permissions:
       id-token: write
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+      list_plugins: ${{ steps.list_plugins.outputs.value }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Generate version string
+        id: version
+        run: echo "value=$(cksum <<< $(git branch --show-current) | cut -f 1 -d ' ').$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: "Print generasted version string"
+        run: |
+          echo "${{ steps.version.outputs.value }}"
+
+      - name: List plugins
+        id: list_plugins
+        run: |
+          git fetch origin main
+          echo "value=$(./.github/workflows/scripts/get_affected_folders.sh)" >> $GITHUB_OUTPUT
+
+      - name: "Print plugins list"
+        run: |
+          echo "${{ steps.list_plugins.outputs.value }}"
 
       - uses: actions/setup-python@v5
         with:
@@ -29,66 +50,57 @@ jobs:
         run: |
           cd intentional-core/
           hatch build
-          hatch version $(date +%s)
+          hatch version ${{ steps.version.outputs.value }}
+          hatch publish --repository test
 
-      - name: Publish intentional-core to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          packages-dir: intentional-core/dist/
+      # - name: Publish intentional-core to TestPyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     repository-url: https://test.pypi.org/legacy/
+      #     packages-dir: intentional-core/dist/
 
-      - name: Build intentional wheel
-        run: |
-          cd intentional/
-          hatch build
-          hatch version $(date +%s)
+      # - name: Build intentional wheel
+      #   run: |
+      #     cd intentional/
+      #     hatch build
+      #     hatch version ${{ steps.version.outputs.value }}
 
-      - name: Publish intentional to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          packages-dir: intentional/dist/
+      # - name: Publish intentional to TestPyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     repository-url: https://test.pypi.org/legacy/
+      #     packages-dir: intentional/dist/
 
-      - name: List plugins
-        id: list_plugins
-        run: |
-          git fetch origin main
-          echo "value=$(./.github/workflows/scripts/get_affected_folders.sh)" >> $GITHUB_OUTPUT
+  # publish-plugins:
+  #   needs: publish-core
+  #   runs-on: ubuntu-latest
+  #   environment: PyPI Publisher
+  #   permissions:
+  #     id-token: write
+  #   strategy:
+  #     matrix:
+  #       plugin: ${{fromJson(needs.publish-core.outputs.list_plugins)}}
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: "Print plugins list"
-        run: |
-          echo "${{ steps.list_plugins.outputs.value }}"
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.12'
 
-  publish-plugins:
-    needs: publish-core
-    runs-on: ubuntu-latest
-    environment: PyPI Publisher
-    permissions:
-      id-token: write
-    strategy:
-      matrix:
-        plugin: ${{fromJson(needs.publish-core.outputs.list_plugins)}}
-    steps:
-      - uses: actions/checkout@v4
+  #     - name: Install dependencies
+  #       run: |
+  #         pip install uv
+  #         uv pip install --system hatch
+  #         uv pip install --system --index-url https://test.pypi.org/simple/ ${{ matrix.plugin }}
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+  #     - name: Build plugin wheel
+  #       run: |
+  #         cd ${{ matrix.plugin }}
+  #         hatch build
+  #         hatch version ${{ needs.publish-core.outputs.version }}
 
-      - name: Install dependencies
-        run: |
-          pip install uv
-          uv pip install --system hatch
-          uv pip install --system --index-url https://test.pypi.org/simple/ ${{ matrix.plugin }}
-
-      - name: Build plugin wheel
-        run: |
-          cd ${{ matrix.plugin }}
-          hatch build
-          hatch version $(date +%s)
-
-      - name: Publish plugin to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          packages-dir: ${{ matrix.plugin }}/dist/
+  #     - name: Publish plugin to TestPyPI
+  #       uses: pypa/gh-action-pypi-publish@release/v1
+  #       with:
+  #         repository-url: https://test.pypi.org/legacy/
+  #         packages-dir: ${{ matrix.plugin }}/dist/
