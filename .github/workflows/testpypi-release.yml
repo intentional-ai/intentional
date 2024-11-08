@@ -81,6 +81,7 @@ jobs:
     permissions:
       id-token: write
     strategy:
+      fail-fast: false
       matrix:
         plugin: ${{fromJson(needs.publish-core.outputs.list_plugins)}}
     steps:
