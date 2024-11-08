@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+env:
+  HATCH_INDEX_USER: __token__
+  HATCH_INDEX_AUTH: ${{ secrets.TEST_PYPI_TOKEN }}
+
 jobs:
 
   publish-core:
