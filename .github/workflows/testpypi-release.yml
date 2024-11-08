@@ -94,7 +94,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install uv
-          uv pip install --system hatch ${{ matrix.plugin }}
+          uv pip install --system hatch plugins/${{ matrix.plugin }}
 
       - name: Build plugin wheel
         run: |
