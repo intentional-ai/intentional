@@ -107,9 +107,11 @@ jobs:
 
       - name: Build intentional-core wheel
         run: |
+          mkdir wheels/
           cd intentional-core/
           hatch version ${{ steps.version.outputs.value }}
           hatch build
+          mv dist/ ../wheels/
 
       - name: Build plugins wheels
         run: |
@@ -120,17 +122,16 @@ jobs:
               cd $folder
               hatch version ${{ steps.version.outputs.value }}
               hatch build
+              mv dist/ ../../wheels/$folder/
               cd ..
             fi
           done
 
-      - name: Archive plugins wheels
+      - name: Archive wheels
         uses: actions/upload-artifact@v4
         with:
-          name: plugins-${{ steps.version.outputs.value }}
-          path: |
-            intentional-core/dist/
-            plugins/*/dist/
+          name: wheels-${{ steps.version.outputs.value }}
+          path: wheels
 
   run-plugins:
     needs:
@@ -153,18 +154,17 @@ jobs:
       with:
         python-version: ${{ matrix.version }}
 
-    # Get the wheels and install them
-    - name: Download plugin wheels
+    - name: Download wheels
       uses: actions/download-artifact@v4
       with:
-        name: plugins-${{ needs.build-wheels.outputs.version }}
+        name: wheels-${{ needs.build-wheels.outputs.version }}
 
     - name: Install packages
       run: |
         sudo apt-get install portaudio19-dev tree
         pip install uv
         tree -L 3
-        uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test] --index-url=./plugins/ --extra-index-url=https://pypi.org/simple
+        uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test] --index-url=./wheels/ --extra-index-url=https://pypi.org/simple
 
     - name: Run tests for ${{ matrix.folder }}
       run: pytest plugins/${{ matrix.folder }}
