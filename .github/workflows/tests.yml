@@ -115,10 +115,13 @@ jobs:
         run: |
           cd plugins/
           for folder in $(ls); do
-            cd $folder
-            hatch version ${{ steps.version.outputs.value }}
-            hatch build
-            cd ..
+            # Only cd into folders that are directories and start with "intentional-"
+            if [ -d "$folder" ] && [[ "$folder" == intentional-* ]]; then
+              cd $folder
+              hatch version ${{ steps.version.outputs.value }}
+              hatch build
+              cd ..
+            fi
           done
 
       - name: Archive plugins wheels
