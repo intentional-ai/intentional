@@ -122,7 +122,7 @@ jobs:
               cd $folder
               hatch version ${{ steps.version.outputs.value }}
               hatch build
-              mv dist/*.whl ../../wheels/$folder/
+              mv dist/*.whl ../../wheels/
               cd ..
             fi
           done
