@@ -126,6 +126,7 @@ jobs:
               cd ..
             fi
           done
+          tree -L 3
 
       - name: Archive wheels
         uses: actions/upload-artifact@v4
@@ -158,6 +159,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: wheels-${{ needs.build-wheels.outputs.version }}
+        path: wheels/
 
     - name: Install packages
       run: |
