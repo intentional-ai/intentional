@@ -9,7 +9,7 @@ env:
   SKIP: pytest   # Skip tests for pre-commit hooks, they will be run separately
 
 jobs:
-  pre-commit:
+  core:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -56,7 +56,7 @@ jobs:
 
   build-wheels:
     needs:
-      - pre-commit
+      - core
     outputs:
       version: ${{ steps.version.outputs.value }}
     runs-on: ubuntu-latest
@@ -118,7 +118,7 @@ jobs:
       fail-fast: false
       matrix:
         folder: ${{fromJSON(needs.find-plugins.outputs.folders)}}
-        version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - name: Checkout repo
