@@ -66,8 +66,58 @@ jobs:
           repository-url: https://test.pypi.org/legacy/
           packages-dir: intentional/dist/
 
+  build-wheels:
+    needs:
+      - publish-core
+    outputs:
+      artifact_id: ${{ steps.artifact_id.outputs.value }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate artifact_id string
+        id: artifact_id
+        run: echo "value=$(cksum <<< $(git branch --show-current) | cut -f 1 -d ' ').$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: "Print generated artifact_id string"
+        run: |
+          echo "${{ steps.artifact_id.outputs.value }}"
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system hatch intentional-core/
+
+      - name: Build plugins wheels
+        run: |
+          cd plugins/
+          for folder in $(ls); do
+            # Only cd into folders that are directories and start with "intentional-"
+            if [ -d "$folder" ] && [[ "$folder" == intentional-* ]]; then
+              cd $folder
+              hatch version patch,dev
+              hatch version "$(hatch version)$(date +%s)"
+              hatch build
+              mv dist/*.whl ../../wheels/
+              cd ..
+            fi
+          done
+
+      - name: Archive wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ steps.artifact_id.outputs.value }}
+          path: wheels
+
   publish-plugins:
-    needs: publish-core
+    needs:
+      - publish-core
+      - build-wheels
     runs-on: ubuntu-latest
     environment: PyPI Publisher
     permissions:
@@ -83,16 +133,20 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Download wheels
+        uses: actions/download-artifact@v4
+        with:
+          name: wheels-${{ needs.build-wheels.outputs.artifact_id }}
+          path: wheels/
+
       - name: Install dependencies
         run: |
           pip install uv
-          uv pip install --system hatch plugins/${{ matrix.plugin }}
+          uv pip install --system hatch plugins/${{ matrix.plugin }} --find-links=./wheels/ --extra-index-url=https://pypi.org/simple
 
       - name: Build plugin wheel
         run: |
           cd ${{ matrix.plugin }}
-          hatch version patch,dev
-          hatch version "$(hatch version)$(date +%s)"
           hatch build
 
       - name: Publish plugin to TestPyPI
