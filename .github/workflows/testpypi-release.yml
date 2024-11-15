@@ -162,11 +162,11 @@ jobs:
 
       - name: Build plugin wheel
         run: |
-          cd ${{ matrix.plugin }}
+          cd plugins/${{ matrix.plugin }}
           hatch build
 
       - name: Publish plugin to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
-          packages-dir: ${{ matrix.plugin }}/dist/
+          packages-dir: plugins/${{ matrix.plugin }}/dist/
