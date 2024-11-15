@@ -7,32 +7,6 @@ on:
       - main
 
 jobs:
-
-  run-main:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
-    - uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.version }}
-
-    - name: Install packages
-      run: |
-        pip install uv
-        uv pip install --system intentional-core/ intentional/[test]
-
-    - name: Run tests
-      run: pytest intentional/
-
   run-core:
     runs-on: ubuntu-latest
     strategy:
@@ -58,6 +32,32 @@ jobs:
     - name: Run tests
       run: pytest intentional-core/
 
+  run-main:
+    runs-on: ubuntu-latest
+    needs: run-core
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.version }}
+
+    - name: Install packages
+      run: |
+        pip install uv
+        uv pip install --system intentional-core/ intentional/[test]
+
+    - name: Run tests
+      run: pytest intentional/
+
   find-plugins:
     runs-on: ubuntu-latest
     outputs:
@@ -77,9 +77,62 @@ jobs:
         run: |
           echo "${{ steps.folders.outputs.value }}"
 
+  # Build wheels for all the plugins and store them as test artifacts
+  build-wheels:
+    needs:
+      - run-core
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate version string
+        id: version
+        run: echo "value=$(cksum <<< $(git branch --show-current) | cut -f 1 -d ' ').$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: "Print generasted version string"
+        run: |
+          echo "${{ steps.version.outputs.value }}"
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system hatch intentional-core/
+
+      - name: Build intentional-core wheel
+        run: |
+          cd intentional-core/
+          hatch version ${{ steps.version.outputs.value }}
+          hatch build
+
+      - name: Build plugins wheels
+        run: |
+          cd plugins/
+          for folder in $(ls); do
+            cd $folder
+            hatch version ${{ steps.version.outputs.value }}
+            hatch build
+            cd ..
+          done
+
+      - name: Archive plugins wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: plugins-${{ steps.version.outputs.value }}
+          path: |
+            intentional-core/dist/
+            plugins/*/dist/
+
   run-plugins:
     needs:
       - find-plugins
+      - build-wheels
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -97,10 +150,17 @@ jobs:
       with:
         python-version: ${{ matrix.version }}
 
+    # Get the wheels and install them
+    - name: Download plugin wheels
+      uses: actions/download-artifact@v2
+      with:
+        name: plugins-${{ needs.build-wheels.outputs.version }}
+
     - name: Install packages
       run: |
-        sudo apt-get install portaudio19-dev
+        sudo apt-get install portaudio19-dev tree
         pip install uv
+        tree -L 3
         uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test] --index-url=./plugins/ --extra-index-url=https://pypi.org/simple
 
     - name: Run tests for ${{ matrix.folder }}
