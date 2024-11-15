@@ -95,6 +95,7 @@ jobs:
 
       - name: Build plugins wheels
         run: |
+          mkdir wheels/
           cd plugins/
           for folder in $(ls); do
             # Only cd into folders that are directories and start with "intentional-"
