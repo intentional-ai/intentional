@@ -122,7 +122,7 @@ jobs:
           done
 
       - name: Archive plugins wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: plugins-${{ steps.version.outputs.value }}
           path: |
@@ -152,7 +152,7 @@ jobs:
 
     # Get the wheels and install them
     - name: Download plugin wheels
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: plugins-${{ needs.build-wheels.outputs.version }}
 
