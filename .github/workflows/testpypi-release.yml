@@ -96,6 +96,21 @@ jobs:
       - name: Build plugins wheels
         run: |
           mkdir wheels/
+
+          cd intentional-core/
+          hatch version patch,dev
+          hatch version "$(hatch version)$(date +%s)"
+          hatch build
+          mv dist/*.whl ../wheels/
+          cd ../
+
+          cd intentional/
+          hatch version patch,dev
+          hatch version "$(hatch version)$(date +%s)"
+          hatch build
+          mv dist/*.whl ../wheels/
+          cd ../
+
           cd plugins/
           for folder in $(ls); do
             # Only cd into folders that are directories and start with "intentional-"
