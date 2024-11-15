@@ -1,7 +1,6 @@
 name: Release All Packages on TestPyPI
 
 on:
-  # pull_request:
   push:
     branches:
       - main
@@ -18,18 +17,9 @@ jobs:
     permissions:
       id-token: write
     outputs:
-      version: ${{ steps.version.outputs.value }}
       list_plugins: ${{ steps.list_plugins.outputs.value }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Generate version string
-        id: version
-        run: echo "value=$(cksum <<< $(git branch --show-current) | cut -f 1 -d ' ').$(date +%s)" >> $GITHUB_OUTPUT
-
-      - name: "Print generasted version string"
-        run: |
-          echo "${{ steps.version.outputs.value }}"
 
       - name: List plugins
         id: list_plugins
@@ -53,26 +43,28 @@ jobs:
       - name: Build intentional-core wheel
         run: |
           cd intentional-core/
-          hatch version ${{ steps.version.outputs.value }}
+          hatch version patch,dev
+          hatch version "$(hatch version)$(date +%s)"
           hatch build
 
-      # - name: Publish intentional-core to TestPyPI
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     repository-url: https://test.pypi.org/legacy/
-      #     packages-dir: intentional-core/dist/
+      - name: Publish intentional-core to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: intentional-core/dist/
 
       - name: Build intentional wheel
         run: |
           cd intentional/
-          hatch version ${{ steps.version.outputs.value }}
+          hatch version patch,dev
+          hatch version "$(hatch version)$(date +%s)"
           hatch build
 
-      # - name: Publish intentional to TestPyPI
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     repository-url: https://test.pypi.org/legacy/
-      #     packages-dir: intentional/dist/
+      - name: Publish intentional to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: intentional/dist/
 
   publish-plugins:
     needs: publish-core
@@ -99,11 +91,12 @@ jobs:
       - name: Build plugin wheel
         run: |
           cd ${{ matrix.plugin }}
-          hatch version ${{ needs.publish-core.outputs.version }}
+          hatch version patch,dev
+          hatch version "$(hatch version)$(date +%s)"
           hatch build
 
-      # - name: Publish plugin to TestPyPI
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     repository-url: https://test.pypi.org/legacy/
-      #     packages-dir: ${{ matrix.plugin }}/dist/
+      - name: Publish plugin to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: ${{ matrix.plugin }}/dist/

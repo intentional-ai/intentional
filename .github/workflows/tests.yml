@@ -77,7 +77,6 @@ jobs:
         run: |
           echo "${{ steps.folders.outputs.value }}"
 
-  # Build wheels for all the plugins and store them as test artifacts
   build-wheels:
     needs:
       - run-core
@@ -126,7 +125,6 @@ jobs:
               cd ..
             fi
           done
-          tree -L 3
 
       - name: Archive wheels
         uses: actions/upload-artifact@v4
@@ -163,9 +161,8 @@ jobs:
 
     - name: Install packages
       run: |
-        sudo apt-get install portaudio19-dev tree
+        sudo apt-get install portaudio19-dev
         pip install uv
-        tree -L 3
         uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test] --find-links=./wheels/ --extra-index-url=https://pypi.org/simple
 
     - name: Run tests for ${{ matrix.folder }}
