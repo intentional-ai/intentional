@@ -138,7 +138,7 @@ class LocalBotInterface(BotInterface):
             event: The event dictionary containing the transcript.
         """
         if "transcript" in event:
-            print(f"[{event["type"]}] Transcript: {event['transcript']}")
+            print(f"[{event['type']}] Transcript: {event['transcript']}")
 
     async def handle_start_text_response(self, _) -> None:
         """
