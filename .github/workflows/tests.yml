@@ -166,7 +166,7 @@ jobs:
         sudo apt-get install portaudio19-dev tree
         pip install uv
         tree -L 3
-        uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test] --index-url=./wheels/ --extra-index-url=https://pypi.org/simple
+        uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[test] --find-links=./wheels/ --extra-index-url=https://pypi.org/simple
 
     - name: Run tests for ${{ matrix.folder }}
       run: pytest plugins/${{ matrix.folder }}
