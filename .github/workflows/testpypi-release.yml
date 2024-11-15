@@ -157,12 +157,15 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get install portaudio19-dev
           pip install uv
           uv pip install --system hatch plugins/${{ matrix.plugin }} --find-links=./wheels/ --extra-index-url=https://pypi.org/simple
 
       - name: Build plugin wheel
         run: |
           cd plugins/${{ matrix.plugin }}
+          hatch version patch,dev
+          hatch version "$(hatch version)$(date +%s)"
           hatch build
 
       - name: Publish plugin to TestPyPI
