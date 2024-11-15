@@ -111,7 +111,7 @@ jobs:
           cd intentional-core/
           hatch version ${{ steps.version.outputs.value }}
           hatch build
-          mv dist/ ../wheels/
+          mv dist/*.whl ../wheels/
 
       - name: Build plugins wheels
         run: |
@@ -122,7 +122,7 @@ jobs:
               cd $folder
               hatch version ${{ steps.version.outputs.value }}
               hatch build
-              mv dist/ ../../wheels/$folder/
+              mv dist/*.whl ../../wheels/$folder/
               cd ..
             fi
           done
