@@ -17,6 +17,9 @@ nav:
      - 'OpenAI':
         - 'Getting Started': plugins/intentional-openai/README.md
         - 'API Reference': plugins/intentional-openai/docs/reference.md
+     - 'Telegram UI':
+        - 'Getting Started': plugins/intentional-telegram/README.md
+        - 'API Reference': plugins/intentional-telegram/docs/reference.md
      - 'Text Chat':
         - 'Getting Started': plugins/intentional-text-chat/README.md
         - 'API Reference': plugins/intentional-text-chat/docs/reference.md
