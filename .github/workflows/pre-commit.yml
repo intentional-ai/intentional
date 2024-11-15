@@ -72,7 +72,7 @@ jobs:
         id: version
         run: echo "value=$(cksum <<< $(git branch --show-current) | cut -f 1 -d ' ').$(date +%s)" >> $GITHUB_OUTPUT
 
-      - name: "Print generasted version string"
+      - name: "Print generated version string"
         run: |
           echo "${{ steps.version.outputs.value }}"
 
