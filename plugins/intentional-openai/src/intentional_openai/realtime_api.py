@@ -39,8 +39,10 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         "response.audio.delta": "on_audio_message_from_model",
         "response.created": "on_model_starts_generating_response",
         "response.done": "on_model_stops_generating_response",
-        "input_audio_buffer.speech_started": "on_vad_detects_user_speech_started",
-        "input_audio_buffer.speech_stopped": "on_vad_detects_user_speech_started_ended",
+        "input_audio_buffer.speech_started": "on_user_speech_started",
+        "input_audio_buffer.speech_stopped": "on_user_speech_ended",
+        "conversation.item.input_audio_transcription.completed": "on_user_speech_transcribed",
+        "response.audio_transcript.done": "on_model_speech_transcribed",
     }
 
     def __init__(self, parent: Callable, intent_router: IntentRouter, config: Dict[str, Any]):
@@ -83,6 +85,8 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         self.intent_router = intent_router
         self.system_prompt = config.get("system_prompt", self.intent_router.get_prompt())
         self.tools = self.intent_router.current_stage.tools
+
+        self.conversation_ended = False
 
     async def connect(self) -> None:
         """
@@ -151,7 +155,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                         await self.emit("on_model_connection", event)
                     if self._updating_system_prompt:
                         self._updating_system_prompt = False
-                        await self.emit("on_system_prompt_updated", event)
+                        await self.emit("on_system_prompt_updated", {"system_prompt": event["session"]["instructions"]})
 
                 # Track agent response state
                 elif event_type == "response.created":
@@ -171,7 +175,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
 
                 # Events from VAD related to the user's input
                 elif event_type == "input_audio_buffer.speech_started":
-                    logger.debug("Speech detected, listening...")
+                    logger.debug("Speech detected.")
 
                 elif event_type == "input_audio_buffer.speech_stopped":
                     logger.debug("Speech ended.")
@@ -183,10 +187,15 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                         event_type,
                         self.events_translation[event_type],
                     )
+                    event["type"] = self.events_translation[event_type]
                     await self.emit(self.events_translation[event_type], event)
                 else:
                     logger.debug("Sending native event type %s to parent", event_type)
                     await self.emit(event_type, event)
+
+                if self.conversation_ended:
+                    logger.debug("Conversation ended.")
+                    break
 
         except websockets.exceptions.ConnectionClosed:
             logging.info("Connection closed")
@@ -213,9 +222,9 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         Update the system prompt to use in the conversation.
         """
         logger.debug("Setting system prompt to: %s", self.system_prompt)
-        logger.debug("Setting tools to: %s", [t.name for t in self.tools])
+        logger.debug("Setting tools to: %s", list(self.tools.keys()))
         await self._update_session(
-            {"instructions": self.system_prompt, "tools": [to_openai_tool(t) for t in self.tools.items()]}
+            {"instructions": self.system_prompt, "tools": [to_openai_tool(t) for t in self.tools.values()]}
         )
         # Flag that we're updating the system prompt and look for this event in the run loop
         self._updating_system_prompt = True
@@ -264,7 +273,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         event = {"type": "session.update", "session": config}
         await self.ws.send(json.dumps(event))
 
-    async def _send_tex_message(self, text: str) -> None:
+    async def _send_text_message(self, text: str) -> None:
         """
         Send text message to the API.
 
@@ -349,6 +358,11 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
             self.system_prompt, self.tools = await self.intent_router.run(tool_arguments)
             await self.update_system_prompt()
             await self._send_function_result(event["call_id"], "ok")
+            return
+
+        # Check if it's end conversation
+        if tool_name == "end_conversation":
+            self.conversation_ended = True
             return
 
         # Make sure the tool actually exists

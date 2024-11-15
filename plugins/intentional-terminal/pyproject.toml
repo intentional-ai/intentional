@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "intentional-{{ package_name }}"
+name = "intentional-terminal"
 dynamic = ["version"]
-description = "{{ description }}"
+description = 'Plugin that makes Intentional able to use a local CLI to communicate'
 readme = "README.md"
 requires-python = ">=3.9"
 license = "AGPL-3.0-or-later"
@@ -26,7 +26,10 @@ classifiers = [
 ]
 
 dependencies = [
-  "intentional-core"
+  "intentional-core",
+  "pynput",
+  "pyaudio",
+  "pydub",
 ]
 
 [project.optional-dependencies]
@@ -47,7 +50,7 @@ Issues = "https://github.com/intentional-ai/intentional/issues"
 Source = "https://github.com/intentional-ai/intentional"
 
 [tool.hatch.version]
-path = "src/intentional_{{ module_name }}/__about__.py"
+path = "src/intentional_terminal/__about__.py"
 
 [tool.black]
 line-length = 120
@@ -57,6 +60,7 @@ fast = true
 disable=[
   "fixme",
   "too-few-public-methods",
+  "too-many-instance-attributes",
 ]
 
 [tool.pylint.format]

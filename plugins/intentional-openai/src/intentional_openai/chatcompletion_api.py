@@ -60,9 +60,11 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         self.api_key = os.environ.get(self.api_key_name)
 
         self.client = openai.AsyncOpenAI(api_key=self.api_key)
+
         self.system_prompt = self.intent_router.get_prompt()
         self.tools = self.intent_router.current_stage.tools
         self.conversation: List[Dict[str, Any]] = [{"role": "system", "content": self.system_prompt}]
+        self.conversation_ended = False
 
     async def run(self) -> None:
         """
@@ -76,7 +78,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         Update the system prompt in the model.
         """
         self.conversation = [{"role": "system", "content": self.system_prompt}] + self.conversation[1:]
-        await self.emit("on_system_prompt_updated", {"prompt": self.system_prompt})
+        await self.emit("on_system_prompt_updated", {"system_prompt": self.system_prompt})
 
     async def handle_interruption(self, lenght_to_interruption: int) -> None:
         """
@@ -93,6 +95,10 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         """
         Send a message to the model.
         """
+        if self.conversation_ended:
+            self.emit("on_conversation_ended", {})
+            return
+
         await self.emit("on_model_starts_generating_response", {})
 
         # Generate a response

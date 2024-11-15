@@ -1,0 +1,102 @@
+name: Release All Packages on TestPyPI
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  HATCH_INDEX_USER: __token__
+  HATCH_INDEX_AUTH: ${{ secrets.TEST_PYPI_TOKEN }}
+
+jobs:
+
+  publish-core:
+    runs-on: ubuntu-latest
+    environment: PyPI Publisher
+    permissions:
+      id-token: write
+    outputs:
+      list_plugins: ${{ steps.list_plugins.outputs.value }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: List plugins
+        id: list_plugins
+        run: |
+          git fetch origin main
+          echo "value=$(./.github/workflows/scripts/get_affected_folders.sh)" >> $GITHUB_OUTPUT
+
+      - name: "Print plugins list"
+        run: |
+          echo "${{ steps.list_plugins.outputs.value }}"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system hatch intentional-core/ intentional/
+
+      - name: Build intentional-core wheel
+        run: |
+          cd intentional-core/
+          hatch version patch,dev
+          hatch version "$(hatch version)$(date +%s)"
+          hatch build
+
+      - name: Publish intentional-core to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: intentional-core/dist/
+
+      - name: Build intentional wheel
+        run: |
+          cd intentional/
+          hatch version patch,dev
+          hatch version "$(hatch version)$(date +%s)"
+          hatch build
+
+      - name: Publish intentional to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: intentional/dist/
+
+  publish-plugins:
+    needs: publish-core
+    runs-on: ubuntu-latest
+    environment: PyPI Publisher
+    permissions:
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        plugin: ${{fromJson(needs.publish-core.outputs.list_plugins)}}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system hatch plugins/${{ matrix.plugin }}
+
+      - name: Build plugin wheel
+        run: |
+          cd ${{ matrix.plugin }}
+          hatch version patch,dev
+          hatch version "$(hatch version)$(date +%s)"
+          hatch build
+
+      - name: Publish plugin to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: ${{ matrix.plugin }}/dist/

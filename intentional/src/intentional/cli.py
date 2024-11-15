@@ -3,12 +3,17 @@
 """
 Entry point for the Intentional CLI.
 """
-
+import os
 import asyncio
 import logging
 import argparse
 
 from intentional_core import load_configuration_file
+
+os.remove("logs.log")
+logging.basicConfig(filename="logs.log", filemode="w", level=logging.DEBUG)
+
+logging.getLogger("markdown_it").setLevel(logging.WARNING)
 
 
 def main():

@@ -79,61 +79,6 @@ class AudioHandler:
         self.frames = []
         self.currently_playing = False
 
-    def start_recording(self) -> bytes:
-        """Start recording audio from microphone and return bytes"""
-        if self.recording:
-            return b""
-
-        self.recording = True
-        self.recording_stream = self.audio.open(
-            format=self.audio_format, channels=self.channels, rate=self.rate, input=True, frames_per_buffer=self.chunk
-        )
-
-        print("\nRecording... Press 'space' to stop.")
-
-        self.frames = []
-        self.recording_thread = threading.Thread(target=self._record)
-        self.recording_thread.start()
-
-        return b""  # Return empty bytes, we'll send audio later
-
-    def _record(self):
-        while self.recording:
-            try:
-                data = self.recording_stream.read(self.chunk)
-                self.frames.append(data)
-            except Exception as e:  # pylint: disable=broad-except
-                logger.exception("Error recording audio: %s", e)
-                break
-
-    # def stop_recording(self) -> bytes:
-    #     """Stop recording and return the recorded audio as bytes"""
-    #     if not self.recording:
-    #         return b""
-
-    #     self.recording = False
-    #     if self.recording_thread:
-    #         self.recording_thread.join()
-
-    #     # Clean up recording stream
-    #     if self.recording_stream:
-    #         self.recording_stream.stop_stream()
-    #         self.recording_stream.close()
-    #         self.recording_stream = None
-
-    #     # Convert frames to WAV format in memory
-    #     wav_buffer = io.BytesIO()
-    #     with wave.open(wav_buffer, "wb") as wf:
-    #         wf: wave.Wave_write
-    #         wf.setnchannels(self.channels)
-    #         wf.setsampwidth(self.audio.get_sample_size(self.audio_format))
-    #         wf.setframerate(self.rate)
-    #         wf.writeframes(b"".join(self.frames))
-
-    #     # Get the WAV data
-    #     wav_buffer.seek(0)
-    #     return wav_buffer.read()
-
     async def start_streaming(self, client_streaming_callback):
         """Start continuous audio streaming."""
         if self.streaming:
@@ -143,8 +88,7 @@ class AudioHandler:
         self.model_stream = self.audio.open(
             format=self.audio_format, channels=self.channels, rate=self.rate, input=True, frames_per_buffer=self.chunk
         )
-
-        print("\nStreaming audio... Press 'q' to stop.")
+        # print("\nStreaming audio... Press 'q' to stop.")
 
         while self.streaming:
             try:
@@ -202,6 +146,7 @@ class AudioHandler:
                 self._play_audio_chunk(audio_segment)
             except queue.Empty:
                 self.playback_play_time = 0
+                logger.debug("Audio buffer empty!!")
                 continue
 
             if self.playback_event.is_set():

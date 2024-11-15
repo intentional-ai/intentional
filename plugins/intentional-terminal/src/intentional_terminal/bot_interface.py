@@ -20,7 +20,7 @@ from intentional_core import (
     IntentRouter,
 )
 
-from intentional_local.handlers import InputHandler, AudioHandler
+from intentional_terminal.handlers import InputHandler, AudioHandler
 
 
 logger = logging.getLogger(__name__)
@@ -79,7 +79,6 @@ class LocalBotInterface(BotInterface):
         bot.add_event_handler("on_model_starts_generating_response", self.handle_start_text_response)
         bot.add_event_handler("on_model_stops_generating_response", self.handle_finish_text_response)
         bot.add_event_handler("on_model_connection", self.handle_model_connection)
-
         await bot.connect()
 
     async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
@@ -97,8 +96,8 @@ class LocalBotInterface(BotInterface):
         bot.add_event_handler("*", self.check_for_transcripts)
         # bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
         bot.add_event_handler("on_audio_message_from_model", self.handle_audio_messages)
-        bot.add_event_handler("on_vad_detects_user_speech_started", self.speech_started)
-        bot.add_event_handler("on_vad_detects_user_speech_ended", self.speech_stopped)
+        bot.add_event_handler("on_user_speech_started", self.speech_started)
+        bot.add_event_handler("on_user_speech_ended", self.speech_stopped)
 
         # Start keyboard listener in a separate thread
         listener = keyboard.Listener(on_press=self.input_handler.on_press)
@@ -139,7 +138,7 @@ class LocalBotInterface(BotInterface):
             event: The event dictionary containing the transcript.
         """
         if "transcript" in event:
-            print(f"[{event["type"]}] Transcript: {event['transcript']}")
+            print(f"[{event['type']}] Transcript: {event['transcript']}")
 
     async def handle_start_text_response(self, _) -> None:
         """

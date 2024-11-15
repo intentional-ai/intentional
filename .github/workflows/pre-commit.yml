@@ -6,10 +6,10 @@ on:
     branches: [main]
 
 env:
-  SKIP: pytest
+  SKIP: pytest   # Skip tests for pre-commit hooks, they will be run separately
 
 jobs:
-  pre-commit:
+  core:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -28,6 +28,12 @@ jobs:
 
     - name: Run pre-commit hooks
       run: pre-commit run --all -v
+
+    - name: Run core tests
+      run: pytest intentional-core/
+
+    - name: Run main tests
+      run: pytest intentional/
 
   find-plugins:
     runs-on: ubuntu-latest
@@ -48,14 +54,71 @@ jobs:
         run: |
           echo "${{ steps.folders.outputs.value }}"
 
+  build-wheels:
+    needs:
+      - core
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate version string
+        id: version
+        run: echo "value=$(cksum <<< $(git branch --show-current) | cut -f 1 -d ' ').$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: "Print generasted version string"
+        run: |
+          echo "${{ steps.version.outputs.value }}"
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system hatch intentional-core/
+
+      - name: Build intentional-core wheel
+        run: |
+          mkdir wheels/
+          cd intentional-core/
+          hatch version ${{ steps.version.outputs.value }}
+          hatch build
+          mv dist/*.whl ../wheels/
+
+      - name: Build plugins wheels
+        run: |
+          cd plugins/
+          for folder in $(ls); do
+            # Only cd into folders that are directories and start with "intentional-"
+            if [ -d "$folder" ] && [[ "$folder" == intentional-* ]]; then
+              cd $folder
+              hatch version ${{ steps.version.outputs.value }}
+              hatch build
+              mv dist/*.whl ../../wheels/
+              cd ..
+            fi
+          done
+
+      - name: Archive wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ steps.version.outputs.value }}
+          path: wheels
+
   run-plugins:
     needs:
       - find-plugins
+      - build-wheels
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         folder: ${{fromJSON(needs.find-plugins.outputs.folders)}}
+        version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - name: Checkout repo
@@ -65,13 +128,22 @@ jobs:
 
     - uses: actions/setup-python@v5
       with:
-        python-version: 3.12
+        python-version: ${{ matrix.version }}
+
+    - name: Download wheels
+      uses: actions/download-artifact@v4
+      with:
+        name: wheels-${{ needs.build-wheels.outputs.version }}
+        path: wheels/
 
     - name: Install packages
       run: |
         sudo apt-get install portaudio19-dev
         pip install uv
-        uv pip install --system intentional-core/ intentional/[test] plugins/${{ matrix.folder }}[lint]
+        uv pip install --system intentional-core/ intentional/[dev] plugins/${{ matrix.folder }}[dev] --find-links=./wheels/ --extra-index-url=https://pypi.org/simple
+
+    - name: Run tests for ${{ matrix.folder }}
+      run: pytest plugins/${{ matrix.folder }}
 
     - name: Run pylint on ${{ matrix.folder }}
       run: pylint -sn -rn --rcfile=plugins/${{ matrix.folder }}/pyproject.toml plugins/${{ matrix.folder }}/src/

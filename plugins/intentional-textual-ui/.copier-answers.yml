@@ -1,0 +1,6 @@
+# Changes here will be overwritten by Copier
+_src_path: .template/
+description: Adds a Textual Terminal User Interface (TUI) for Intentional bots
+module_name: textual_ui
+name: Textual TUI
+package_name: textual-ui

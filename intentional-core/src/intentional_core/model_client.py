@@ -32,8 +32,11 @@ KNOWN_MODEL_EVENTS = [
     "on_model_stops_generating_response",
     "on_text_message_from_model",
     "on_audio_message_from_model",
-    "on_vad_detects_user_speech_started",
-    "on_vad_detects_user_speech_ended",
+    "on_user_speech_started",
+    "on_user_speech_ended",
+    "on_user_speech_transcribed",
+    "on_model_speech_transcribed",
+    "on_conversation_ended",
 ]
 
 
