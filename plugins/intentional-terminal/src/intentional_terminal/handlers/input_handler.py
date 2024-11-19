@@ -14,7 +14,7 @@ import logging
 from pynput import keyboard
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class InputHandler:

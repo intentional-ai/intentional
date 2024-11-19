@@ -12,7 +12,7 @@ import networkx
 from intentional_core.tools import Tool, ToolParameter, load_tools_from_dict
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 BACKTRACKING_CONNECTION = "_backtrack_"

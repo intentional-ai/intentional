@@ -14,7 +14,7 @@ from intentional_core.intent_routing import IntentRouter
 from intentional_core.events import EventListener
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 _BOT_STRUCTURES = {}

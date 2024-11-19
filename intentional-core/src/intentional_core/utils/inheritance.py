@@ -10,7 +10,7 @@ import logging
 import inspect
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 def inheritors(class_: Any, include_abstract: bool = False) -> Set[Any]:

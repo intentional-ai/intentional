@@ -10,7 +10,7 @@ import logging
 from intentional_core.utils import inheritors
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 _TOOL_CLASSES = {}

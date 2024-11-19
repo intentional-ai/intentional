@@ -9,7 +9,7 @@ from typing import Dict, Any
 from abc import ABC, abstractmethod
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class EventListener(ABC):

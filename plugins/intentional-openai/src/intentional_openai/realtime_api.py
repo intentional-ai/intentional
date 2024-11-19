@@ -22,7 +22,7 @@ from intentional_core.intent_routing import IntentRouter
 from intentional_openai.tools import to_openai_tool
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class RealtimeAPIClient(ContinuousStreamModelClient):

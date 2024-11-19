@@ -21,7 +21,7 @@ from telegram import Update, Bot
 from telegram.error import NetworkError, Forbidden
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class TelegramBotInterface(BotInterface):

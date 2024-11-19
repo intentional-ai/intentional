@@ -17,7 +17,7 @@ from intentional_core.utils import import_plugin, inheritors
 from intentional_core.intent_routing import IntentRouter
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 _BOT_INTERFACES = {}

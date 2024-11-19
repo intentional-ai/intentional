@@ -24,7 +24,7 @@ from intentional_textual_ui.audio_stream_ui import AudioStreamInterface
 from intentional_textual_ui.text_chat_ui import TextChatInterface
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class TextualUIBotInterface(BotInterface):
