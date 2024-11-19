@@ -9,7 +9,7 @@ import inspect
 import importlib
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 def import_plugin(name: str):

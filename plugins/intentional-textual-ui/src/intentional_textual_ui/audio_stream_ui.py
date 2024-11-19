@@ -15,7 +15,7 @@ from intentional_core import ContinuousStreamBotStructure
 from intentional_terminal.handlers import AudioHandler
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class ChatHistory(Markdown):

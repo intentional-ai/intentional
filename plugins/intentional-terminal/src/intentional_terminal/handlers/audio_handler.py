@@ -22,7 +22,7 @@ import pyaudio
 from pydub import AudioSegment
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class AudioHandler:

@@ -9,7 +9,7 @@ import logging
 from intentional_core import TurnBasedBotStructure, TurnBasedModelClient, load_model_client_from_dict, IntentRouter
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class TextChatBotStructure(TurnBasedBotStructure):

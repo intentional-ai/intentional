@@ -14,7 +14,7 @@ from intentional_core import (
 )
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class WebsocketBotStructure(ContinuousStreamBotStructure):

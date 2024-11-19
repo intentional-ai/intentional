@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from intentional_core.bot_structure import BotStructure
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("intentional")
 
 
 class ChatCompletionAPIClient(TurnBasedModelClient):
