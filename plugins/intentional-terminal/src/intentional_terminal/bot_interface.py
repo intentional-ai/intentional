@@ -6,10 +6,10 @@ Local bot interface for Intentional.
 
 from typing import Any, Dict
 
-import logging
 import asyncio
 import base64
 
+import structlog
 from pynput import keyboard
 from intentional_core import (
     BotInterface,
@@ -23,27 +23,29 @@ from intentional_core import (
 from intentional_terminal.handlers import InputHandler, AudioHandler
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
-class LocalBotInterface(BotInterface):
+class TerminalBotInterface(BotInterface):
     """
     Bot that uses the local command line interface to interact with the user.
     """
 
-    name = "local"
+    name = "terminal"
 
     def __init__(self, intent_router: IntentRouter, config: Dict[str, Any]):
         # Init the structure
         bot_structure_config = config.pop("bot", None)
         if not bot_structure_config:
-            raise ValueError("LocalBotInterface requires a 'bot' configuration key to know how to structure the bot.")
-        logger.debug("Creating bot structure of type '%s'", bot_structure_config)
+            raise ValueError(
+                f"{self.__class__.__name__} requires a 'bot' configuration key to know how to structure the bot."
+            )
+        log.debug("Creating bot structure", bot_structure_type=bot_structure_config)
         self.bot: BotStructure = load_bot_structure_from_dict(intent_router, bot_structure_config)
 
         # Check the modality
         self.modality = config.pop("modality")
-        logger.debug("Modality for LocalBotInterface is set to: %s", self.modality)
+        log.debug("Setting interface modality", modality=self.modality)
 
         self.audio_handler = None
         self.input_handler = None
@@ -52,6 +54,8 @@ class LocalBotInterface(BotInterface):
         """
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
+        log.debug("Running the bot", bot_type=self.bot.__class__.__name__, modality=self.modality)
+
         if isinstance(self.bot, ContinuousStreamBotStructure):
             if self.modality == "audio_stream":
                 await self._run_audio_stream(self.bot)
@@ -74,7 +78,6 @@ class LocalBotInterface(BotInterface):
         """
         Runs the CLI interface for the text turns modality.
         """
-        logger.debug("Running the LocalBotInterface in text turns mode.")
         bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
         bot.add_event_handler("on_model_starts_generating_response", self.handle_start_text_response)
         bot.add_event_handler("on_model_stops_generating_response", self.handle_finish_text_response)
@@ -85,8 +88,6 @@ class LocalBotInterface(BotInterface):
         """
         Runs the CLI interface for the continuous audio streaming modality.
         """
-        logger.debug("Running the LocalBotInterface in continuous audio streaming mode.")
-
         # Create the handlers
         self.audio_handler = AudioHandler()
         self.input_handler = InputHandler()
@@ -104,7 +105,7 @@ class LocalBotInterface(BotInterface):
         listener.start()
 
         try:
-            logger.debug("Asking the bot to connect to the model...")
+            log.debug("Connecting to the model")
             await bot.connect()
             asyncio.create_task(bot.run())
 
@@ -122,8 +123,8 @@ class LocalBotInterface(BotInterface):
                 if command == "q":
                     break
 
-        except Exception as e:  # pylint: disable=broad-except
-            logger.exception("An error occurred: %s", str(e))
+        except Exception:  # pylint: disable=broad-except
+            log.exception("An error occurred")
         finally:
             self.audio_handler.stop_streaming()
             self.audio_handler.cleanup()
@@ -193,11 +194,11 @@ class LocalBotInterface(BotInterface):
 
         # Handle interruptions if it is the case
         played_milliseconds = self.audio_handler.stop_playback_immediately()
-        logging.debug("Played the response for %s milliseconds.", played_milliseconds)
+        log.debug("Audio response played", play_duration=played_milliseconds)
 
         # If we're interrupting the bot, handle the interruption on the model side too
         if played_milliseconds:
-            logging.info("Handling interruption...")
+            log.info("Handling interruption", play_duration=played_milliseconds)
             await self.bot.handle_interruption(played_milliseconds)
 
     async def speech_stopped(self, event: Dict[str, Any]) -> None:  # pylint: disable=unused-argument

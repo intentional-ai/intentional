@@ -14,15 +14,15 @@ from typing import Optional
 
 import queue
 import asyncio
-import logging
 import datetime
 import threading
 
 import pyaudio
+import structlog
 from pydub import AudioSegment
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 class AudioHandler:
@@ -88,16 +88,14 @@ class AudioHandler:
         self.model_stream = self.audio.open(
             format=self.audio_format, channels=self.channels, rate=self.rate, input=True, frames_per_buffer=self.chunk
         )
-        # print("\nStreaming audio... Press 'q' to stop.")
-
         while self.streaming:
             try:
                 # Read raw PCM data
                 data = self.model_stream.read(self.chunk, exception_on_overflow=False)
                 # Stream directly without trying to decode
                 await client_streaming_callback({"audio_stream": data})
-            except Exception as e:  # pylint: disable=broad-except
-                logger.exception("Error streaming: %s", e)
+            except Exception:  # pylint: disable=broad-except
+                log.exception("Error streaming")
                 break
             await asyncio.sleep(0.01)
 
@@ -146,7 +144,7 @@ class AudioHandler:
                 self._play_audio_chunk(audio_segment)
             except queue.Empty:
                 self.playback_play_time = 0
-                logger.debug("Audio buffer empty!!")
+                log.debug("Audio buffer empty")
                 continue
 
             if self.playback_event.is_set():
@@ -169,8 +167,8 @@ class AudioHandler:
                     break
                 chunk = audio_data[i : i + chunk_size]
                 self.playback_stream.write(chunk)
-        except Exception as e:  # pylint: disable=broad-except
-            logger.exception("Error playing audio chunk: %s", e)
+        except Exception:  # pylint: disable=broad-except
+            log.exception("Error playing audio chunk")
 
     def stop_playback_immediately(self) -> datetime.timedelta:
         """

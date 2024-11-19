@@ -6,11 +6,11 @@ Tools baseclass for Intentional.
 from typing import List, Any, Dict, Set
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-import logging
+import structlog
 from intentional_core.utils import inheritors
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 _TOOL_CLASSES = {}
@@ -59,32 +59,37 @@ def load_tools_from_dict(config: List[Dict[str, Any]]) -> Dict[str, Tool]:
     # Get all the subclasses of Tool
     if not _TOOL_CLASSES:
         subclasses: Set[Tool] = inheritors(Tool)
-        logger.debug("Known tool classes: %s", subclasses)
+        log.debug("Collected tool classes", tool_classes=subclasses)
         for subclass in subclasses:
             if not subclass.name:
-                logger.error("Tool class '%s' does not have a name. This tool will not be usable.", subclass)
+                log.error(
+                    "Tool class '%s' does not have a name. This tool will not be usable.",
+                    subclass,
+                    tool_class=subclass,
+                )
                 continue
 
             if subclass.name in _TOOL_CLASSES:
-                logger.warning(
-                    "Duplicate tool '%s' found. The older class (%s) will be replaced by the newly imported one (%s).",
+                log.warning(
+                    "Duplicate tool '%s' found. The older class will be replaced by the newly imported one.",
                     subclass.name,
-                    _TOOL_CLASSES[subclass.name],
-                    subclass,
+                    old_tool_name=subclass.name,
+                    old_tool_class=_TOOL_CLASSES[subclass.name],
+                    new_tool_class=subclass,
                 )
             _TOOL_CLASSES[subclass.name] = subclass
 
     # Initialize the tools
     tools = {}
     for tool_config in config:
-        class_ = tool_config.pop("name")
-        logger.debug("Creating tool of type '%s'", class_)
-        if class_ not in _TOOL_CLASSES:
+        tool_class = tool_config.pop("name")
+        log.debug("Creating tool", tool_class=tool_class)
+        if tool_class not in _TOOL_CLASSES:
             raise ValueError(
-                f"Unknown tool '{class_}'. Available tools: {list(_TOOL_CLASSES)}. "
+                f"Unknown tool '{tool_class}'. Available tools: {list(_TOOL_CLASSES)}. "
                 "Did you forget to install a plugin?"
             )
-        tool_instance = _TOOL_CLASSES[class_](**tool_config)
+        tool_instance = _TOOL_CLASSES[tool_class](**tool_config)
         tools[tool_instance.name] = tool_instance
 
     return tools

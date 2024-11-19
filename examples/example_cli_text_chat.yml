@@ -3,7 +3,7 @@ plugins:
 - intentional_text_chat
 - intentional_openai
 
-interface: local
+interface: terminal
 modality: text_turns
 bot:
   type: text_chat
@@ -113,7 +113,7 @@ conversation:
       outcomes:
         ok:
           description: user tells you the city where they live
-          move_to: ask_for_city
+          move_to: confirm
         not_ok:
           description: user doesn't want to tell you the city where they live
           move_to: ask_to_continue

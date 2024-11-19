@@ -6,8 +6,9 @@ Telegram bot interface for Intentional.
 
 from typing import Any, Dict
 import os
-import logging
 import asyncio
+
+import structlog
 
 from intentional_core import (
     BotInterface,
@@ -21,7 +22,7 @@ from telegram import Update, Bot
 from telegram.error import NetworkError, Forbidden
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 class TelegramBotInterface(BotInterface):
@@ -38,12 +39,12 @@ class TelegramBotInterface(BotInterface):
             raise ValueError(
                 "TelegramBotInterface requires a 'bot' configuration key to know how to structure the bot."
             )
-        logger.debug("Creating bot structure of type '%s'", bot_structure_config)
+        log.debug("Creating bot structure", bot_structure_config=bot_structure_config)
         self.bot: BotStructure = load_bot_structure_from_dict(intent_router=intent_router, config=bot_structure_config)
 
         # Check the modality
         self.modality = config.pop("modality")
-        logger.debug("Modality for TelegramBotInterface is set to: %s", self.modality)
+        log.debug("Modality for %s is set", self.__class__.__name__, modality=self.modality)
 
         self.telegram_bot = None
         self.latest_update = None
@@ -68,13 +69,11 @@ class TelegramBotInterface(BotInterface):
         """
         Runs the CLI interface for the text turns modality.
         """
-        logger.debug("Running the TelegramBotInterface in text turns mode.")
-
         async with Bot(os.getenv("TELEGRAM_BOT_TOKEN")) as telegram_bot:
 
             # Startup by checking it there's any new update
             async for update in updates_generator(telegram_bot):
-                logger.debug("Past updates: %s", update)
+                log.debug("Past Telegram updates processed", telegram_updates=update)
                 self.latest_update = update
                 break
 
@@ -111,7 +110,7 @@ class TelegramBotInterface(BotInterface):
         Process updates from the telegram bot.
         """
         async for update in updates_generator(telegram_bot):
-            logger.info("Received update: %s", update)
+            log.info("Received Telegram update", telegram_update=update)
             if update.message:
                 # If the message is a text message, send it to the bot
                 if update.message.text:
@@ -147,10 +146,10 @@ async def updates_generator(telegram_bot):
             yield update
 
         except NetworkError:
-            logger.exception("")
+            log.exception("")
             await asyncio.sleep(1)
         except Forbidden:
-            logger.exception("The user has removed or blocked the bot.")
+            log.exception("The user has removed or blocked the bot.")
         except Exception:  # pylint: disable=broad-except
-            logger.exception("An exception occurred")
+            log.exception("An exception occurred")
             await update.message.reply_text("An error occurred! Check the logs.")

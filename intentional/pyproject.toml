@@ -25,7 +25,8 @@ classifiers = [
 ]
 
 dependencies = [
-  "intentional-core"
+  "intentional-core",
+  "python-json-logger",
 ]
 
 [project.optional-dependencies]

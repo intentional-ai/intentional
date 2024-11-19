@@ -6,15 +6,16 @@ Functions to load bot structure classes from config files.
 
 from typing import Dict, Any, Optional, Set, Callable
 
-import logging
 from abc import abstractmethod
+
+import structlog
 
 from intentional_core.utils import inheritors
 from intentional_core.intent_routing import IntentRouter
 from intentional_core.events import EventListener
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 _BOT_STRUCTURES = {}
@@ -90,27 +91,28 @@ class BotStructure(EventListener):
             handler: The handler function to call when the event is received.
         """
         if event_name in self.event_handlers:
-            logger.warning(
+            log.warning(
                 "Event handler for '%s' already exists. The older handler will be replaced by the new one.",
                 event_name,
+                event_name=event_name,
+                event_handler=self.event_handlers[event_name],
             )
-
-        logger.debug("Adding event handler for event '%s'", event_name)
+        log.debug("Adding event handler", event_name=event_name, event_handler=handler)
         self.event_handlers[event_name] = handler
 
     async def handle_event(self, event_name: str, event: Dict[str, Any]) -> None:
         """
         Handle different types of events that the model may generate.
         """
-        logger.debug("Received event '%s'", event_name)
-
         if "*" in self.event_handlers:
-            logger.debug("Calling wildcard event handler for event '%s'", event_name)
+            log.debug("Calling wildcard event handler", event_name=event_name)
             await self.event_handlers["*"](event)
 
         if event_name in self.event_handlers:
-            logger.debug("Calling event handler for event '%s'", event_name)
+            log.debug("Calling event handler", event_name=event_name)
             await self.event_handlers[event_name](event)
+        else:
+            log.debug("No event handler for event", event_name=event_name)
 
 
 class ContinuousStreamBotStructure(BotStructure):
@@ -137,32 +139,34 @@ def load_bot_structure_from_dict(intent_router: IntentRouter, config: Dict[str, 
     """
     # Get all the subclasses of Bot
     subclasses: Set[BotStructure] = inheritors(BotStructure)
-    logger.debug("Known bot structure classes: %s", subclasses)
+    log.debug("Collected bot structure classes", bot_structure_classes=subclasses)
     for subclass in subclasses:
         if not subclass.name:
-            logger.error(
-                "BotStructure class '%s' does not have a name. This bot structure type will not be usable.", subclass
+            log.error(
+                "BotStructure class '%s' does not have a name. This bot structure type will not be usable.",
+                subclass,
+                bot_structure_class=subclass,
             )
             continue
 
         if subclass.name in _BOT_STRUCTURES:
-            logger.warning(
-                "Duplicate bot structure type '%s' found. The older class (%s) "
-                "will be replaced by the newly imported one (%s).",
+            log.warning(
+                "Duplicate bot structure type '%s' found. The older class will be replaced by the newly imported one.",
                 subclass.name,
-                _BOT_STRUCTURES[subclass.name],
-                subclass,
+                old_bot_structure_name=subclass.name,
+                old_bot_structure_class=_BOT_STRUCTURES[subclass.name],
+                new_bot_structure_class=subclass,
             )
         _BOT_STRUCTURES[subclass.name] = subclass
 
     # Identify the type of bot and see if it's known
-    class_ = config.pop("type")
-    logger.debug("Creating bot of type '%s'", class_)
-    if class_ not in _BOT_STRUCTURES:
+    bot_structure_class = config.pop("type")
+    log.debug("Creating bot structure", bot_structure_class=bot_structure_class)
+    if bot_structure_class not in _BOT_STRUCTURES:
         raise ValueError(
-            f"Unknown bot structure type '{class_}'. Available types: {list(_BOT_STRUCTURES)}. "
+            f"Unknown bot structure type '{bot_structure_class}'. Available types: {list(_BOT_STRUCTURES)}. "
             "Did you forget to install your plugin?"
         )
 
     # Handoff to the subclass' init
-    return _BOT_STRUCTURES[class_](config, intent_router)
+    return _BOT_STRUCTURES[bot_structure_class](config, intent_router)

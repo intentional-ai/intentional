@@ -5,11 +5,11 @@ Bot structure to support text chat for Intentional.
 """
 from typing import Any, Dict, AsyncGenerator
 
-import logging
+import structlog
 from intentional_core import TurnBasedBotStructure, TurnBasedModelClient, load_model_client_from_dict, IntentRouter
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 class TextChatBotStructure(TurnBasedBotStructure):
@@ -26,12 +26,14 @@ class TextChatBotStructure(TurnBasedBotStructure):
                 The configuration dictionary for the bot structure.
         """
         super().__init__()
-        logger.debug("Loading TextChatBotStructure from config: %s", config)
+        log.debug("Loading bot structure from config", bot_structure_config=config)
 
         # Init the model client
         llm_config = config.pop("llm", None)
         if not llm_config:
-            raise ValueError("TextChatBotStructure requires a 'llm' configuration key to know which model to use.")
+            raise ValueError(
+                f"{self.__class__.__name__} requires a 'llm' configuration key to know which model to use."
+            )
         self.model: TurnBasedModelClient = load_model_client_from_dict(
             parent=self, intent_router=intent_router, config=llm_config
         )
@@ -66,4 +68,4 @@ class TextChatBotStructure(TurnBasedBotStructure):
                 This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
                 depending on the bot structure that implements it.
         """
-        logger.warning("TODO! Interruption not yet supported in text chat bot structure.")
+        log.warning("TODO! Interruption not yet supported in text chat bot structure.")
