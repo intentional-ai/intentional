@@ -29,6 +29,7 @@ dependencies = [
   "requests",
   "pyyaml",
   "networkx",
+  "structlog",
 ]
 
 [project.urls]

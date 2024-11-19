@@ -9,7 +9,7 @@ from typing import Any, Dict, List, AsyncGenerator, TYPE_CHECKING
 
 import os
 import json
-import logging
+import structlog
 
 import openai
 from intentional_core import TurnBasedModelClient
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from intentional_core.bot_structure import BotStructure
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 class ChatCompletionAPIClient(TurnBasedModelClient):
@@ -39,7 +39,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             intent_router: The intent router.
             config: The configuration dictionary.
         """
-        logger.debug("Loading ChatCompletionAPIClient from config: %s", config)
+        log.debug("Loading ChatCompletionAPIClient from config", model_client_config=config)
         super().__init__(parent, intent_router)
 
         self.model_name = config.get("name")
@@ -71,7 +71,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         Handle events from the model by either processing them internally or by translating them into higher-level
         events that the BotStructure class can understand, then re-emitting them.
         """
-        logger.debug("ChatCompletionAPIClient.run() is no-op for now")
+        log.debug("ChatCompletionAPIClient.run() is no-op for now")
 
     async def update_system_prompt(self) -> None:
         """
@@ -89,7 +89,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
                 This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
                 depending on the bot structure that implements it.
         """
-        logger.warning("TODO! Implement handle_interruption in ChatCompletionAPIClient")
+        log.warning("TODO! Implement handle_interruption in ChatCompletionAPIClient")
 
     async def send(self, data: Dict[str, Any]) -> None:
         """
@@ -122,7 +122,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             else:
                 # TODO handle multiple parallel function calls
                 if delta["tool_calls"][0]["index"] > 0 or len(delta["tool_calls"]) > 1:
-                    logger.error("TODO: Multiple parallel function calls not supported yet. Please open an issue.")
+                    log.error("TODO: Multiple parallel function calls not supported yet. Please open an issue.")
                 # Consume the response to understand which tool to call with which parameters
                 for tool_call in delta["tool_calls"]:
                     if not function_name:
@@ -161,7 +161,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         """
         Handle a function call from the model.
         """
-        logger.debug("Function call detected: %s with args: %s", function_name, function_args)
+        log.debug("Function call detected", function_name=function_name, function_args=function_args)
         function_args = json.loads(function_args)
 
         # Routing function call - this is special because it should not be recorded in the conversation history
@@ -184,8 +184,8 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         """
         self.system_prompt, self.tools = await self.intent_router.run(routing_info)
         await self.update_system_prompt()
-        logger.debug("System prompt updated to: %s", self.system_prompt)
-        logger.debug("Tools updated to: %s", self.tools)
+        log.debug("System prompt updated", system_prompt=self.system_prompt)
+        log.debug("Tools updated", tools=self.tools)
 
     async def _call_tool(self, call_id, function_name, function_args):
         """
@@ -210,11 +210,11 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             }
         )
         # Get the tool output
-        logger.debug("Available tools: %s", self.tools)
         if function_name not in self.tools:
-            output = f"Tool {function_name} not found."
+            log.debug("The LLM called a non-existing tool.", tool=function_name)
+            output = f"Tool '{function_name}' not found."
         else:
-            logger.debug("Calling tool %s with args %s.", function_name, function_args)
+            log.debug("Calling tool", function_name=function_name, function_args=function_args)
             output = await self.tools[function_name].run(function_args)
-        logger.debug("Tool output: %s", output)
+        log.debug("Tool run", tool_output=output)
         return output

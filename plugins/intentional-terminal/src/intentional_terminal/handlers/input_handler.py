@@ -10,11 +10,11 @@ This module is responsible for capturing keyboard input and translating it into 
 """
 
 import asyncio
-import logging
+import structlog
 from pynput import keyboard
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 class InputHandler:
@@ -59,5 +59,5 @@ class InputHandler:
                 else:
                     self.text_input += key.char
 
-        except AttributeError as e:
-            logger.exception("Error processing key event", exc_info=e)
+        except AttributeError:
+            log.exception("Error processing key event")

@@ -1,21 +1,18 @@
 # SPDX-FileCopyrightText: 2024-present ZanSara <github@zansara.dev>
 # SPDX-License-Identifier: AGPL-3.0-or-later
-
-# SPDX-FileCopyrightText: 2024-present Kwal Inc. <sara@kwal.ai>
-# SPDX-License-Identifier: MIT
-
 """
 Helpers that allow the user to draw the bot's graph.
 """
 
 import base64
-import logging
 from pathlib import Path
+
 import requests
+import structlog
 from intentional_core.intent_routing import IntentRouter
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 MERMAID_STYLED_TEMPLATE = """
@@ -134,5 +131,5 @@ def to_mermaid_diagram(intent_router: IntentRouter) -> str:
 
     connections = "\n".join(connections_list)
     graph_styled = MERMAID_STYLED_TEMPLATE.format(connections=connections)
-    logger.debug("Mermaid graph:\n%s", graph_styled)
+    log.debug("Mermaid graph created", mermaid_graph=graph_styled)
     return graph_styled

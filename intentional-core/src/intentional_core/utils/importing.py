@@ -4,12 +4,12 @@
 Module import functions to handle dynamic plugins import.
 """
 
-import logging
 import inspect
 import importlib
+import structlog
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 def import_plugin(name: str):
@@ -17,20 +17,21 @@ def import_plugin(name: str):
     Imports the specified package. It does NOT check if this is an Intentional package or not.
     """
     try:
-        logger.debug("Importing module %s", name)
+        log.debug("Importing module", module_name=name)
         module = importlib.import_module(name)
         # Print all classes in the module
         class_found = False
         for _, obj in inspect.getmembers(module):
             if inspect.isclass(obj):
-                logger.debug("Class found: %s", obj)
+                log.debug("Class found in module", module_name=name, found_class=obj)
                 class_found = True
         if not class_found:
-            logger.debug(
-                "No classes found in module %s: are they imported in the top-level __init__ file of the plugin?", name
+            log.debug(
+                "No classes found in module: are they imported in the top-level __init__ file of the plugin?",
+                module_name=name,
             )
     except ModuleNotFoundError:
-        logger.exception("Module '%s' not found for import, is it installed?", name)
+        log.exception("Module '%s' not found for import, is it installed?", name, module_name=name)
 
 
 def import_all_plugins():
@@ -39,7 +40,7 @@ def import_all_plugins():
     """
     for dist in importlib.metadata.distributions():
         if not hasattr(dist, "_path"):
-            logger.debug("'_path' not found in '%s', ignoring", dist)
+            log.debug("'_path' not found in '%s', ignoring", dist, dist=dist)
         path = dist._path  # pylint: disable=protected-access
         if path.name.startswith("intentional_"):
             with open(path / "top_level.txt", encoding="utf-8") as file:

@@ -4,7 +4,7 @@
 Websocket bot structure for Intentional.
 """
 from typing import Any, Dict
-import logging
+import structlog
 
 from intentional_core import (
     ContinuousStreamBotStructure,
@@ -14,7 +14,7 @@ from intentional_core import (
 )
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 class WebsocketBotStructure(ContinuousStreamBotStructure):
@@ -31,7 +31,7 @@ class WebsocketBotStructure(ContinuousStreamBotStructure):
                 The configuration dictionary for the bot structure.
         """
         super().__init__()
-        logger.debug("Loading WebsocketBotStructure from config: %s", config)
+        log.debug("Loading bot structure from config", bot_structure_config=config)
 
         # Init the model client
         llm_config = config.pop("llm", None)

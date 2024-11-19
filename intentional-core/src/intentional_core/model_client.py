@@ -5,8 +5,9 @@ Functions to load model client classes from config files.
 """
 from typing import Optional, Dict, Any, Set, TYPE_CHECKING
 
-import logging
 from abc import ABC, abstractmethod
+
+import structlog
 
 from intentional_core.utils import inheritors
 from intentional_core.events import EventEmitter
@@ -16,7 +17,7 @@ if TYPE_CHECKING:
     from intentional_core.bot_structure import BotStructure
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 _MODELCLIENT_CLASSES = {}
@@ -133,32 +134,34 @@ def load_model_client_from_dict(
     """
     # Get all the subclasses of ModelClient
     subclasses: Set[ModelClient] = inheritors(ModelClient)
-    logger.debug("Known model client classes: %s", subclasses)
+    log.debug("Collected model client classes", model_client_classes=subclasses)
     for subclass in subclasses:
         if not subclass.name:
-            logger.error(
-                "Model client class '%s' does not have a name. This model client type will not be usable.", subclass
+            log.error(
+                "Model client class '%s' does not have a name. This model client type will not be usable.",
+                subclass,
+                model_client_class=subclass,
             )
             continue
 
         if subclass.name in _MODELCLIENT_CLASSES:
-            logger.warning(
-                "Duplicate model client type '%s' found. The older class (%s) "
-                "will be replaced by the newly imported one (%s).",
+            log.warning(
+                "Duplicate model client type '%s' found. The older class will be replaced by the newly imported one.",
                 subclass.name,
-                _MODELCLIENT_CLASSES[subclass.name],
-                subclass,
+                old_model_client_name=subclass.name,
+                old_model_client_class=_MODELCLIENT_CLASSES[subclass.name],
+                new_model_client_class=subclass,
             )
         _MODELCLIENT_CLASSES[subclass.name] = subclass
 
     # Identify the type of bot and see if it's known
-    class_ = config.pop("client")
-    logger.debug("Creating model client of type '%s'", class_)
-    if class_ not in _MODELCLIENT_CLASSES:
+    model_client_class = config.pop("client")
+    log.debug("Creating model client", model_client_class=model_client_class)
+    if model_client_class not in _MODELCLIENT_CLASSES:
         raise ValueError(
-            f"Unknown model client type '{class_}'. Available types: {list(_MODELCLIENT_CLASSES)}. "
+            f"Unknown model client type '{model_client_class}'. Available types: {list(_MODELCLIENT_CLASSES)}. "
             "Did you forget to install your plugin?"
         )
 
     # Handoff to the subclass' init
-    return _MODELCLIENT_CLASSES[class_](parent=parent, intent_router=intent_router, config=config)
+    return _MODELCLIENT_CLASSES[model_client_class](parent=parent, intent_router=intent_router, config=config)

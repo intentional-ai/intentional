@@ -5,7 +5,11 @@ Sample tools for Intentional's examples.
 """
 
 from datetime import datetime
+import structlog
 from intentional_core.tools import Tool, ToolParameter
+
+
+log = structlog.get_logger(logger_name=__name__)
 
 
 class EndConversationTool(Tool):
@@ -21,6 +25,7 @@ class EndConversationTool(Tool):
         """
         Ends the conversation.
         """
+        log.debug("Ending the conversation.")
         return "The conversation has ended."
 
 
@@ -37,7 +42,9 @@ class GetCurrentDateTimeTool(Tool):
         """
         Returns the current time.
         """
-        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log.debug("Getting the current date and time.", current_date_time=current_datetime)
+        return current_datetime
 
 
 class RescheduleInterviewTool(Tool):
@@ -68,4 +75,5 @@ class RescheduleInterviewTool(Tool):
         """
         Returns the current time.
         """
+        log.debug("Rescheduling the interview.")
         return "The interview was rescheduled successfully."

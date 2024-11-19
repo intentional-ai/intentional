@@ -4,6 +4,6 @@
 Init file for `intentional_terminal`.
 """
 
-from intentional_terminal.bot_interface import LocalBotInterface
+from intentional_terminal.bot_interface import TerminalBotInterface
 
-__all__ = ["LocalBotInterface"]
+__all__ = ["TerminalBotInterface"]

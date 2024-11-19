@@ -6,7 +6,7 @@ Textual UI for audio stream bots.
 
 from typing import Dict, Any
 import base64
-import logging
+import structlog
 from textual.app import App, ComposeResult
 from textual.containers import ScrollableContainer
 from textual.containers import Horizontal, Vertical
@@ -15,7 +15,7 @@ from intentional_core import ContinuousStreamBotStructure
 from intentional_terminal.handlers import AudioHandler
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 class ChatHistory(Markdown):
@@ -89,7 +89,7 @@ class AudioStreamInterface(App):
         elif event["type"] == "on_model_speech_transcribed":
             self.conversation += f"\n**Assistant:** {event['transcript']}\n"
         else:
-            logger.debug("Unknown event type: %s", event["type"])
+            log.debug("Unknown event with transcript received.", event_name=event["type"])
             self.conversation += f"\n**{event['type']}:** {event['transcript']}\n"
         self.query_one(ChatHistory).update(self.conversation)
 

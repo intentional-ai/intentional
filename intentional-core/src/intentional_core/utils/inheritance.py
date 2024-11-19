@@ -6,11 +6,11 @@ Utils for inheritance checks, to discover subclasses of a base Intentional class
 """
 
 from typing import Set, Any
-import logging
 import inspect
+import structlog
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 def inheritors(class_: Any, include_abstract: bool = False) -> Set[Any]:
@@ -29,10 +29,10 @@ def inheritors(class_: Any, include_abstract: bool = False) -> Set[Any]:
             if child not in subclasses:
                 to_process.append(child)
                 if not include_abstract and inspect.isabstract(child):
-                    logger.debug(
-                        "Skipping abstract class from inheritor's list: %s. Abstract methods: %s",
-                        child,
-                        list(child.__abstractmethods__),
+                    log.debug(
+                        "Skipping abstract class from inheritor's list.",
+                        abstract_class=child,
+                        abstract_methods=list(child.__abstractmethods__),
                     )
                 else:
                     subclasses.add(child)

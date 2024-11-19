@@ -5,14 +5,14 @@ Intent routing logic.
 """
 
 from typing import Any, Dict
-import logging
 
+import structlog
 import networkx
 
 from intentional_core.tools import Tool, ToolParameter, load_tools_from_dict
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 BACKTRACKING_CONNECTION = "_backtrack_"
@@ -64,28 +64,30 @@ class IntentRouter(Tool):
 
         # Init the stages
         self.stages = {}
-        for stage_name, stage_config in config["stages"].items():
-            logger.debug("Loading stage %s", stage_name)
-            self.stages[stage_name] = Stage(stage_config)
-            self.stages[stage_name].tools[self.name] = self  # Add the intent router to the tools of each stage
-            self.graph.add_node(stage_name)
+        for name, stage_config in config["stages"].items():
+            log.debug("Adding stage", stage_name=name)
+            self.stages[name] = Stage(stage_config)
+            self.stages[name].tools[self.name] = self  # Add the intent router to the tools list of each stage
+            self.graph.add_node(name)
 
         # Connect the stages
-        for stage_name, stage in self.stages.items():
+        for name, stage in self.stages.items():
             for outcome_name, outcome_config in stage.outcomes.items():
                 if outcome_config["move_to"] not in [*self.stages, BACKTRACKING_CONNECTION]:
                     raise ValueError(
-                        f"Stage {stage_name} has an outcome leading to an unknown stage {outcome_config['move_to']}"
+                        f"Stage {name} has an outcome leading to an unknown stage {outcome_config['move_to']}"
                     )
-                self.graph.add_edge(stage_name, outcome_config["move_to"], key=outcome_name)
+                log.debug("Adding connection", origin=name, target=outcome_config["move_to"], outcome=outcome_name)
+                self.graph.add_edge(name, outcome_config["move_to"], key=outcome_name)
 
         # Initial prompt
         initial_stage = ""
-        for stage_name, stage in self.stages.items():
+        for name, stage in self.stages.items():
             if START_CONNECTION in stage.accessible_from:
                 if initial_stage:
                     raise ValueError("Multiple start stages found!")
-                initial_stage = stage_name
+                log.debug("Found start stage", stage_name=name)
+                initial_stage = name
         if not initial_stage:
             raise ValueError("No start stage found!")
 
@@ -113,10 +115,7 @@ class IntentRouter(Tool):
         transitions = self.get_transitions()
 
         if selected_outcome not in self.current_stage.outcomes and selected_outcome not in transitions:
-            raise ValueError(
-                f"Unknown outcome {params['outcome']}. "
-                f"Known outcomes: {list(self.current_stage.outcomes.keys()) + transitions}"
-            )
+            raise ValueError(f"Unknown outcome {params['outcome']}")
 
         if selected_outcome in self.current_stage.outcomes:
             next_stage = self.current_stage.outcomes[params["outcome"]]["move_to"]
@@ -176,3 +175,11 @@ class Stage:
             self.accessible_from = [self.accessible_from]
         self.tools = load_tools_from_dict(config.get("tools", {}))
         self.outcomes = config.get("outcomes", {})
+        log.debug(
+            "Stage loaded",
+            stage_goal=self.goal,
+            stage_description=self.description,
+            stage_accessible_from=self.accessible_from,
+            stage_tools=self.tools,
+            outcomes=self.outcomes,
+        )

@@ -6,10 +6,10 @@ Local bot interface for Intentional.
 
 from typing import Any, Dict, List, Callable
 
-import logging
 import asyncio
 import threading
 
+import structlog
 from intentional_core import (
     BotInterface,
     BotStructure,
@@ -24,7 +24,7 @@ from intentional_textual_ui.audio_stream_ui import AudioStreamInterface
 from intentional_textual_ui.text_chat_ui import TextChatInterface
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 class TextualUIBotInterface(BotInterface):
@@ -39,14 +39,14 @@ class TextualUIBotInterface(BotInterface):
         bot_structure_config = config.pop("bot", None)
         if not bot_structure_config:
             raise ValueError(
-                "TextualUIBotInterface requires a 'bot' configuration key to know how to structure the bot."
+                f"{self.__class__.__name__} requires a 'bot' configuration key to know how to structure the bot."
             )
-        logger.debug("Creating bot structure of type '%s'", bot_structure_config)
+        log.debug("Creating bot structure", bot_structure_config=bot_structure_config)
         self.bot: BotStructure = load_bot_structure_from_dict(intent_router=intent_router, config=bot_structure_config)
 
         # Check the modality
         self.modality = config.pop("modality")
-        logger.debug("Modality for TextualUIBotInterface is set to: %s", self.modality)
+        log.debug("Setting modality for bot structure", modality=self.modality)
 
         # Handlers
         self.audio_handler = None
@@ -79,7 +79,7 @@ class TextualUIBotInterface(BotInterface):
         """
         Runs the CLI interface for the text turns modality.
         """
-        logger.debug("Running the TextualUIBotInterface in text turns mode.")
+        log.debug("Running in text turns mode.")
         self.app = TextChatInterface(bot=bot)
         await bot.connect()
         await self._launch_ui()
@@ -88,7 +88,7 @@ class TextualUIBotInterface(BotInterface):
         """
         Runs the CLI interface for the continuous audio streaming modality.
         """
-        logger.debug("Running the TextualUIBotInterface in continuous audio streaming mode.")
+        log.debug("Running in continuous audio streaming mode.")
 
         try:
             self.audio_handler = AudioHandler()

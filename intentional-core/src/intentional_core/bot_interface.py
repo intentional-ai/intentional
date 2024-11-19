@@ -7,17 +7,17 @@ Functions to load bots from config files.
 from typing import Dict, Any, Optional, Set
 
 import json
-import logging
 from pathlib import Path
 from abc import ABC, abstractmethod
 
 import yaml
+import structlog
 
 from intentional_core.utils import import_plugin, inheritors
 from intentional_core.intent_routing import IntentRouter
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 _BOT_INTERFACES = {}
@@ -66,7 +66,7 @@ def load_configuration_file(path: Path) -> BotInterface:
     Returns:
         The bot instance.
     """
-    logger.debug("Loading YAML configuration file from '%s'", path)
+    log.debug("Loading YAML configuration file", config_file_path=path)
     with open(path, "r", encoding="utf-8") as file:
         config = yaml.safe_load(file)
     return load_bot_interface_from_dict(config)
@@ -82,47 +82,53 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
     Returns:
         The bot interface instance.
     """
-    logger.debug("Loading bot interface from configuration:\n%s", json.dumps(config, indent=4))
+    log.debug("Loading bot interface from configuration:", bot_interface_config=json.dumps(config, indent=4))
 
     # Import all the necessary plugins
     plugins = config.pop("plugins")
-    logger.debug("Plugins to import: %s", plugins)
+    log.debug("Found plugins to import", plugins=plugins)
     for plugin in plugins:
+        log.debug("Importing plugin", plugin=plugin)
         import_plugin(plugin)
 
     # Initialize the intent router
+    log.debug("Creating intent router")
     intent_router = IntentRouter(config.pop("conversation", {}))
 
     # Get all the subclasses of Bot
     subclasses: Set[BotInterface] = inheritors(BotInterface)
-    logger.debug("Known bot interface classes: %s", subclasses)
+    log.debug("Collected bot interface classes", bot_interfaces=subclasses)
 
     for subclass in subclasses:
         if not subclass.name:
-            logger.error("Bot interface class '%s' does not have a name. This bot type will not be usable.", subclass)
+            log.error(
+                "Bot interface class '%s' does not have a name. This bot type will not be usable.",
+                subclass,
+                bot_interface_class=subclass,
+            )
             continue
 
         if subclass.name in _BOT_INTERFACES:
-            logger.warning(
-                "Duplicate bot interface type '%s' found. The older class (%s) "
-                "will be replaced by the newly imported one (%s).",
+            log.warning(
+                "Duplicate bot interface type '%s' found. The older class will be replaced by the newly imported one.",
                 subclass.name,
-                _BOT_INTERFACES[subclass.name],
-                subclass,
+                old_bot_interface_name=subclass.name,
+                old_bot_interface_class=_BOT_INTERFACES[subclass.name],
+                new_bot_interface_class=subclass,
             )
         _BOT_INTERFACES[subclass.name] = subclass
 
     # Identify the type of bot interface and see if it's known
-    interface_class_ = config.pop("interface", None)
-    if not interface_class_:
+    interface_class = config.pop("interface", None)
+    if not interface_class:
         raise ValueError("Bot configuration must contain an 'interface' key to know which interface to use.")
 
-    if interface_class_ not in _BOT_INTERFACES:
+    if interface_class not in _BOT_INTERFACES:
         raise ValueError(
-            f"Unknown bot interface type '{interface_class_}'. Available types: {list(_BOT_INTERFACES)}. "
+            f"Unknown bot interface type '{interface_class}'. Available types: {list(_BOT_INTERFACES)}. "
             "Did you forget to add the correct plugin name in the configuration file, or to install it?"
         )
 
     # Handoff to the subclass' init
-    logger.debug("Creating bot interface of type '%s'", interface_class_)
-    return _BOT_INTERFACES[interface_class_](intent_router=intent_router, config=config)
+    log.debug("Creating bot interface", bot_interface_class=interface_class)
+    return _BOT_INTERFACES[interface_class](intent_router=intent_router, config=config)

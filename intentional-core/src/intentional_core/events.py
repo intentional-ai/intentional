@@ -4,12 +4,13 @@
 Base class for very simplified event emitter and listener.
 """
 
-import logging
 from typing import Dict, Any
 from abc import ABC, abstractmethod
 
+import structlog
 
-logger = logging.getLogger("intentional")
+
+log = structlog.get_logger(logger_name=__name__)
 
 
 class EventListener(ABC):
@@ -40,5 +41,5 @@ class EventEmitter:
         """
         Send the event to the listener.
         """
-        logger.debug("Emitting event %s", event_name)
+        log.debug("Emitting event", event_name=event_name)
         await self._events_listener.handle_event(event_name, event)

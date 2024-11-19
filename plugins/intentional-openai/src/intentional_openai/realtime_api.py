@@ -14,7 +14,7 @@ import os
 import math
 import json
 import base64
-import logging
+import structlog
 import websockets
 
 from intentional_core import ContinuousStreamModelClient
@@ -22,7 +22,7 @@ from intentional_core.intent_routing import IntentRouter
 from intentional_openai.tools import to_openai_tool
 
 
-logger = logging.getLogger("intentional")
+log = structlog.get_logger(logger_name=__name__)
 
 
 class RealtimeAPIClient(ContinuousStreamModelClient):
@@ -50,7 +50,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         A client for interacting with the OpenAI Realtime API that lets you manage the WebSocket connection, send text
         and audio data, and handle responses and events.
         """
-        logger.debug("Loading RealtimeAPIClient from config: %s", config)
+        log.debug("Loading %s from config", self.__class__.__name__, model_client_config=config)
         super().__init__(parent, intent_router)
 
         self.model_name = config.get("name")
@@ -92,7 +92,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         """
         Establish WebSocket connection with the Realtime API.
         """
-        logger.debug("Initializing websocket connection to OpenAI Realtime API")
+        log.debug("Initializing websocket connection to OpenAI Realtime API")
 
         url = f"{self.base_url}?model={self.model_name}"
         headers = {"Authorization": f"Bearer {self.api_key}", "OpenAI-Beta": "realtime=v1"}
@@ -125,10 +125,10 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         Close the WebSocket connection.
         """
         if self.ws:
-            logger.debug("Disconnecting from OpenAI Realtime API")
+            log.debug("Disconnecting from OpenAI Realtime API")
             await self.ws.close()
         else:
-            logger.debug("Attempted disconnection of a OpenAIRealtimeAPIClient that was never connected, nothing done.")
+            log.debug("Attempted disconnection of a OpenAIRealtimeAPIClient that was never connected, nothing done.")
         await self.emit("on_model_disconnection", {})
 
     async def run(self) -> None:  # pylint: disable=too-many-branches
@@ -141,14 +141,14 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         try:
             async for message in self.ws:
                 event = json.loads(message)
-                event_type = event.get("type")
-                logger.debug("Received event: %s", event_type)
+                event_name = event.get("type")
+                log.debug("Received event", event_name=event_name)
 
-                if event_type == "error":
-                    logger.error("An error response was returned: %s", event)
+                if event_name == "error":
+                    log.error("An error response was returned", event_data=event)
 
-                elif event_type == "session.updated":
-                    logger.debug("Session updated to the following configuration: %s", event)
+                elif event_name == "session.updated":
+                    log.debug("Session configuration updated", event_data=event)
                     # Check why we updated the session and emit the corresponding event
                     if self._connecting:
                         self._connecting = False
@@ -158,49 +158,49 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                         await self.emit("on_system_prompt_updated", {"system_prompt": event["session"]["instructions"]})
 
                 # Track agent response state
-                elif event_type == "response.created":
+                elif event_name == "response.created":
                     self._current_response_id = event.get("response", {}).get("id")
-                    logger.debug("Agent started responding. Response created with ID: %s", self._current_response_id)
+                    log.debug("Agent started responding. Response created.", response_id=self._current_response_id)
 
-                elif event_type == "response.output_item.added":
+                elif event_name == "response.output_item.added":
                     self._current_item_id = event.get("item", {}).get("id")
-                    logger.debug("Agent is responding. Added response item with ID: %s", self._current_item_id)
+                    log.debug("Agent is responding. Added response item.", response_id=self._current_item_id)
 
-                elif event_type == "response.done":
-                    logger.debug("Agent finished generating a response.")
+                elif event_name == "response.done":
+                    log.debug("Agent finished generating a response.", response_id=self._current_item_id)
 
                 # Tool call
-                elif event_type == "response.function_call_arguments.done":
+                elif event_name == "response.function_call_arguments.done":
                     await self._call_tool(event)
 
                 # Events from VAD related to the user's input
-                elif event_type == "input_audio_buffer.speech_started":
-                    logger.debug("Speech detected.")
+                elif event_name == "input_audio_buffer.speech_started":
+                    log.debug("Speech detected.")
 
-                elif event_type == "input_audio_buffer.speech_stopped":
-                    logger.debug("Speech ended.")
+                elif event_name == "input_audio_buffer.speech_stopped":
+                    log.debug("Speech ended.")
 
                 # Relay the event to the parent BotStructure - regardless whether it was processed above or not
-                if event_type in self.events_translation:
-                    logger.debug(
-                        "Translating event type %s to parent's event type %s",
-                        event_type,
-                        self.events_translation[event_type],
+                if event_name in self.events_translation:
+                    log.debug(
+                        "Translating event",
+                        old_event_name=event_name,
+                        new_event_name=self.events_translation[event_name],
                     )
-                    event["type"] = self.events_translation[event_type]
-                    await self.emit(self.events_translation[event_type], event)
+                    event["type"] = self.events_translation[event_name]
+                    await self.emit(self.events_translation[event_name], event)
                 else:
-                    logger.debug("Sending native event type %s to parent", event_type)
-                    await self.emit(event_type, event)
+                    log.debug("Sending native event to parent", event_name=event_name)
+                    await self.emit(event_name, event)
 
                 if self.conversation_ended:
-                    logger.debug("Conversation ended.")
+                    log.debug("Conversation ended.")
                     break
 
         except websockets.exceptions.ConnectionClosed:
-            logging.info("Connection closed")
-        except Exception as e:  # pylint: disable=broad-except
-            logging.exception("Error in message handling: %s", str(e))
+            log.info("Connection closed")
+        except Exception:  # pylint: disable=broad-except
+            log.exception("Error in message handling")
 
     async def send(self, data: Dict[str, Any]) -> None:
         """
@@ -221,8 +221,8 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         """
         Update the system prompt to use in the conversation.
         """
-        logger.debug("Setting system prompt to: %s", self.system_prompt)
-        logger.debug("Setting tools to: %s", list(self.tools.keys()))
+        log.debug("Setting new system prompt", system_prompt=self.system_prompt)
+        log.debug("Setting new tools", tools=list(self.tools.keys()))
         await self._update_session(
             {"instructions": self.system_prompt, "tools": [to_openai_tool(t) for t in self.tools.values()]}
         )
@@ -238,22 +238,26 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                 The length in milliseconds of the audio that was played to the user before the interruption.
                 May be zero if the interruption happened before any audio was played.
         """
-        logging.info("[Handling interruption at %s ms]", lenght_to_interruption)
+        log.info("[Handling interruption at %s ms]", lenght_to_interruption, interruption_time=lenght_to_interruption)
 
         # Cancel the current response
         # Cancelling responses is effective when the response is still being generated by the model.
         if self._current_response_id:
-            logger.debug("Cancelling response %s due to a user's interruption.", self._current_response_id)
+            log.debug("Cancelling response due to a user's interruption.", response_id=self._current_response_id)
             event = {"type": "response.cancel"}
             await self.ws.send(json.dumps(event))
         else:
-            logger.warning("No response ID found to cancel.")
+            log.warning("No response ID found to cancel.")
 
         # Truncate the conversation item to what was actually played
         # Truncating the response is effective when the response has already been generated by the model and is being
         # played out.
         if lenght_to_interruption:
-            logger.debug("Truncating the response due to a user's interruption at %s ms", lenght_to_interruption)
+            log.debug(
+                "Truncating the response due to a user's interruption at %s ms",
+                lenght_to_interruption,
+                interruption_time=lenght_to_interruption,
+            )
             event = {
                 "type": "conversation.item.truncate",
                 "item_id": self._current_item_id,
@@ -351,7 +355,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         call_id = event["call_id"]
         tool_name = event["name"]
         tool_arguments = json.loads(event["arguments"])
-        logger.debug("Calling tool %s with arguments %s (call_id: %s)", tool_name, tool_arguments, call_id)
+        log.debug("Calling tool", tool_name=tool_name, tool_arguments=tool_arguments, call_id=call_id)
 
         # Check if it's the router
         if tool_name == self.intent_router.name:
@@ -367,10 +371,10 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
 
         # Make sure the tool actually exists
         if tool_name not in self.tools:
-            logger.error("Tool %s not found in the list of available tools.", tool_name)
+            log.error("Tool '%s' not found in the list of available tools.", tool_name)
             await self._send_function_result(call_id, f"Error: Tool {tool_name} not found")
 
         # Invoke the tool and send back the output
         result = await self.tools.get(tool_name).run(tool_arguments)
-        logger.debug("Tool %s returned: %s", tool_name, result)
+        log.debug("Tool run", tool_name=tool_name, tool_output=result)
         await self._send_function_result(call_id, str(result))
