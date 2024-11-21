@@ -27,7 +27,7 @@ log = structlog.get_logger(logger_name=__name__)
 
 class TelegramBotInterface(BotInterface):
     """
-    Bot that uses a Teelegram to interact with the user.
+    Bot that uses Telegram to interact with the user.
     """
 
     name = "telegram"
@@ -37,7 +37,7 @@ class TelegramBotInterface(BotInterface):
         bot_structure_config = config.pop("bot", None)
         if not bot_structure_config:
             raise ValueError(
-                "TelegramBotInterface requires a 'bot' configuration key to know how to structure the bot."
+                f"{self.__class__.__name__} requires a 'bot' configuration key to know how to structure the bot."
             )
         log.debug("Creating bot structure", bot_structure_config=bot_structure_config)
         self.bot: BotStructure = load_bot_structure_from_dict(intent_router=intent_router, config=bot_structure_config)
@@ -63,7 +63,7 @@ class TelegramBotInterface(BotInterface):
                     "These are the supported modalities: 'text_turns'."
                 )
         else:
-            raise ValueError(f"Bot '{self.bot.name}' is not yet supported for the TelegramBotInterface.")
+            raise ValueError(f"Bot '{self.bot.name}' is not yet supported for {self.__class__.__name__}.")
 
     async def _run_text_turns(self, bot: TurnBasedBotStructure) -> None:
         """

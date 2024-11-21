@@ -11,6 +11,9 @@ nav:
    - 'API Reference - Main Package': docs/reference.md
    - 'API Reference - Core Package': docs/core-reference.md
    - 'Plugins':
+     - 'FastAPI':
+        - 'Getting Started': plugins/intentional-fastapi/README.md
+        - 'API Reference': plugins/intentional-fastapi/docs/reference.md
      - 'Local Terminal':
         - 'Getting Started': plugins/intentional-terminal/README.md
         - 'API Reference': plugins/intentional-terminal/docs/reference.md
