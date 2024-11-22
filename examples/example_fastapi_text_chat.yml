@@ -4,7 +4,7 @@ plugins:
 - intentional_openai
 
 interface: fastapi
-modality: text_turns
+modality: text_messages
 bot:
   type: text_chat
   llm:

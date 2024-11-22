@@ -96,7 +96,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
 
         url = f"{self.base_url}?model={self.model_name}"
         headers = {"Authorization": f"Bearer {self.api_key}", "OpenAI-Beta": "realtime=v1"}
-        self.ws = await websockets.connect(url, extra_headers=headers)
+        self.ws = await websockets.connect(url, additional_headers=headers)
 
         await self._update_session(
             {
@@ -210,8 +210,8 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
             data:
                 The data chunk to stream. It should be in the format {"audio": bytes}.
         """
-        if "audio_stream" in data:
-            await self._send_audio_stream(data["audio_stream"])
+        if "audio_chunk" in data:
+            await self._send_audio_stream(data["audio_chunk"])
         # if "audio_message" in data:
         #     await self._send_audio(data["audio_message"])
         # if "text_message" in data:

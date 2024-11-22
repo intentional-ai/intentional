@@ -93,7 +93,7 @@ class AudioHandler:
                 # Read raw PCM data
                 data = self.model_stream.read(self.chunk, exception_on_overflow=False)
                 # Stream directly without trying to decode
-                await client_streaming_callback({"audio_stream": data})
+                await client_streaming_callback({"audio_chunk": data})
             except Exception:  # pylint: disable=broad-except
                 log.exception("Error streaming")
                 break

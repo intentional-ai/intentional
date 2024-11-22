@@ -4,7 +4,7 @@ plugins:
 - intentional_openai
 
 interface: telegram
-modality: text_turns
+modality: text_messages
 bot:
   type: text_chat
   llm:

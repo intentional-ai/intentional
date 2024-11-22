@@ -16,20 +16,20 @@ from intentional_core import (
     IntentRouter,
 )
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.responses import StreamingResponse
 
 
 log = structlog.get_logger(logger_name=__name__)
 
 
-class TextResponseIterator:
+class ResponseChunksIterator:
     """
-    Async iterator that collects the text response chunks from the bot and streams them out.
+    Async iterator that collects the response chunks from the bot and streams them out.
     """
 
     def __init__(self):
-        self.buffer = ""
+        self.buffer = []
 
     def __aiter__(self):
         return self
@@ -38,12 +38,12 @@ class TextResponseIterator:
         if not self.buffer:
             raise StopAsyncIteration
 
-        next_char = self.buffer[0]
+        next_chunk = self.buffer[0]
         self.buffer = self.buffer[1:]
-        return next_char
+        return next_chunk
 
     async def asend(self, value):  # pylint: disable=missing-function-docstring
-        self.buffer += value
+        self.buffer.append(value)
         return
 
 
@@ -73,12 +73,12 @@ class FastAPIBotInterface(BotInterface):
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
         if isinstance(self.bot, TurnBasedBotStructure):
-            if self.modality == "text_turns":
-                await self._run_text_turns(self.bot)
+            if self.modality == "text_messages":
+                await self._run_text_messages(self.bot)
             else:
                 raise ValueError(
                     f"Modality '{self.modality}' is not yet supported by '{self.bot.name}' bots."
-                    "These are the supported modalities: 'text_turns'."
+                    "These are the supported modalities: 'text_messages'."
                 )
         elif isinstance(self.bot, ContinuousStreamBotStructure):
             if self.modality == "audio_stream":
@@ -91,7 +91,14 @@ class FastAPIBotInterface(BotInterface):
         else:
             raise ValueError(f"Bot '{self.bot.name}' is not yet supported by {self.__class__.__name__}.")
 
-    async def _run_text_turns(self, bot: TurnBasedBotStructure) -> None:
+    async def handle_response_chunks(self, response: ResponseChunksIterator, event: Dict[str, Any]) -> None:
+        """
+        Stream out text messages from the bot through a TextChunksIterator.
+        """
+        if event["delta"]:
+            await response.asend(event["delta"])
+
+    async def _run_text_messages(self, bot: TurnBasedBotStructure) -> None:
         """
         Runs the interface for the text turns modality.
         """
@@ -102,9 +109,9 @@ class FastAPIBotInterface(BotInterface):
             """
             Send a message to the bot.
             """
-            response = TextResponseIterator()
+            response = ResponseChunksIterator()
             bot.add_event_handler(
-                "on_text_message_from_model", lambda event: self.handle_text_messages(response, event)
+                "on_text_message_from_model", lambda event: self.handle_response_chunks(response, event)
             )
             await self.bot.send({"role": "user", "content": message})
             return StreamingResponse(response)
@@ -115,13 +122,7 @@ class FastAPIBotInterface(BotInterface):
         server = uvicorn.Server(config)
         await server.serve()
 
-    async def handle_text_messages(self, response: TextResponseIterator, event: Dict[str, Any]) -> None:
-        """
-        Stream out text messages from the bot through a TextResponseIterator.
-        """
-        if event["delta"]:
-            await response.asend(event["delta"])
-
+    # TODO TEST THIS MODALITY!
     async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
         """
         Runs the interface for the audio stream modality.
@@ -129,9 +130,24 @@ class FastAPIBotInterface(BotInterface):
 
         app = FastAPI(title="Intentional FastAPI")
 
-        @app.get("/start")
-        async def start_stream():
-            pass
+        @app.get("/ws/input")
+        async def input_stream(websocket: WebSocket):
+            await websocket.accept()
+            while True:
+                data = await websocket.receive()
+                self.bot.send({"audio_chunk": data})
+
+        @app.get("/ws/output")
+        async def output_stream(websocket: WebSocket):
+            await websocket.accept()
+
+            async def send_audio_chunk(event: Dict[str, Any]) -> None:
+                if event["delta"]:
+                    await websocket.send_bytes(event["delta"])
+
+            response = ResponseChunksIterator()
+            bot.add_event_handler("on_audio_message_from_model", send_audio_chunk)
+            return StreamingResponse(response)
 
         await bot.connect()
 

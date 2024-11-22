@@ -55,17 +55,17 @@ class TelegramBotInterface(BotInterface):
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
         if isinstance(self.bot, TurnBasedBotStructure):
-            if self.modality == "text_turns":
-                await self._run_text_turns(self.bot)
+            if self.modality == "text_messages":
+                await self._run_text_messages(self.bot)
             else:
                 raise ValueError(
                     f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-                    "These are the supported modalities: 'text_turns'."
+                    "These are the supported modalities: 'text_messages'."
                 )
         else:
             raise ValueError(f"Bot '{self.bot.name}' is not yet supported for {self.__class__.__name__}.")
 
-    async def _run_text_turns(self, bot: TurnBasedBotStructure) -> None:
+    async def _run_text_messages(self, bot: TurnBasedBotStructure) -> None:
         """
         Runs the CLI interface for the text turns modality.
         """
