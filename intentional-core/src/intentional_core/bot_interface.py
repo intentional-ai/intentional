@@ -29,7 +29,7 @@ class BotInterface(ABC):
     Tiny base class used to recognize Intentional bots interfaces.
 
     The class name is meant to represent the **communication channel** you will use to interact with your bot.
-    For example an interface that uses a local command line interface would be called "LocalBotInterface", one that
+    For example an interface that uses a local command line interface would be called "TerminalBotInterface", one that
     uses Whatsapp would be called "WhatsappBotInterface", one that uses Twilio would be called "TwilioBotInterface",
     etc.
 

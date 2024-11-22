@@ -5,7 +5,7 @@ plugins:
 - intentional_openai
 
 interface: textual_ui
-modality: text_turns
+modality: text_messages
 bot:
   type: text_chat
   llm:

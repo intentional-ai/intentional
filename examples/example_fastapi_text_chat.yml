@@ -1,9 +1,9 @@
 plugins:
-- intentional_telegram
+- intentional_fastapi
 - intentional_text_chat
 - intentional_openai
 
-interface: telegram
+interface: fastapi
 modality: text_messages
 bot:
   type: text_chat

@@ -1,15 +1,16 @@
 plugins:
-- intentional_telegram
-- intentional_text_chat
+- intentional_fastapi
+- intentional_websocket
 - intentional_openai
 
-interface: telegram
-modality: text_messages
+interface: fastapi
+modality: audio_stream
 bot:
-  type: text_chat
+  type: websocket
   llm:
-    client: openai
-    name: gpt-4o
+    client: openai_realtime
+    name: gpt-4o-realtime-preview-2024-10-01
+    voice: echo
 
 
 conversation:

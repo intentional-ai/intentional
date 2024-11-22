@@ -91,8 +91,8 @@ class BotStructure(EventListener):
             handler: The handler function to call when the event is received.
         """
         if event_name in self.event_handlers:
-            log.warning(
-                "Event handler for '%s' already exists. The older handler will be replaced by the new one.",
+            log.debug(
+                "Event handler for '%s' was already assigned. The older handler will be replaced by the new one.",
                 event_name,
                 event_name=event_name,
                 event_handler=self.event_handlers[event_name],
