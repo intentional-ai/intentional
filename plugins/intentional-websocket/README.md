@@ -1,5 +1,6 @@
 # Intentional - WebSocket Streaming to Models
 
+[![Made for Intentional](https://img.shields.io/badge/made_for-intentional-blue)](https://intentional-ai.github.io/intentional/docs/home/)
 [![PyPI - Version](https://img.shields.io/pypi/v/intentional-websocket.svg)](https://pypi.org/project/intentional-websocket)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/intentional-websocket.svg)](https://pypi.org/project/intentional-websocket)
 [![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/copier-org/copier)
