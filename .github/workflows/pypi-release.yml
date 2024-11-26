@@ -51,22 +51,22 @@ jobs:
           echo "Package path: ${{ steps.parse_tag.outputs.path }}"
           echo "Package version: ${{ steps.parse_tag.outputs.version }}"
 
-      # - uses: actions/setup-python@v5
-      #   with:
-      #     python-version: '3.12'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-      # - name: Install dependencies
-      #   run: |
-      #     pip install uv
-      #     uv pip install --system hatch ${{ steps.parse_tag.outputs.path }}
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system hatch ${{ steps.parse_tag.outputs.path }}
 
-      # - name: Build wheel
-      #   run: |
-      #     cd ${{ steps.parse_tag.outputs.package_path }}
-      #     hatch version "${{ steps.parse_tag.outputs.version }}"
-      #     hatch build
+      - name: Build wheel
+        run: |
+          cd ${{ steps.parse_tag.outputs.package_path }}
+          hatch version "${{ steps.parse_tag.outputs.version }}"
+          hatch build
 
-      # - name: Publish to PyPI
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     packages-dir: ${{ steps.parse_tag.outputs.path }}/dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: ${{ steps.parse_tag.outputs.path }}/dist/
