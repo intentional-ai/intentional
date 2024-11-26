@@ -62,7 +62,7 @@ jobs:
 
       - name: Build wheel
         run: |
-          cd ${{ steps.parse_tag.outputs.package_path }}
+          cd ${{ steps.parse_tag.outputs.path }}
           hatch version "${{ steps.parse_tag.outputs.version }}"
           hatch build
 
