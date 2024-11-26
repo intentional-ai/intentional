@@ -27,14 +27,21 @@ jobs:
       - name: Parse the tag name
         id: parse_tag
         run: |
+          echo "Tag: ${GITHUB_REF#refs/tags/}"
           IFS='/' read -r -a parts <<< "${GITHUB_REF#refs/tags/}"
+
+          echo "Package name: ${parts[0]}"
           echo "package=${parts[0]}" >> $GITHUB_OUTPUT
+
+          echo "Package version: ${parts[1]}"
           echo "version=${parts[1]}" >> $GITHUB_OUTPUT
 
           # If the package name is not intentional or intentional-core, prefix the path with plugins/
           if [ "${parts[0]}" != "intentional" ] && [ "${parts[0]}" != "intentional-core" ]; then
-            echo "path=plugins/${parts[0]}/"  >> $GITHUB_OUTPUT
+            echo "Package path: plugins/${parts[0]}/"
+            echo "path=plugins/${parts[0]}/" >> $GITHUB_OUTPUT
           else
+            echo "Package path: ${parts[0]}/"
             echo "path=${parts[0]}"/ >> $GITHUB_OUTPUT
           fi
 
@@ -44,22 +51,22 @@ jobs:
           echo "Package path: ${{ steps.parse_tag.outputs.package_path }}"
           echo "Package version: ${{ steps.parse_tag.outputs.package_version }}"
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      # - uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.12'
 
-      - name: Install dependencies
-        run: |
-          pip install uv
-          uv pip install --system hatch ${{ steps.parse_tag.outputs.package_path }}
+      # - name: Install dependencies
+      #   run: |
+      #     pip install uv
+      #     uv pip install --system hatch ${{ steps.parse_tag.outputs.package_path }}
 
-      - name: Build wheel
-        run: |
-          cd ${{ steps.parse_tag.outputs.package_path }}
-          hatch version "${{ steps.parse_tag.outputs.package_version }}"
-          hatch build
+      # - name: Build wheel
+      #   run: |
+      #     cd ${{ steps.parse_tag.outputs.package_path }}
+      #     hatch version "${{ steps.parse_tag.outputs.package_version }}"
+      #     hatch build
 
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: ${{ steps.parse_tag.outputs.package_path }}/dist/
+      # - name: Publish to PyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     packages-dir: ${{ steps.parse_tag.outputs.package_path }}/dist/
