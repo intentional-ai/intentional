@@ -21,3 +21,5 @@ PRs with a failing CI check won't be merged. If CI is failing and you believe it
 ### Contributor License Agreement (CLA)
 
 All contributors must sign a Contributor License Agreement (CLA). A GitHub bot will take care of making sure you sign it when you open your first PR.
+
+You can review the content of the CLA [here](https://intentional-ai.github.io/intentional/docs/cla/).
