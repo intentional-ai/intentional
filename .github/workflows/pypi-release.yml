@@ -18,9 +18,9 @@ jobs:
     permissions:
       id-token: write
     outputs:
-      package_name: ${{ steps.parse_tag.outputs.package }}
-      package_path: ${{ steps.parse_tag.outputs.path }}
-      package_version: ${{ steps.parse_tag.outputs.version }}
+      name: ${{ steps.parse_tag.outputs.name }}
+      path: ${{ steps.parse_tag.outputs.path }}
+      version: ${{ steps.parse_tag.outputs.version }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,7 +31,7 @@ jobs:
           IFS='/' read -r -a parts <<< "${GITHUB_REF#refs/tags/}"
 
           echo "Package name: ${parts[0]}"
-          echo "package=${parts[0]}" >> $GITHUB_OUTPUT
+          echo "name=${parts[0]}" >> $GITHUB_OUTPUT
 
           echo "Package version: ${parts[1]}"
           echo "version=${parts[1]}" >> $GITHUB_OUTPUT
@@ -47,9 +47,9 @@ jobs:
 
       - name: "Print package name and version"
         run: |
-          echo "Package name: ${{ steps.parse_tag.outputs.package_name }}"
-          echo "Package path: ${{ steps.parse_tag.outputs.package_path }}"
-          echo "Package version: ${{ steps.parse_tag.outputs.package_version }}"
+          echo "Package name: ${{ steps.parse_tag.outputs.name }}"
+          echo "Package path: ${{ steps.parse_tag.outputs.path }}"
+          echo "Package version: ${{ steps.parse_tag.outputs.version }}"
 
       # - uses: actions/setup-python@v5
       #   with:
@@ -58,15 +58,15 @@ jobs:
       # - name: Install dependencies
       #   run: |
       #     pip install uv
-      #     uv pip install --system hatch ${{ steps.parse_tag.outputs.package_path }}
+      #     uv pip install --system hatch ${{ steps.parse_tag.outputs.path }}
 
       # - name: Build wheel
       #   run: |
       #     cd ${{ steps.parse_tag.outputs.package_path }}
-      #     hatch version "${{ steps.parse_tag.outputs.package_version }}"
+      #     hatch version "${{ steps.parse_tag.outputs.version }}"
       #     hatch build
 
       # - name: Publish to PyPI
       #   uses: pypa/gh-action-pypi-publish@release/v1
       #   with:
-      #     packages-dir: ${{ steps.parse_tag.outputs.package_path }}/dist/
+      #     packages-dir: ${{ steps.parse_tag.outputs.path }}/dist/
