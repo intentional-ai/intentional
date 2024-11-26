@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags-ignore:
+      - "**"  # Do not run on tags push
 
 env:
   HATCH_INDEX_USER: __token__
