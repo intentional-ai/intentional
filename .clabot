@@ -1,3 +1,4 @@
 {
-  "contributors": ["ZanSara"]
+  "contributors": ["ZanSara"],
+  "message": "Thank you for your pull request and welcome to our community. We require contributors to sign our Contributor License Agreement, and we don't seem to have the users {{usersWithoutCLA}} on file. In order for us to review and merge your code, please contact the project maintainers to get yourself added.\nAlternatively, you can add yourself to the list by editing the `.clabot` file in the root of this repository. Adding yourself to the list implies that you agree to the terms of the Contributor License Agreement, which you can review [here](https://intentional-ai.github.io/intentional/docs/cla/)."
 }
