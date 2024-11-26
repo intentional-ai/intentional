@@ -3,8 +3,8 @@ name: Release on PyPI
 on:
   push:
     tags:
-    - "*-v[0-9]+.[0-9]+.[0-9]+"  # package-name-v0.0.1
-    - "*-v[0-9]+.[0-9]+.[0-9]+rc[0-9]+"  # package-name-v0.0.1rc0
+    - "*/v[0-9]+.[0-9]+.[0-9]+"  # package-name/v0.0.1
+    - "*/v[0-9]+.[0-9]+.[0-9]+rc[0-9]+"  # package-name/v0.0.1rc0
 
 env:
   HATCH_INDEX_USER: __token__
@@ -12,7 +12,7 @@ env:
 
 jobs:
 
-  publish-core:
+  publish:
     runs-on: ubuntu-latest
     environment: PyPI Publisher
     permissions:
@@ -27,19 +27,15 @@ jobs:
       - name: Parse the tag name
         id: parse_tag
         run: |
-          IFS='-' read -r -a parts <<< "${GITHUB_REF#refs/tags/}"
-          echo "package=${parts[0]}"
-          echo "version=${parts[1]}"
-          echo "::set-output name=package::${parts[0]}"
-          echo "::set-output name=version::${parts[1]}"
+          IFS='/' read -r -a parts <<< "${GITHUB_REF#refs/tags/}"
+          echo "package=${parts[0]}" >> $GITHUB_OUTPUT
+          echo "version=${parts[1]}" >> $GITHUB_OUTPUT
 
           # If the package name is not intentional or intentional-core, prefix the path with plugins/
           if [ "${parts[0]}" != "intentional" ] && [ "${parts[0]}" != "intentional-core" ]; then
-            echo "path=plugins/${parts[0]}"
-            echo "::set-output name=path::plugins/${parts[0]}"
+            echo "path=plugins/${parts[0]}/"  >> $GITHUB_OUTPUT
           else
-            echo "path=${parts[0]}"
-            echo "::set-output name=path::${parts[0]}"
+            echo "path=${parts[0]}"/ >> $GITHUB_OUTPUT
           fi
 
       - name: "Print package name and version"
