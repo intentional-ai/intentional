@@ -1,0 +1,69 @@
+name: Release on PyPI
+
+on:
+  push:
+    tags:
+    - "*-v[0-9]+.[0-9]+.[0-9]+"  # package-name-v0.0.1
+    - "*-v[0-9]+.[0-9]+.[0-9]+rc[0-9]+"  # package-name-v0.0.1rc0
+
+env:
+  HATCH_INDEX_USER: __token__
+  HATCH_INDEX_AUTH: ${{ secrets.PYPI_TOKEN }}
+
+jobs:
+
+  publish-core:
+    runs-on: ubuntu-latest
+    environment: PyPI Publisher
+    permissions:
+      id-token: write
+    outputs:
+      package_name: ${{ steps.parse_tag.outputs.package }}
+      package_path: ${{ steps.parse_tag.outputs.path }}
+      package_version: ${{ steps.parse_tag.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse the tag name
+        id: parse_tag
+        run: |
+          IFS='-' read -r -a parts <<< "${GITHUB_REF#refs/tags/}"
+          echo "package=${parts[0]}"
+          echo "version=${parts[1]}"
+          echo "::set-output name=package::${parts[0]}"
+          echo "::set-output name=version::${parts[1]}"
+
+          # If the package name is not intentional or intentional-core, prefix the path with plugins/
+          if [ "${parts[0]}" != "intentional" ] && [ "${parts[0]}" != "intentional-core" ]; then
+            echo "path=plugins/${parts[0]}"
+            echo "::set-output name=path::plugins/${parts[0]}"
+          else
+            echo "path=${parts[0]}"
+            echo "::set-output name=path::${parts[0]}"
+          fi
+
+      - name: "Print package name and version"
+        run: |
+          echo "Package name: ${{ steps.parse_tag.outputs.package_name }}"
+          echo "Package path: ${{ steps.parse_tag.outputs.package_path }}"
+          echo "Package version: ${{ steps.parse_tag.outputs.package_version }}"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv pip install --system hatch ${{ steps.parse_tag.outputs.package_path }}
+
+      - name: Build wheel
+        run: |
+          cd ${{ steps.parse_tag.outputs.package_path }}
+          hatch version "${{ steps.parse_tag.outputs.package_version }}"
+          hatch build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: ${{ steps.parse_tag.outputs.package_path }}/dist/
