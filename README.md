@@ -8,6 +8,14 @@ Intentional introduces a new way of prompting the LLM in a way that gives the de
 
 Intentional is still in its very early stages: get in touch if you want to give any feedback or contribute!
 
+## Installation
+
+To get started, install Intentional with:
+
+```
+pip install intentional
+```
+
 -----
 
 ## License
