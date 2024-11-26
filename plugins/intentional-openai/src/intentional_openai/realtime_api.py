@@ -14,11 +14,14 @@ import os
 import math
 import json
 import base64
+import asyncio
+
 import structlog
 import websockets
 
 from intentional_core import ContinuousStreamModelClient
 from intentional_core.intent_routing import IntentRouter
+from intentional_core.end_conversation import EndConversationTool
 from intentional_openai.tools import to_openai_tool
 
 
@@ -83,10 +86,16 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
 
         # Intent routering data
         self.intent_router = intent_router
-        self.system_prompt = config.get("system_prompt", self.intent_router.get_prompt())
-        self.tools = self.intent_router.current_stage.tools
+        self.system_prompt = None
+        self.tools = None
+        self.setup_initial_prompt()
 
-        self.conversation_ended = False
+    def setup_initial_prompt(self) -> None:
+        """
+        Setup initial prompt and tools. Used also after conversation end to reset the state.
+        """
+        self.system_prompt = self.intent_router.get_prompt()
+        self.tools = self.intent_router.current_stage.tools
 
     async def connect(self) -> None:
         """
@@ -193,18 +202,21 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                     log.debug("Sending native event to parent", event_name=event_name)
                     await self.emit(event_name, event)
 
-                if self.conversation_ended:
-                    log.debug("Conversation ended.")
-                    break
+        except websockets.exceptions.ConnectionClosedOK:
+            await asyncio.sleep(1)
+            log.warning("Connection closed.")
+            return
 
-        except websockets.exceptions.ConnectionClosed:
-            log.info("Connection closed")
         except Exception:  # pylint: disable=broad-except
+            await asyncio.sleep(1)
             log.exception("Error in message handling")
+            return
+
+        log.debug(".run() exited without errors.")
 
     async def send(self, data: Dict[str, Any]) -> None:
         """
-        Stream raw audio data to the API.
+        Stream data to the API.
 
         Args:
             data:
@@ -364,10 +376,17 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
             await self._send_function_result(event["call_id"], "ok")
             return
 
-        # Check if it's end conversation
-        if tool_name == "end_conversation":
-            self.conversation_ended = True
+        # Check if the conversation should end
+        if tool_name == EndConversationTool.name:
+            await self.tools[EndConversationTool.name].run()
+            await self.disconnect()
+            self.setup_initial_prompt()
+            await self.emit("on_conversation_ended", {})
+            await self.connect()
             return
+
+        # Emit the event
+        self.emit("on_tool_invoked", {"name": tool_name, "args": tool_arguments})
 
         # Make sure the tool actually exists
         if tool_name not in self.tools:

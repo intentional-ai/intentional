@@ -3,30 +3,13 @@
 """
 Sample tools for Intentional's examples.
 """
-
+from typing import Dict, Any, Optional
 from datetime import datetime
 import structlog
 from intentional_core.tools import Tool, ToolParameter
 
 
 log = structlog.get_logger(logger_name=__name__)
-
-
-class EndConversationTool(Tool):
-    """
-    Tool to end the conversation. This tool must be handled by each model client. TODO
-    """
-
-    name = "end_conversation"
-    description = "End the conversation."
-    parameters = []
-
-    async def run(self, _) -> str:
-        """
-        Ends the conversation.
-        """
-        log.debug("Ending the conversation.")
-        return "The conversation has ended."
 
 
 class GetCurrentDateTimeTool(Tool):
@@ -38,7 +21,7 @@ class GetCurrentDateTimeTool(Tool):
     description = "Get the current date and time in the format 'YYYY-MM-DD HH:MM:SS'."
     parameters = []
 
-    async def run(self, _) -> str:
+    async def run(self, params: Optional[Dict[str, Any]] = None) -> str:
         """
         Returns the current time.
         """
@@ -71,7 +54,7 @@ class RescheduleInterviewTool(Tool):
         ),
     ]
 
-    async def run(self, _) -> str:
+    async def run(self, params: Optional[Dict[str, Any]] = None) -> str:
         """
         Returns the current time.
         """
