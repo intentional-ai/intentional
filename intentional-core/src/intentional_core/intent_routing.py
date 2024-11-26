@@ -4,12 +4,13 @@
 Intent routing logic.
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import structlog
 import networkx
 
 from intentional_core.tools import Tool, ToolParameter, load_tools_from_dict
+from intentional_core.end_conversation import EndConversationTool
 
 
 log = structlog.get_logger(logger_name=__name__)
@@ -22,20 +23,20 @@ DEFAULT_PROMPT_TEMPLATE = """
 
 Your goal is '{stage_name}': {current_goal}
 
-You need to reach one of these situations:
 {outcomes}
 {transitions}
 
-Talk to the user to reach one of these outcomes and once you do, classify the response with the {intent_router_tool} tool.
-You MUST use one of the outcomes described above when invoking the {intent_router_tool} tool or it will fail.
-Call the tool as soon as possible. Call it ONLY right after the user's response, before replying to the user. This will
-help the system to understand the user's response and act accordingly. NEVER call this tool after another tool output.
-You must say something to the user after each tool call!
-Never call any tool, except for {intent_router_tool}, before telling something to the user! For example, if
+Talk to the user to reach one of these outcomes and once you do, classify the response with the '{intent_router_tool}' tool.
+You MUST use one of the outcomes described above when invoking the '{intent_router_tool}' tool or it will fail.
+Call the tool as soon as possible, but make sure to talk to the user first if your goal description says so.
+Call it ONLY right after the user's response, before replying to the user. This will help the system to understand the
+user's response and act accordingly. NEVER call this tool after another tool output.
+You must say something to the user before each tool call!
+Never call any tool, except for '{intent_router_tool}', before telling something to the user! For example, if
 you want to check what's the current time, first tell the user "Let me see the time", then invoke the tool, and then tell
 them the time, such as "10:34 am". This will keep the user engaged in the conversation!
-If the user just says something short, such as "ok", "hm hm", "I see", etc., you don't need to call the {intent_router_tool}
-to classify this response. Ignore it and continue to work towards your goal.
+If the user just says something short, such as "ok", "hm hm", "I see", etc., you don't need to call the '{intent_router_tool}'
+to classify this response unless that's all you need to proceed. Ignore it and continue to work towards your goal.
 Never do ANYTHING ELSE than what the goal describes! This is very important!
 """
 
@@ -70,6 +71,14 @@ class IntentRouter(Tool):
             self.stages[name].tools[self.name] = self  # Add the intent router to the tools list of each stage
             self.graph.add_node(name)
 
+        # Add end stage
+        name = "_end_"
+        log.debug("Adding stage", stage_name=name)
+        end_tool = EndConversationTool(intent_router=self)
+        self.stages[name] = Stage({"custom_template": f"The conversation is over. Call the '{end_tool.name}' tool."})
+        self.stages[name].tools[end_tool.name] = end_tool
+        self.graph.add_node("_end_")
+
         # Connect the stages
         for name, stage in self.stages.items():
             for outcome_name, outcome_config in stage.outcomes.items():
@@ -80,18 +89,18 @@ class IntentRouter(Tool):
                 log.debug("Adding connection", origin=name, target=outcome_config["move_to"], outcome=outcome_name)
                 self.graph.add_edge(name, outcome_config["move_to"], key=outcome_name)
 
-        # Initial prompt
-        initial_stage = ""
+        # Find initial stage
+        self.initial_stage = ""
         for name, stage in self.stages.items():
             if START_CONNECTION in stage.accessible_from:
-                if initial_stage:
+                if self.initial_stage:
                     raise ValueError("Multiple start stages found!")
                 log.debug("Found start stage", stage_name=name)
-                initial_stage = name
-        if not initial_stage:
+                self.initial_stage = name
+        if not self.initial_stage:
             raise ValueError("No start stage found!")
 
-        self.current_stage_name = initial_stage
+        self.current_stage_name = self.initial_stage
         self.backtracking_stack = []
 
     @property
@@ -101,7 +110,7 @@ class IntentRouter(Tool):
         """
         return self.stages[self.current_stage_name]
 
-    async def run(self, params: Dict[str, Any]) -> str:
+    async def run(self, params: Optional[Dict[str, Any]] = None) -> str:
         """
         Given the response's classification, returns the new system prompt and the tools accessible in this stage.
 
@@ -137,9 +146,12 @@ class IntentRouter(Tool):
         """
         Get the prompt for the current stage.
         """
-        outcomes = "\n".join(f"  - {name}: {data['description']}" for name, data in self.current_stage.outcomes.items())
+        outcomes = "You need to reach one of these situations:\n" + "\n".join(
+            f"  - {name}: {data['description']}" for name, data in self.current_stage.outcomes.items()
+        )
         transitions = "\n".join(f"  - {stage}: {self.stages[stage].description}" for stage in self.get_transitions())
-        return DEFAULT_PROMPT_TEMPLATE.format(
+        template = self.current_stage.custom_template or DEFAULT_PROMPT_TEMPLATE
+        return template.format(
             intent_router_tool=self.name,
             stage_name=self.current_stage_name,
             background=self.background,
@@ -168,7 +180,8 @@ class Stage:
     """
 
     def __init__(self, config: Dict[str, Any]) -> None:
-        self.goal = config["goal"]
+        self.custom_template = config.get("custom_template", None)
+        self.goal = config.get("goal", None)
         self.description = config.get("description", "--no description provided--")
         self.accessible_from = config.get("accessible_from", [])
         if isinstance(self.accessible_from, str):
@@ -177,6 +190,7 @@ class Stage:
         self.outcomes = config.get("outcomes", {})
         log.debug(
             "Stage loaded",
+            custom_template=self.custom_template,
             stage_goal=self.goal,
             stage_description=self.description,
             stage_accessible_from=self.accessible_from,

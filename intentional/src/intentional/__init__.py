@@ -4,7 +4,7 @@
 Init file for Intentional's sample tools.
 """
 
-from intentional.sample_tools import GetCurrentDateTimeTool, EndConversationTool, RescheduleInterviewTool
+from intentional.sample_tools import GetCurrentDateTimeTool, RescheduleInterviewTool
 
 
-__all__ = ["GetCurrentDateTimeTool", "EndConversationTool", "RescheduleInterviewTool"]
+__all__ = ["GetCurrentDateTimeTool", "RescheduleInterviewTool"]

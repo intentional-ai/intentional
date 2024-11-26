@@ -14,6 +14,7 @@ import structlog
 import openai
 from intentional_core import TurnBasedModelClient
 from intentional_core.intent_routing import IntentRouter
+from intentional_core.end_conversation import EndConversationTool
 from intentional_openai.tools import to_openai_tool
 
 if TYPE_CHECKING:
@@ -58,13 +59,20 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
                 f"The provided environment variable name ({self.api_key_name}) is not set or is empty."
             )
         self.api_key = os.environ.get(self.api_key_name)
-
         self.client = openai.AsyncOpenAI(api_key=self.api_key)
+        self.system_prompt = None
+        self.tools = None
+        self.setup_initial_prompt()
+        self.conversation = [{"role": "system", "content": self.system_prompt}]
 
+    def setup_initial_prompt(self) -> None:
+        """
+        Setup initial prompt and tools. Used also after conversation end to reset the state.
+        """
         self.system_prompt = self.intent_router.get_prompt()
         self.tools = self.intent_router.current_stage.tools
         self.conversation: List[Dict[str, Any]] = [{"role": "system", "content": self.system_prompt}]
-        self.conversation_ended = False
+        log.debug("Initial system prompt set", system_prompt=self.system_prompt)
 
     async def run(self) -> None:
         """
@@ -95,10 +103,6 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         """
         Send a message to the model.
         """
-        if self.conversation_ended:
-            self.emit("on_conversation_ended", {})
-            return
-
         await self.emit("on_model_starts_generating_response", {})
 
         # Generate a response
@@ -123,6 +127,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
                 # TODO handle multiple parallel function calls
                 if delta["tool_calls"][0]["index"] > 0 or len(delta["tool_calls"]) > 1:
                     log.error("TODO: Multiple parallel function calls not supported yet. Please open an issue.")
+                    log.debug("Multiple parallel function calls", delta=delta)
                 # Consume the response to understand which tool to call with which parameters
                 for tool_call in delta["tool_calls"]:
                     if not function_name:
@@ -171,6 +176,12 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             # We don't append the user message to the history in order to avoid message duplication.
             await self.send({"text_message": message})
 
+        # Check if the conversation should end
+        elif function_name == EndConversationTool.name:
+            await self.tools[EndConversationTool.name].run()
+            self.setup_initial_prompt()
+            await self.emit("on_conversation_ended", {})
+
         else:
             # Handle a regular function call - this one shows up in the history as normal
             # so we start by appending the user message
@@ -196,6 +207,8 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             function_name: The name of the tool function to call.
             function_args: The arguments to pass to the tool
         """
+        await self.emit("on_tool_invoked", {"name": function_name, "args": function_args})
+
         # Record the tool invocation in the conversation
         self.conversation.append(
             {
@@ -209,6 +222,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
                 ],
             }
         )
+
         # Get the tool output
         if function_name not in self.tools:
             log.debug("The LLM called a non-existing tool.", tool=function_name)

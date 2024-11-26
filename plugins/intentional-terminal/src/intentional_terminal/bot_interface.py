@@ -6,6 +6,7 @@ Local bot interface for Intentional.
 
 from typing import Any, Dict
 
+import sys
 import asyncio
 import base64
 
@@ -41,7 +42,9 @@ class TerminalBotInterface(BotInterface):
                 f"{self.__class__.__name__} requires a 'bot' configuration key to know how to structure the bot."
             )
         log.debug("Creating bot structure", bot_structure_type=bot_structure_config)
-        self.bot: BotStructure = load_bot_structure_from_dict(intent_router, bot_structure_config)
+        self.intent_router = intent_router
+        self.bot_structure_config = bot_structure_config
+        self.bot: BotStructure = load_bot_structure_from_dict(self.intent_router, self.bot_structure_config)
 
         # Check the modality
         self.modality = config.pop("modality")
@@ -82,6 +85,7 @@ class TerminalBotInterface(BotInterface):
         bot.add_event_handler("on_model_starts_generating_response", self.handle_start_text_response)
         bot.add_event_handler("on_model_stops_generating_response", self.handle_finish_text_response)
         bot.add_event_handler("on_model_connection", self.handle_model_connection)
+        bot.add_event_handler("on_conversation_ended", self.handle_conversation_ended)
         await bot.connect()
 
     async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
@@ -95,6 +99,7 @@ class TerminalBotInterface(BotInterface):
 
         # Connect the event handlers
         bot.add_event_handler("*", self.check_for_transcripts)
+        bot.add_event_handler("on_conversation_ended", self.handle_conversation_ended)
         # bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
         bot.add_event_handler("on_audio_message_from_model", self.handle_audio_messages)
         bot.add_event_handler("on_user_speech_started", self.speech_started)
@@ -161,7 +166,7 @@ class TerminalBotInterface(BotInterface):
         Args:
             event: The event dictionary containing the model connection event.
         """
-        print("########## Chat is ready! ###########")
+        print("==> Chat is ready!")
         await self.handle_finish_text_response(event)
 
     async def handle_text_messages(self, event: Dict[str, Any]) -> None:
@@ -209,3 +214,14 @@ class TerminalBotInterface(BotInterface):
             event: The event dictionary containing the speech stop event.
         """
         print("[User stopped speaking]")
+
+    async def handle_conversation_ended(self, _):
+        """
+        The conversation is over, so let's ask the user if they want to have another go.
+        """
+        restart = input("==> The conversation was ended by the bot. Do you want to restart? (y/N)")
+        if "y" not in restart.lower():
+            sys.exit(0)
+
+        self.bot: BotStructure = load_bot_structure_from_dict(self.intent_router, self.bot_structure_config)
+        await self.run()

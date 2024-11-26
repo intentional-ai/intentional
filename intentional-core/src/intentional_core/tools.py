@@ -3,7 +3,7 @@
 """
 Tools baseclass for Intentional.
 """
-from typing import List, Any, Dict, Set
+from typing import List, Any, Dict, Set, Optional
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 import structlog
@@ -29,6 +29,12 @@ class ToolParameter:
     required: bool
     default: Any
 
+    def __repr__(self) -> str:
+        return (
+            f"<{self.__class__.__name__} name={self.name}, description={self.description}, type={self.type}, "
+            f"required={self.required}, default={self.default}>"
+        )
+
 
 class Tool(ABC):
     """
@@ -39,8 +45,14 @@ class Tool(ABC):
     description: str = None
     parameters: List[ToolParameter] = None
 
+    def __repr__(self) -> str:
+        return (
+            f"<{self.__class__.__name__} name={self.name}, description={self.description}, "
+            f"parameters={repr(self.parameters)}>"
+        )
+
     @abstractmethod
-    async def run(self, params: dict) -> Any:
+    async def run(self, params: Optional[Dict[str, Any]] = None) -> Any:
         """
         Run the tool.
         """

@@ -37,6 +37,7 @@ KNOWN_MODEL_EVENTS = [
     "on_user_speech_ended",
     "on_user_speech_transcribed",
     "on_model_speech_transcribed",
+    "on_tool_invoked",
     "on_conversation_ended",
 ]
 
@@ -45,7 +46,7 @@ class ModelClient(ABC, EventEmitter):
     """
     Tiny base class used to recognize Intentional model clients.
 
-    In order for your client to be usable, you need to assign a value to the `_name` class variable
+    In order for your client to be usable, you need to assign a value to the `name` class variable
     in the client class' definition.
     """
 
@@ -88,12 +89,6 @@ class ModelClient(ABC, EventEmitter):
     async def send(self, data: Dict[str, Any]) -> None:
         """
         Send a unit of data to the model. The response is streamed out as an async generator.
-        """
-
-    @abstractmethod
-    async def update_system_prompt(self) -> None:
-        """
-        Update the system prompt in the model.
         """
 
     @abstractmethod

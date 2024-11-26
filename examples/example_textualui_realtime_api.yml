@@ -39,7 +39,7 @@ conversation:
       outcomes:
         ok:
           description: user says goodbye too
-          move_to: end
+          move_to: _end_
         second_thoughts:
           description: user says they can continue talking to you now
           move_to: ask_for_availability
@@ -67,7 +67,7 @@ conversation:
       outcomes:
         ok:
           description: user says goodbye too
-          move_to: end
+          move_to: _end_
         second_thoughts:
           description: user wants to reschedule at a different time.
           move_to: reschedule_interview
@@ -86,7 +86,7 @@ conversation:
           move_to: _backtrack_
         not_ok:
           description: user says they don't want to continue the conversation
-          move_to: end
+          move_to: _end_
 
     ask_for_name:
       goal: ask the user for their name.
@@ -152,9 +152,4 @@ conversation:
       outcomes:
         ok:
           description: user says goodbye too
-          move_to: end
-
-    end:
-      goal: call the 'end_conversation' tool to end the conversation.
-      tools:
-        - name: end_conversation
+          move_to: _end_
