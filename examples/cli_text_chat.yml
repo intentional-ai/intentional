@@ -1,6 +1,5 @@
 plugins:
 - intentional_terminal
-- intentional_text_chat
 - intentional_openai
 
 interface: terminal

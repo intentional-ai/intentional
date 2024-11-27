@@ -1,6 +1,5 @@
 plugins:
 - intentional_fastapi
-- intentional_websocket
 - intentional_openai
 
 interface: fastapi

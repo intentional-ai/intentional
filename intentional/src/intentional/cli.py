@@ -127,5 +127,7 @@ async def draw_intent_graph_from_config(path: str) -> IntentRouter:
     for plugin in plugins:
         import_plugin(plugin)
 
+    # Remove YAML extension from path
+    path = path.rsplit(".", 1)[0]
     intent_router = IntentRouter(config.pop("conversation", {}))
     return await to_image(intent_router, path + ".png")

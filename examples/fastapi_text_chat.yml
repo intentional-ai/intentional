@@ -1,6 +1,5 @@
 plugins:
 - intentional_fastapi
-- intentional_text_chat
 - intentional_openai
 
 interface: fastapi

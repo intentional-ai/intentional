@@ -6,7 +6,9 @@ Bot structure to support text chat for Intentional.
 from typing import Any, Dict, AsyncGenerator
 
 import structlog
-from intentional_core import TurnBasedBotStructure, TurnBasedModelClient, load_model_client_from_dict, IntentRouter
+from intentional_core.bot_structures.bot_structure import TurnBasedBotStructure
+from intentional_core.model_client import TurnBasedModelClient, load_model_client_from_dict
+from intentional_core.intent_routing import IntentRouter
 
 
 log = structlog.get_logger(logger_name=__name__)

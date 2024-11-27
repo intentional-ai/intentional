@@ -1,6 +1,5 @@
 plugins:
 - intentional_telegram
-- intentional_text_chat
 - intentional_openai
 
 interface: telegram

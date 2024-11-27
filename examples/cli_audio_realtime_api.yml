@@ -1,6 +1,5 @@
 plugins:
 - intentional_terminal
-- intentional_websocket
 - intentional_openai
 
 interface: terminal
