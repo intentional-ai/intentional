@@ -65,6 +65,8 @@ class IntentRouter(Tool):
 
         # Init the stages
         self.stages = {}
+        if "stages" not in config or not config["stages"]:
+            raise ValueError("The conversation must have at least one stage.")
         for name, stage_config in config["stages"].items():
             log.debug("Adding stage", stage_name=name)
             self.stages[name] = Stage(stage_config)
