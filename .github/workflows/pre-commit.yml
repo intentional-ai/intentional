@@ -22,6 +22,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt-get install portaudio19-dev
         pip install uv
         uv pip install --system intentional-core/ intentional/[dev]
         git fetch origin main

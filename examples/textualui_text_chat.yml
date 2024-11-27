@@ -1,9 +1,8 @@
 plugins:
-- intentional_telegram
-- intentional_text_chat
+- intentional_textual_ui
 - intentional_openai
 
-interface: telegram
+interface: textual_ui
 modality: text_messages
 bot:
   type: text_chat

@@ -1,9 +1,8 @@
 plugins:
-- intentional_fastapi
-- intentional_websocket
+- intentional_terminal
 - intentional_openai
 
-interface: fastapi
+interface: terminal
 modality: audio_stream
 bot:
   type: websocket
@@ -11,7 +10,6 @@ bot:
     client: openai_realtime
     name: gpt-4o-realtime-preview-2024-10-01
     voice: echo
-
 
 conversation:
   background: "You're Jane, an interviewer calling a person to ask a few questions."

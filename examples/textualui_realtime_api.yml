@@ -1,17 +1,15 @@
 plugins:
-- intentional_terminal
 - intentional_textual_ui
-- intentional_text_chat
 - intentional_openai
 
 interface: textual_ui
-modality: text_messages
+modality: audio_stream
 bot:
-  type: text_chat
+  type: websocket
   llm:
-    client: openai
-    name: gpt-4o
-
+    client: openai_realtime
+    name: gpt-4o-realtime-preview-2024-10-01
+    voice: echo
 
 conversation:
   background: "You're Jane, an interviewer calling a person to ask a few questions."
