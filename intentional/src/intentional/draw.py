@@ -20,7 +20,7 @@ graph TD;
 
 {connections}
 
-classDef special fill:#aaf,stroke:#aaf;
+classDef highlight fill:#aaf,stroke:#aaf;
 """
 
 
@@ -106,7 +106,7 @@ def to_mermaid_diagram(intent_router: IntentRouter) -> str:
             edge_string = f'{stages[origin]} -- {key} --> END["<b>end</b>"]'
         elif target == "_backtrack_":
             unique_counter += 1
-            edge_string = f'{stages[origin]} -- {key} --> BACKTRACK{unique_counter}("<b>backtrack</b>"):::special'
+            edge_string = f'{stages[origin]} -- {key} --> BACKTRACK{unique_counter}("<b>backtrack</b>"):::highlight'
 
         else:
             edge_string = f"{stages[origin]} -- {key} --> {stages.get(target, target)}"
@@ -117,14 +117,14 @@ def to_mermaid_diagram(intent_router: IntentRouter) -> str:
             processed_nodes.add(origin)
 
             if intent_router.stages[origin].accessible_from == ["_start_"]:
-                edge_string = f'START("<b>start</b>"):::special ---> {stages[origin]}'
+                edge_string = f'START("<b>start</b>"):::highlight ---> {stages[origin]}'
             elif intent_router.stages[origin].accessible_from == ["_all_"]:
                 unique_counter += 1
-                edge_string = f'ALL{unique_counter}("<b>all</b>"):::special ---> {stages[origin]}'
+                edge_string = f'ALL{unique_counter}("<b>all</b>"):::highlight ---> {stages[origin]}'
             elif intent_router.stages[origin].accessible_from:
                 unique_counter += 1
                 accessible_from_str = ",<br>".join(intent_router.stages[origin].accessible_from)
-                edge_string = f'FROM{unique_counter}("<b>{accessible_from_str}</b>"):::special ---> {stages[origin]}'
+                edge_string = f'FROM{unique_counter}("<b>{accessible_from_str}</b>"):::highlight ---> {stages[origin]}'
             else:
                 continue
             connections_list.append(edge_string)

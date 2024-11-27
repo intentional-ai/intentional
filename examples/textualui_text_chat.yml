@@ -1,5 +1,4 @@
 plugins:
-- intentional_terminal
 - intentional_textual_ui
 - intentional_openai
 

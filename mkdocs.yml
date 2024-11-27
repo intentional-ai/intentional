@@ -7,6 +7,10 @@ theme:
 
 nav:
    - 'Home': docs/home.md
+   - 'Installation': docs/installation.md
+   - 'High-level Concepts': docs/concepts.md
+   - 'Configuration File': docs/config-file.md
+   - 'Plugins': docs/plugins.md
    - 'API Reference':
       - 'Main Package': docs/reference.md
       - 'Core Package': docs/core-reference.md
@@ -34,7 +38,11 @@ markdown_extensions:
       permalink: "#"
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
 
 plugins:
 - exclude:
@@ -49,6 +57,8 @@ plugins:
         'index.md': 'docs/home.md'
 - search
 - same-dir
+- mermaid2:
+   version: 10.3.0
 - include-markdown
 - mkdocstrings:
     handlers:

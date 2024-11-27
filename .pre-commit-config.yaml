@@ -17,6 +17,7 @@ repos:
       - id: check-symlinks
       - id: check-toml
       - id: check-yaml
+        args: [--unsafe]  # Required to parse mkdocs.yml :(
       - id: check-vcs-permalinks
       - id: debug-statements
       - id: destroyed-symlinks

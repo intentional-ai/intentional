@@ -6,14 +6,46 @@ Pure LLM-based chatbots are very hard to control: when a lot of very specific in
 
 Intentional introduces a new way of prompting the LLM in a way that gives the developer full control on the conversation at scale while retaining the smooth conversational skills of the LLM.
 
-## Features
+## Getting started
 
-Intentional lets you contro the way your chatbot behaves by specifying a **conversation graph** made of several **stages**.
-
-At each stage, the LLM has a very specific **goal** to accomplish and will stick to it until it reaches one of the **outcomes** you specify. Once the LLM is confident that one of the outcomes is reached, it will move over to the next stage and continue along the conversation graph in this way.
-
-For example, here is an example of a very simple conversation graph:
-
-```TODO
+First, install Intentional:
 
 ```
+pip install intentional
+```
+
+Next, get a configuration file. For your first test run you should pick [this file](https://github.com/intentional-ai/intentional/blob/main/examples/example_cli_text_chat.yml), which needs no additional plugins, but you can find a few other examples [here](https://github.com/intentional-ai/intentional/tree/main/examples).
+
+!!! note
+
+    The example here also requires an OpenAI key. Export it as an environment variable called `OPENAI_API_KEY` before proceeding.
+
+Assuming your configuration file is called `intentional_bot.yml`, you can now launch your bot by doing:
+
+```
+intentional intentional_bot.yml
+```
+
+The output should look like:
+
+```
+==> Chat is ready!
+
+User:
+```
+
+Type in your message and the bot is going to respond.
+
+### Draw the conversation
+
+To see the graph of the conversation defined by this configuration file, run:
+
+```
+intentional intentional_bot.yml --draw
+```
+
+The graph will be saved next to your configuration file as `intentional_bot.png`.
+
+## What next?
+
+Once you ran your first example, you should head to **[High-level Concepts](/docs/concepts.md)** to understand how to use Intentional, and then check out the specs of Intentional's **[configuration file](/docs/config-file.md)** to start building your own bots.
