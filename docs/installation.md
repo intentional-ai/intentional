@@ -48,5 +48,5 @@ For example, `intentional-textual-ui` depends on `intentional-terminal`. To have
 ```
 pip install intentional-core/
 pip install plugins/intentional-terminal/
-pip install plugins/intentional-textual-ui
+pip install plugins/intentional-textual-ui/
 ```
