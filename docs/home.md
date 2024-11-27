@@ -46,6 +46,38 @@ intentional intentional_bot.yml --draw
 
 The graph will be saved next to your configuration file as `intentional_bot.png`.
 
+### Running from code
+
+If you want to run your bot from code instead of using the command line tool, this is how you can do it:
+
+```python
+import asyncio
+from intentional_core import load_configuration_file
+
+def main():
+    bot = load_configuration_file("intentional_bot.yml")
+    asyncio.run(bot.run())
+
+if __name__ == "__main__":
+    main()
+```
+
+You can also load an Intentional bot directly from a dictionary configuration instead of using a YAML file:
+
+```python
+import asyncio
+from intentional_core import load_bot_interface_from_dict
+
+def main():
+    bot = load_bot_interface_from_dict({ ... your configuration ...})
+    asyncio.run(bot.run())
+
+if __name__ == "__main__":
+    main()
+```
+
+There are other methods to load only parts of your Intentional bot, such as skipping the model interface entirely if you want to interact with it using the Python API. To find out which methods you can use, have a look at the [API Reference](/docs/core-reference.md).
+
 ## What next?
 
 Once you ran your first example, you should head to **[High-level Concepts](/docs/concepts.md)** to understand how to use Intentional, and then check out the specs of Intentional's **[configuration file](/docs/config-file.md)** to start building your own bots.

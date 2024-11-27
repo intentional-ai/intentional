@@ -165,7 +165,7 @@ Intentional is highly modular, and some of the parameters highlighted above requ
 
 In our example we're using OpenAI as the LLM provider and Textual UI as our UI. Therefore we can list these two plugins to make sure Intentional loads them properly.
 
-!!! note:
+!!! note
 
     If this section is not specified, Intentional will search your virtual environment for any package that begins with `intentional_` and will try to import it. In many cases this may be sufficient.
 
@@ -216,7 +216,7 @@ Each outcome has two properties:
 
 Stages also have a list of **`tools`** that they should have access to. For example, `ask_for_address` needs access to the `address_exists` tool. The tool itself will contain all the information needed for the bot to use it, but if further configuration is required, it can be listed under the tool as well.
 
-!!! note:
+!!! note
 
     Listing the tools by name is sufficient for the bot to find them, but they must have been imported by the Python process running your bot in order to be found. See more in the Tools section of the docs.
 
