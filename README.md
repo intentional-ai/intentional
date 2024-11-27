@@ -12,6 +12,8 @@ First, install Intentional:
 pip install intentional
 ```
 
+**NOTE**: you may also need to install `portaudio` with `sudo apt install portaudio19-dev`.
+
 Next, get a configuration file. For your first test run you should pick [this file](https://github.com/intentional-ai/intentional/blob/main/examples/example_cli_text_chat.yml), which needs no additional plugins, but you can find a few other examples [here](https://github.com/intentional-ai/intentional/tree/main/examples).
 
 **NOTE**: The example here also requires an OpenAI key. Export it as an environment variable called `OPENAI_API_KEY` before proceeding.
