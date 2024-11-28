@@ -65,9 +65,11 @@ class IntentRouter(Tool):
 
         # Init the stages
         self.stages = {}
+        if "stages" not in config or not config["stages"]:
+            raise ValueError("The conversation must have at least one stage.")
         for name, stage_config in config["stages"].items():
             log.debug("Adding stage", stage_name=name)
-            self.stages[name] = Stage(stage_config)
+            self.stages[name] = Stage(name, stage_config)
             self.stages[name].tools[self.name] = self  # Add the intent router to the tools list of each stage
             self.graph.add_node(name)
 
@@ -75,7 +77,9 @@ class IntentRouter(Tool):
         name = "_end_"
         log.debug("Adding stage", stage_name=name)
         end_tool = EndConversationTool(intent_router=self)
-        self.stages[name] = Stage({"custom_template": f"The conversation is over. Call the '{end_tool.name}' tool."})
+        self.stages[name] = Stage(
+            name, {"custom_template": f"The conversation is over. Call the '{end_tool.name}' tool."}
+        )
         self.stages[name].tools[end_tool.name] = end_tool
         self.graph.add_node("_end_")
 
@@ -84,7 +88,7 @@ class IntentRouter(Tool):
             for outcome_name, outcome_config in stage.outcomes.items():
                 if outcome_config["move_to"] not in [*self.stages, BACKTRACKING_CONNECTION]:
                     raise ValueError(
-                        f"Stage {name} has an outcome leading to an unknown stage {outcome_config['move_to']}"
+                        f"Stage '{name}' has an outcome leading to an unknown stage '{outcome_config['move_to']}'"
                     )
                 log.debug("Adding connection", origin=name, target=outcome_config["move_to"], outcome=outcome_name)
                 self.graph.add_edge(name, outcome_config["move_to"], key=outcome_name)
@@ -121,10 +125,10 @@ class IntentRouter(Tool):
             The new system prompt and the tools accessible in this stage.
         """
         selected_outcome = params["outcome"]
-        transitions = self.get_transitions()
+        transitions = self.get_external_transitions()
 
         if selected_outcome not in self.current_stage.outcomes and selected_outcome not in transitions:
-            raise ValueError(f"Unknown outcome {params['outcome']}")
+            raise ValueError(f"Unknown outcome '{params['outcome']}' for stage '{self.current_stage_name}'")
 
         if selected_outcome in self.current_stage.outcomes:
             next_stage = self.current_stage.outcomes[params["outcome"]]["move_to"]
@@ -149,7 +153,9 @@ class IntentRouter(Tool):
         outcomes = "You need to reach one of these situations:\n" + "\n".join(
             f"  - {name}: {data['description']}" for name, data in self.current_stage.outcomes.items()
         )
-        transitions = "\n".join(f"  - {stage}: {self.stages[stage].description}" for stage in self.get_transitions())
+        transitions = "\n".join(
+            f"  - {stage}: {self.stages[stage].description}" for stage in self.get_external_transitions()
+        )
         template = self.current_stage.custom_template or DEFAULT_PROMPT_TEMPLATE
         return template.format(
             intent_router_tool=self.name,
@@ -160,9 +166,9 @@ class IntentRouter(Tool):
             transitions=transitions,
         )
 
-    def get_transitions(self):
+    def get_external_transitions(self):
         """
-        Return a list of all the stages that can be reached from the current stage.
+        Return a list of all the stages that can be reached from the current stage that are not direct connections.
         """
         return [
             name
@@ -179,15 +185,34 @@ class Stage:
     Describes a stage in the bot's conversation.
     """
 
-    def __init__(self, config: Dict[str, Any]) -> None:
+    def __init__(self, stage_name, config: Dict[str, Any]) -> None:
         self.custom_template = config.get("custom_template", None)
         self.goal = config.get("goal", None)
-        self.description = config.get("description", "--no description provided--")
+        self.description = config.get("description", None)
         self.accessible_from = config.get("accessible_from", [])
         if isinstance(self.accessible_from, str):
             self.accessible_from = [self.accessible_from]
         self.tools = load_tools_from_dict(config.get("tools", {}))
         self.outcomes = config.get("outcomes", {})
+
+        # If a custom template is given, nothing else is strictly needed
+        if not self.custom_template:
+            # Make sure the stage has a goal
+            if not self.goal:
+                raise ValueError(f"Stage '{stage_name}' is missing a goal.")
+            # If the stage is accessible from somewhere else than a direct transition, it needs a description
+            if self.accessible_from and self.accessible_from != ["_start_"] and not self.description:
+                raise ValueError(
+                    "Stages that set the 'accessible_from' field also need a description. "
+                    f"'{stage_name}' has 'accessible_from' set to {self.accessible_from}, but no 'description' field."
+                )
+        # Make sure all outcomes have a description
+        for name, outcome in self.outcomes.items():
+            if "description" not in outcome:
+                raise ValueError(f"Outcome '{name}' in stage '{stage_name}' is missing a description.")
+            if "move_to" not in outcome:
+                raise ValueError(f"Outcome '{name}' in stage '{stage_name}' is missing a 'move_to' field.")
+
         log.debug(
             "Stage loaded",
             custom_template=self.custom_template,
