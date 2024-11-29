@@ -19,7 +19,11 @@ def to_openai_tool(tool: Tool):
         "parameters": {
             "type": "object",
             "properties": {
-                param.name: {"description": param.description, "type": param.type, "default": param.default}
+                param.name: {
+                    "description": param.description,
+                    "type": param.type,
+                    "default": param.default,
+                }
                 for param in tool.parameters
             },
             "required": [param.name for param in tool.parameters if param.required],

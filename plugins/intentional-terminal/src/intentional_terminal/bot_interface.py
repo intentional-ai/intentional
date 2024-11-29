@@ -12,14 +12,7 @@ import base64
 
 import structlog
 from pynput import keyboard
-from intentional_core import (
-    BotInterface,
-    BotStructure,
-    ContinuousStreamBotStructure,
-    TurnBasedBotStructure,
-    load_bot_structure_from_dict,
-    IntentRouter,
-)
+from intentional_core import BotInterface, BotStructure, load_bot_structure_from_dict, IntentRouter
 
 from intentional_terminal.handlers import InputHandler, AudioHandler
 
@@ -58,37 +51,28 @@ class TerminalBotInterface(BotInterface):
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
         log.debug("Running the bot", bot_type=self.bot.__class__.__name__, modality=self.modality)
+        if self.modality == "audio_stream":
+            await self._run_audio_stream(self.bot)
+        elif self.modality == "text_messages":
+            await self._run_text_messages(self.bot)
+        else:
+            raise ValueError(
+                f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
+                "These are the supported modalities: 'text_messages', 'audio_stream'."
+            )
 
-        if isinstance(self.bot, ContinuousStreamBotStructure):
-            if self.modality == "audio_stream":
-                await self._run_audio_stream(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-                    "These are the supported modalities: 'audio_stream'."
-                )
-
-        if isinstance(self.bot, TurnBasedBotStructure):
-            if self.modality == "text_messages":
-                await self._run_text_messages(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-                    "These are the supported modalities: 'text_messages'."
-                )
-
-    async def _run_text_messages(self, bot: TurnBasedBotStructure) -> None:
+    async def _run_text_messages(self, bot: BotStructure) -> None:
         """
         Runs the CLI interface for the text turns modality.
         """
-        bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
-        bot.add_event_handler("on_model_starts_generating_response", self.handle_start_text_response)
-        bot.add_event_handler("on_model_stops_generating_response", self.handle_finish_text_response)
-        bot.add_event_handler("on_model_connection", self.handle_model_connection)
+        bot.add_event_handler("on_text_message_from_llm", self.handle_text_messages)
+        bot.add_event_handler("on_llm_starts_generating_response", self.handle_start_text_response)
+        bot.add_event_handler("on_llm_stops_generating_response", self.handle_finish_text_response)
+        bot.add_event_handler("on_llm_connection", self.handle_llm_connection)
         bot.add_event_handler("on_conversation_ended", self.handle_conversation_ended)
         await bot.connect()
 
-    async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
+    async def _run_audio_stream(self, bot: BotStructure) -> None:
         """
         Runs the CLI interface for the continuous audio streaming modality.
         """
@@ -100,8 +84,8 @@ class TerminalBotInterface(BotInterface):
         # Connect the event handlers
         bot.add_event_handler("*", self.check_for_transcripts)
         bot.add_event_handler("on_conversation_ended", self.handle_conversation_ended)
-        # bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
-        bot.add_event_handler("on_audio_message_from_model", self.handle_audio_messages)
+        # bot.add_event_handler("on_text_message_from_llm", self.handle_text_messages)
+        bot.add_event_handler("on_audio_message_from_llm", self.handle_audio_messages)
         bot.add_event_handler("on_user_speech_started", self.speech_started)
         bot.add_event_handler("on_user_speech_ended", self.speech_stopped)
 
@@ -110,7 +94,7 @@ class TerminalBotInterface(BotInterface):
         listener.start()
 
         try:
-            log.debug("Connecting to the model")
+            log.debug("Connecting to the LLM")
             await bot.connect()
             asyncio.create_task(bot.run())
 
@@ -157,14 +141,14 @@ class TerminalBotInterface(BotInterface):
         Prints to the console when the bot starts generating a text response.
         """
         print("")
-        await self.bot.send({"role": "user", "content": input("User: ")})
+        await self.bot.send({"text_message": {"role": "user", "content": input("User: ")}})
 
-    async def handle_model_connection(self, event: Dict[str, Any]) -> None:
+    async def handle_llm_connection(self, event: Dict[str, Any]) -> None:
         """
-        Prints to the console when the bot connects to the model.
+        Prints to the console when the bot connects to the LLM.
 
         Args:
-            event: The event dictionary containing the model connection event.
+            event: The event dictionary containing the LLM connection event.
         """
         print("==> Chat is ready!")
         await self.handle_finish_text_response(event)
@@ -201,7 +185,7 @@ class TerminalBotInterface(BotInterface):
         played_milliseconds = self.audio_handler.stop_playback_immediately()
         log.debug("Audio response played", play_duration=played_milliseconds)
 
-        # If we're interrupting the bot, handle the interruption on the model side too
+        # If we're interrupting the bot, handle the interruption on the LLM side too
         if played_milliseconds:
             log.info("Handling interruption", play_duration=played_milliseconds)
             await self.bot.handle_interruption(played_milliseconds)

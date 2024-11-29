@@ -10,7 +10,7 @@ from textual.app import App, ComposeResult
 from textual.containers import ScrollableContainer
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Markdown, Input
-from intentional_core import TurnBasedBotStructure
+from intentional_core import BotStructure
 
 
 class ChatHistory(Markdown):
@@ -40,12 +40,12 @@ class TextChatInterface(App):
 
     CSS_PATH = "example.tcss"
 
-    def __init__(self, bot: TurnBasedBotStructure):
+    def __init__(self, bot: BotStructure):
         super().__init__()
         self.bot = bot
-        self.bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
-        self.bot.add_event_handler("on_model_starts_generating_response", self.handle_start_text_response)
-        self.bot.add_event_handler("on_model_stops_generating_response", self.handle_finish_text_response)
+        self.bot.add_event_handler("on_text_message_from_llm", self.handle_text_messages)
+        self.bot.add_event_handler("on_llm_starts_generating_response", self.handle_start_text_response)
+        self.bot.add_event_handler("on_llm_stops_generating_response", self.handle_finish_text_response)
         self.bot.add_event_handler("on_system_prompt_updated", self.handle_system_prompt_updated)
 
         self.conversation = ""
@@ -73,7 +73,7 @@ class TextChatInterface(App):
         """
         Operations to perform when the UI is mounted.
         """
-        self.query_one(SystemPrompt).update(self.bot.model.system_prompt)
+        self.query_one(SystemPrompt).update(self.bot.llm.system_prompt)
         self.query_one(MessageBox).focus()
 
     @on(MessageBox.Submitted)
@@ -87,7 +87,7 @@ class TextChatInterface(App):
         self.conversation += "\n\n**User**: " + event.value
         self.query_one(MessageBox).clear()
         self.query_one(ChatHistory).update(self.conversation)
-        await self.bot.send({"role": "user", "content": event.value})
+        await self.bot.send({"text_message": {"role": "user", "content": event.value}})
 
     async def handle_start_text_response(self, _) -> None:
         """
@@ -122,4 +122,4 @@ class TextChatInterface(App):
         Args:
             event: The event dictionary containing the message.
         """
-        self.query_one(SystemPrompt).update(event["system_prompt"])  # self.bot.model.system_prompt)
+        self.query_one(SystemPrompt).update(event["system_prompt"])  # self.bot.llm.system_prompt)

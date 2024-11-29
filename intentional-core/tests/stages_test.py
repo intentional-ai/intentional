@@ -43,7 +43,10 @@ def test_external_stage_must_have_description():
 
 
 def test_stage_outcomes_need_a_description():
-    with pytest.raises(ValueError, match="Outcome 'name_given' in stage 'ask_for_name' is missing a description"):
+    with pytest.raises(
+        ValueError,
+        match="Outcome 'name_given' in stage 'ask_for_name' is missing a description",
+    ):
         Stage(
             "ask_for_name",
             {
@@ -59,7 +62,10 @@ def test_stage_outcomes_need_a_description():
 
 
 def test_stage_outcomes_need_a_move_to():
-    with pytest.raises(ValueError, match="Outcome 'name_given' in stage 'ask_for_name' is missing a 'move_to' field"):
+    with pytest.raises(
+        ValueError,
+        match="Outcome 'name_given' in stage 'ask_for_name' is missing a 'move_to' field",
+    ):
         Stage(
             "ask_for_name",
             {

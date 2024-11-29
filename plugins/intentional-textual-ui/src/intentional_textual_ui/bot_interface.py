@@ -13,8 +13,6 @@ import structlog
 from intentional_core import (
     BotInterface,
     BotStructure,
-    ContinuousStreamBotStructure,
-    TurnBasedBotStructure,
     load_bot_structure_from_dict,
     IntentRouter,
 )
@@ -57,25 +55,19 @@ class TextualUIBotInterface(BotInterface):
         """
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
-        if isinstance(self.bot, ContinuousStreamBotStructure):
-            if self.modality == "audio_stream":
-                await self._run_audio_stream(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-                    "These are the supported modalities: 'audio_stream'."
-                )
+        if self.modality == "audio_stream":
+            await self._run_audio_stream(self.bot)
 
-        if isinstance(self.bot, TurnBasedBotStructure):
-            if self.modality == "text_messages":
-                await self._run_text_messages(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-                    "These are the supported modalities: 'text_messages'."
-                )
+        elif self.modality == "text_messages":
+            await self._run_text_messages(self.bot)
 
-    async def _run_text_messages(self, bot: TurnBasedBotStructure) -> None:
+        else:
+            raise ValueError(
+                f"Modality '{self.modality}' is not yet supported."
+                "These are the supported modalities: 'audio_stream', 'text_messages'."
+            )
+
+    async def _run_text_messages(self, bot: BotStructure) -> None:
         """
         Runs the CLI interface for the text turns modality.
         """
@@ -84,7 +76,7 @@ class TextualUIBotInterface(BotInterface):
         await bot.connect()
         await self._launch_ui()
 
-    async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
+    async def _run_audio_stream(self, bot: BotStructure) -> None:
         """
         Runs the CLI interface for the continuous audio streaming modality.
         """
@@ -119,12 +111,22 @@ class TextualUIBotInterface(BotInterface):
             try:
                 if not gather:
                     await self.app.run_async(
-                        headless=False, inline=False, inline_no_clear=False, mouse=True, size=None, auto_pilot=None
+                        headless=False,
+                        inline=False,
+                        inline_no_clear=False,
+                        mouse=True,
+                        size=None,
+                        auto_pilot=None,
                     )
                 else:
                     asyncio.gather(
                         self.app.run_async(
-                            headless=False, inline=False, inline_no_clear=False, mouse=True, size=None, auto_pilot=None
+                            headless=False,
+                            inline=False,
+                            inline_no_clear=False,
+                            mouse=True,
+                            size=None,
+                            auto_pilot=None,
                         ),
                         *gather,
                     )

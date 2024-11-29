@@ -119,7 +119,8 @@ def test_router_graph_two_connected_stages():
 
 def test_router_transition_to_unknown_stage():
     with pytest.raises(
-        ValueError, match="Stage 'ask_for_name' has an outcome leading to an unknown stage 'ask_for_age'"
+        ValueError,
+        match="Stage 'ask_for_name' has an outcome leading to an unknown stage 'ask_for_age'",
     ):
         IntentRouter(
             {

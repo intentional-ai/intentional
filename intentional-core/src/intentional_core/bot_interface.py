@@ -82,7 +82,10 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
     Returns:
         The bot interface instance.
     """
-    log.debug("Loading bot interface from configuration:", bot_interface_config=json.dumps(config, indent=4))
+    log.debug(
+        "Loading bot interface from configuration:",
+        bot_interface_config=json.dumps(config, indent=4),
+    )
 
     # Import all the necessary plugins
     plugins = config.pop("plugins")

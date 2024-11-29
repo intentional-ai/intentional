@@ -13,7 +13,6 @@ import structlog
 from intentional_core import (
     BotInterface,
     BotStructure,
-    TurnBasedBotStructure,
     load_bot_structure_from_dict,
     IntentRouter,
 )
@@ -54,18 +53,14 @@ class TelegramBotInterface(BotInterface):
         """
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
-        if isinstance(self.bot, TurnBasedBotStructure):
-            if self.modality == "text_messages":
-                await self._run_text_messages(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-                    "These are the supported modalities: 'text_messages'."
-                )
+        if self.modality == "text_messages":
+            await self._run_text_messages(self.bot)
         else:
-            raise ValueError(f"Bot '{self.bot.name}' is not yet supported for {self.__class__.__name__}.")
+            raise ValueError(
+                f"Modality '{self.modality}' is not yet supported. These are the supported modalities: 'text_messages'."
+            )
 
-    async def _run_text_messages(self, bot: TurnBasedBotStructure) -> None:
+    async def _run_text_messages(self, bot: BotStructure) -> None:
         """
         Runs the CLI interface for the text turns modality.
         """
@@ -77,9 +72,9 @@ class TelegramBotInterface(BotInterface):
                 self.latest_update = update
                 break
 
-            bot.add_event_handler("on_text_message_from_model", self.handle_text_messages)
-            bot.add_event_handler("on_model_starts_generating_response", self.handle_start_text_response)
-            bot.add_event_handler("on_model_stops_generating_response", self.handle_finish_text_response)
+            bot.add_event_handler("on_text_message_from_llm", self.handle_text_messages)
+            bot.add_event_handler("on_llm_starts_generating_response", self.handle_start_text_response)
+            bot.add_event_handler("on_llm_stops_generating_response", self.handle_finish_text_response)
 
             await bot.connect()
             await self._process_updates(telegram_bot)
@@ -114,11 +109,18 @@ class TelegramBotInterface(BotInterface):
             if update.message:
                 # If the message is a text message, send it to the bot
                 if update.message.text:
-                    await self.bot.send({"role": "user", "content": update.message.text})
+                    await self.bot.send({"text_message": {"role": "user", "content": update.message.text}})
                     self.latest_update = update
 
             if update.message_reaction:
-                await self.bot.send({"role": "user", "content": (update.message_reaction.new_reaction)[0].emoji})
+                await self.bot.send(
+                    {
+                        "text_message": {
+                            "role": "user",
+                            "content": (update.message_reaction.new_reaction)[0].emoji,
+                        }
+                    }
+                )
 
 
 async def updates_generator(telegram_bot):

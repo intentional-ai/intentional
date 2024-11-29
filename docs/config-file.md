@@ -6,13 +6,13 @@ The configuration file is the core of Intentional bots. They are YAML files that
 Here is an example of a conversation file. Don't feel overwhelmed just yet! Each part will be explained separately.
 
 ```yaml
+interface: textual_ui
+modality: text_messages
 bot:
-  type: text_chat
+  type: direct_to_llm
   llm:
     client: openai
     name: gpt-4o
-interface: textual_ui
-modality: text_messages
 
 plugins:
 - intentional_textual_ui
@@ -97,40 +97,16 @@ conversation:
 ### Bot configuration
 
 ```yaml
+interface: textual_ui
+modality: text_messages
 bot:
   type: text_chat
   llm:
     client: openai
     name: gpt-4o
-interface: textual_ui
-modality: text_messages
 ```
 
-Intentional supports several styles of bots, so the configuration file must first of all specify what sort of bot we're building. The `bot` section takes care of this definition.
-
-#### Bot type
-
-First, we need to specify the `type`. Right now Intentional supports a few types of bots:
-
-- `text chat`: the bot and the user take turns exchanging text messages, as in a regular chat application. To each single message of the user the bot will respond with one or more messages.
-
-- `audio/text`: the bot and the user each communicate by audio. They may either take turns explicitly (such as in a chat conversation where both parties exchange audio messages) or they may both talk continuously and be able to interrupt each other. The audio messages are converted to text and vice-versa, to make text-only LLMs able to be used for voice conversations.
-
-- `websocket`: the bot and the user each communicate by publishing audio messages on a websocket continuously, without taking turns. There is no transcription to text happening within Intentional. This modality mirrors how OpenAI's Realtime API works.
-
-!!! note
-
-    More documentation on the `type` field coming soon!
-
-#### LLM
-
-Next, we need to specify what LLM we want to use. The `llm` field takes two parameters:
-
-- `client`: which client to use to connect to the model. For example, `openai` (provided by the `intentional-openai` plugin, see below) will tell Intentional to use the OpenAI SDK to connect to the model.
-
-- `name`: the name of the model (if required by the specified client). In this case, we specify `gpt-4o`.
-
-If the client you specified requires any other parameters, they can be listed in this section.
+Intentional supports several styles of bots, so the configuration file must first of all specify what sort of bot we're building. The `bot` section and a few other related fields take care of this definition.
 
 #### Interface
 
@@ -138,7 +114,7 @@ If the client you specified requires any other parameters, they can be listed in
 
 !!! note
 
-    Interfaces are always provided by a plugin: Intentional comes with no interfaces by default. Make sure to install the plugins you need.
+    Interfaces are always provided by a plugin: `intentional` will install the `intentional-terminal` plugin to help you get started, but `intentional-core` comes with no interfaces by default. Make sure to install the plugins you need for your interface to work.
 
     You can find a list of available plugins in the API Reference sidebar. Better documentation of the available plugins is coming soon.
 
@@ -152,6 +128,27 @@ Right now, most bots support either one of these modalities:
 
 - `text_messages`: classic chat-style messages.
 - `audio_stream`: telephone-like interaction where bot and user freely talk together.
+
+
+#### Bot type
+
+First, we need to specify the `type`, which defines the implementation style of the bot, any intermediate steps that need to be done to make the user's input understandable to the LLM. Right now Intentional supports a few types of bots:
+
+- `direct_to_llm`: the LLM is able to handle directly the messages of the user. For example, if the user is using text, the LLM is able to read the messages as they are. If the user is talking, the LLM is able to understand their voice without transcription.
+
+!!! note
+
+    More documentation on the `type` field coming soon!
+
+#### LLM
+
+Next, we need to specify what LLM we want to use. The `llm` field takes two parameters:
+
+- `client`: which client to use to connect to the LLM. For example, `openai` (provided by the `intentional-openai` plugin, see below) will tell Intentional to use the OpenAI SDK to connect to the LLM.
+
+- `name`: the name of the LLM (if required by the specified client). In this case, we specify `gpt-4o`.
+
+If the client you specified requires any other parameters, they can be listed in this section.
 
 ### Plugins
 

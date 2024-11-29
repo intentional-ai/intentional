@@ -12,7 +12,7 @@ import json
 import structlog
 
 import openai
-from intentional_core import TurnBasedModelClient
+from intentional_core import LLMClient
 from intentional_core.intent_routing import IntentRouter
 from intentional_core.end_conversation import EndConversationTool
 from intentional_openai.tools import to_openai_tool
@@ -24,14 +24,19 @@ if TYPE_CHECKING:
 log = structlog.get_logger(logger_name=__name__)
 
 
-class ChatCompletionAPIClient(TurnBasedModelClient):
+class ChatCompletionAPIClient(LLMClient):
     """
     A client for interacting with the OpenAI Chat Completion API.
     """
 
     name: str = "openai"
 
-    def __init__(self, parent: "BotStructure", intent_router: IntentRouter, config: Dict[str, Any]):
+    def __init__(
+        self,
+        parent: "BotStructure",
+        intent_router: IntentRouter,
+        config: Dict[str, Any],
+    ):
         """
         A client for interacting with the OpenAI Chat Completion API.
 
@@ -40,13 +45,13 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             intent_router: The intent router.
             config: The configuration dictionary.
         """
-        log.debug("Loading ChatCompletionAPIClient from config", model_client_config=config)
+        log.debug("Loading ChatCompletionAPIClient from config", llm_client_config=config)
         super().__init__(parent, intent_router)
 
-        self.model_name = config.get("name")
-        if not self.model_name:
-            raise ValueError("ChatCompletionAPIClient requires a 'name' configuration key to know which model to use.")
-        if "realtime" in self.model_name:
+        self.llm_name = config.get("name")
+        if not self.llm_name:
+            raise ValueError("ChatCompletionAPIClient requires a 'name' configuration key to know which LLM to use.")
+        if "realtime" in self.llm_name:
             raise ValueError(
                 "ChatCompletionAPIClient doesn't support Realtime API. "
                 "To use the Realtime API, use RealtimeAPIClient instead (client: openai_realtime)"
@@ -76,14 +81,14 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
 
     async def run(self) -> None:
         """
-        Handle events from the model by either processing them internally or by translating them into higher-level
+        Handle events from the LLM by either processing them internally or by translating them into higher-level
         events that the BotStructure class can understand, then re-emitting them.
         """
         log.debug("ChatCompletionAPIClient.run() is no-op for now")
 
     async def update_system_prompt(self) -> None:
         """
-        Update the system prompt in the model.
+        Update the system prompt in the LLM.
         """
         self.conversation = [{"role": "system", "content": self.system_prompt}] + self.conversation[1:]
         await self.emit("on_system_prompt_updated", {"system_prompt": self.system_prompt})
@@ -101,9 +106,9 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
 
     async def send(self, data: Dict[str, Any]) -> None:
         """
-        Send a message to the model.
+        Send a message to the LLM.
         """
-        await self.emit("on_model_starts_generating_response", {})
+        await self.emit("on_llm_starts_generating_response", {})
 
         # Generate a response
         message = data["text_message"]
@@ -121,7 +126,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
 
             if "tool_calls" not in delta:
                 # If this is not a function call, just stream out
-                await self.emit("on_text_message_from_model", {"delta": delta.get("content")})
+                await self.emit("on_text_message_from_llm", {"delta": delta.get("content")})
                 assistant_response += delta.get("content") or ""
             else:
                 # TODO handle multiple parallel function calls
@@ -142,7 +147,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             # Otherwise deal with the function call
             await self._handle_function_call(message, call_id, function_name, function_args)
 
-        await self.emit("on_model_stops_generating_response", {})
+        await self.emit("on_llm_stops_generating_response", {})
 
     async def _send_message(self, message: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
         """
@@ -152,7 +157,7 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             message: The message to respond to.
         """
         return await self.client.chat.completions.create(
-            model=self.model_name,
+            model=self.llm_name,
             messages=self.conversation + [message],
             stream=True,
             tools=[{"type": "function", "function": to_openai_tool(t)} for t in self.tools.values()],
@@ -161,12 +166,20 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
         )
 
     async def _handle_function_call(
-        self, message: Dict[str, Any], call_id: str, function_name: str, function_args: str
+        self,
+        message: Dict[str, Any],
+        call_id: str,
+        function_name: str,
+        function_args: str,
     ):
         """
-        Handle a function call from the model.
+        Handle a function call from the LLM.
         """
-        log.debug("Function call detected", function_name=function_name, function_args=function_args)
+        log.debug(
+            "Function call detected",
+            function_name=function_name,
+            function_args=function_args,
+        )
         function_args = json.loads(function_args)
 
         # Routing function call - this is special because it should not be recorded in the conversation history
@@ -187,7 +200,15 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
             # so we start by appending the user message
             self.conversation.append(message)
             output = await self._call_tool(call_id, function_name, function_args)
-            await self.send({"text_message": {"role": "tool", "content": json.dumps(output), "tool_call_id": call_id}})
+            await self.send(
+                {
+                    "text_message": {
+                        "role": "tool",
+                        "content": json.dumps(output),
+                        "tool_call_id": call_id,
+                    }
+                }
+            )
 
     async def _route(self, routing_info: Dict[str, Any]) -> None:
         """
@@ -217,7 +238,10 @@ class ChatCompletionAPIClient(TurnBasedModelClient):
                     {
                         "id": call_id,
                         "type": "function",
-                        "function": {"arguments": json.dumps(function_args), "name": function_name},
+                        "function": {
+                            "arguments": json.dumps(function_args),
+                            "name": function_name,
+                        },
                     }
                 ],
             }
