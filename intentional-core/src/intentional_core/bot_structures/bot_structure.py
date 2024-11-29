@@ -27,7 +27,7 @@ class BotStructure(EventListener):
     Tiny base class used to recognize Intentional bot structure classes.
 
     The bot structure's name is meant to represent the **structure** of the bot. For example a bot that uses a direct
-    WebSocket connection to a model such as OpenAI's Realtime API could be called "RealtimeAPIBotStructure", one that
+    WebSocket connection to a LLM such as OpenAI's Realtime API could be called "RealtimeAPIBotStructure", one that
     uses a VAD-STT-LLM-TTS stack could be called "AudioToTextBotStructure", and so on
 
     In order for your bot structure to be usable, you need to assign a value to the `name` class variable in the bot
@@ -102,7 +102,7 @@ class BotStructure(EventListener):
 
     async def handle_event(self, event_name: str, event: Dict[str, Any]) -> None:
         """
-        Handle different types of events that the model may generate.
+        Handle different types of events that the LLM may generate.
         """
         if "*" in self.event_handlers:
             log.debug("Calling wildcard event handler", event_name=event_name)
@@ -113,18 +113,6 @@ class BotStructure(EventListener):
             await self.event_handlers[event_name](event)
         else:
             log.debug("No event handler for event", event_name=event_name)
-
-
-class ContinuousStreamBotStructure(BotStructure):
-    """
-    Base class for structures that support continuous streaming of data, as opposed to turn-based message exchanges.
-    """
-
-
-class TurnBasedBotStructure(BotStructure):
-    """
-    Base class for structures that support turn-based message exchanges, as opposed to continuous streaming of data.
-    """
 
 
 def load_bot_structure_from_dict(intent_router: IntentRouter, config: Dict[str, Any]) -> BotStructure:

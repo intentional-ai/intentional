@@ -4,7 +4,7 @@
 
     Work in progress
 
-Every layer of an Intentional bot that is configurable from the configuration file (interfaces, bot structures, model client, tools etc) can be expanded through a plugin.
+Every layer of an Intentional bot that is configurable from the configuration file (interfaces, bot structures, LLM client, tools etc) can be expanded through a plugin.
 
 ## Writing your own plugins
 

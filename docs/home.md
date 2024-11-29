@@ -76,7 +76,7 @@ if __name__ == "__main__":
     main()
 ```
 
-There are other methods to load only parts of your Intentional bot, such as skipping the model interface entirely if you want to interact with it using the Python API. To find out which methods you can use, have a look at the [API Reference](/docs/core-reference.md).
+There are other methods to load only parts of your Intentional bot, such as skipping the bot interface entirely if you want to interact with it using the Python API. To find out which methods you can use, have a look at the [API Reference](/docs/core-reference.md).
 
 ## What next?
 

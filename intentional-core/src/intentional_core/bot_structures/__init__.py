@@ -4,21 +4,12 @@
 Bot structures supported by Intentional.
 """
 
-from intentional_core.bot_structures.bot_structure import (
-    BotStructure,
-    ContinuousStreamBotStructure,
-    TurnBasedBotStructure,
-    load_bot_structure_from_dict,
-)
-from intentional_core.bot_structures.text_chat import TextChatBotStructure
-from intentional_core.bot_structures.websocket import WebsocketBotStructure
-
+from intentional_core.bot_structures.bot_structure import BotStructure, load_bot_structure_from_dict
+from intentional_core.bot_structures.direct_to_llm import DirectToLLMBotStructure
 
 __all__ = [
     "BotStructure",
     "load_bot_structure_from_dict",
-    "ContinuousStreamBotStructure",
-    "TurnBasedBotStructure",
-    "TextChatBotStructure",
-    "WebsocketBotStructure",
+    "BotStructure",
+    "DirectToLLMBotStructure",
 ]

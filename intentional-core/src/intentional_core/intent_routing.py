@@ -78,7 +78,8 @@ class IntentRouter(Tool):
         log.debug("Adding stage", stage_name=name)
         end_tool = EndConversationTool(intent_router=self)
         self.stages[name] = Stage(
-            name, {"custom_template": f"The conversation is over. Call the '{end_tool.name}' tool."}
+            name,
+            {"custom_template": f"The conversation is over. Call the '{end_tool.name}' tool."},
         )
         self.stages[name].tools[end_tool.name] = end_tool
         self.graph.add_node("_end_")
@@ -86,11 +87,19 @@ class IntentRouter(Tool):
         # Connect the stages
         for name, stage in self.stages.items():
             for outcome_name, outcome_config in stage.outcomes.items():
-                if outcome_config["move_to"] not in [*self.stages, BACKTRACKING_CONNECTION]:
+                if outcome_config["move_to"] not in [
+                    *self.stages,
+                    BACKTRACKING_CONNECTION,
+                ]:
                     raise ValueError(
                         f"Stage '{name}' has an outcome leading to an unknown stage '{outcome_config['move_to']}'"
                     )
-                log.debug("Adding connection", origin=name, target=outcome_config["move_to"], outcome=outcome_name)
+                log.debug(
+                    "Adding connection",
+                    origin=name,
+                    target=outcome_config["move_to"],
+                    outcome=outcome_name,
+                )
                 self.graph.add_edge(name, outcome_config["move_to"], key=outcome_name)
 
         # Find initial stage

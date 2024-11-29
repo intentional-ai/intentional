@@ -64,9 +64,9 @@ class AudioHandler:
         self.recording_thread = None
         self.recording = False
 
-        # Model streaming attributes
+        # LLM streaming attributes
         self.streaming = False
-        self.model_stream = None
+        self.llm_stream = None
 
         # Playback attributes
         self.playback_stream = None
@@ -85,13 +85,17 @@ class AudioHandler:
             return
 
         self.streaming = True
-        self.model_stream = self.audio.open(
-            format=self.audio_format, channels=self.channels, rate=self.rate, input=True, frames_per_buffer=self.chunk
+        self.llm_stream = self.audio.open(
+            format=self.audio_format,
+            channels=self.channels,
+            rate=self.rate,
+            input=True,
+            frames_per_buffer=self.chunk,
         )
         while self.streaming:
             try:
                 # Read raw PCM data
-                data = self.model_stream.read(self.chunk, exception_on_overflow=False)
+                data = self.llm_stream.read(self.chunk, exception_on_overflow=False)
                 # Stream directly without trying to decode
                 await client_streaming_callback({"audio_chunk": data})
             except Exception:  # pylint: disable=broad-except
@@ -104,10 +108,10 @@ class AudioHandler:
         Stop audio streaming.
         """
         self.streaming = False
-        if self.model_stream:
-            self.model_stream.stop_stream()
-            self.model_stream.close()
-            self.model_stream = None
+        if self.llm_stream:
+            self.llm_stream.stop_stream()
+            self.llm_stream.close()
+            self.llm_stream = None
 
     def play_audio(self, audio_data: bytes):
         """
@@ -135,7 +139,11 @@ class AudioHandler:
         Continuously play audio from the buffer.
         """
         self.playback_stream = self.audio.open(
-            format=self.audio_format, channels=self.channels, rate=self.rate, output=True, frames_per_buffer=self.chunk
+            format=self.audio_format,
+            channels=self.channels,
+            rate=self.rate,
+            output=True,
+            frames_per_buffer=self.chunk,
         )
         while not self.stop_playback:
             try:
@@ -201,8 +209,8 @@ class AudioHandler:
             self.recording_stream.stop_stream()
             self.recording_stream.close()
 
-        if self.model_stream:
-            self.model_stream.stop_stream()
-            self.model_stream.close()
+        if self.llm_stream:
+            self.llm_stream.stop_stream()
+            self.llm_stream.close()
 
         self.audio.terminate()

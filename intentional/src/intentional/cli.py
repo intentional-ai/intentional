@@ -27,7 +27,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("path", help="the path to the configuration file to load.", type=str)
     parser.add_argument("--draw", help="Draw the graph.", action="store_true")
-    parser.add_argument("--log-cli-level", help="Select the logging level to the console.", type=str, default="INFO")
+    parser.add_argument(
+        "--log-cli-level",
+        help="Select the logging level to the console.",
+        type=str,
+        default="INFO",
+    )
     parser.add_argument("--log-file", help="Path to the log file.", type=str)
     parser.add_argument(
         "--log-file-level",

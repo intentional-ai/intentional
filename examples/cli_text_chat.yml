@@ -5,7 +5,7 @@ plugins:
 interface: terminal
 modality: text_messages
 bot:
-  type: text_chat
+  type: direct_to_llm
   llm:
     client: openai
     name: gpt-4o

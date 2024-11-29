@@ -19,7 +19,7 @@ import asyncio
 import structlog
 import websockets
 
-from intentional_core import ContinuousStreamModelClient
+from intentional_core import LLMClient
 from intentional_core.intent_routing import IntentRouter
 from intentional_core.end_conversation import EndConversationTool
 from intentional_openai.tools import to_openai_tool
@@ -28,7 +28,7 @@ from intentional_openai.tools import to_openai_tool
 log = structlog.get_logger(logger_name=__name__)
 
 
-class RealtimeAPIClient(ContinuousStreamModelClient):
+class RealtimeAPIClient(LLMClient):
     """
     A client for interacting with the OpenAI Realtime API that lets you manage the WebSocket connection, send text and
     audio data, and handle responses and events.
@@ -38,14 +38,14 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
 
     events_translation = {
         "error": "on_error",
-        "response.text.delta": "on_text_message_from_model",
-        "response.audio.delta": "on_audio_message_from_model",
-        "response.created": "on_model_starts_generating_response",
-        "response.done": "on_model_stops_generating_response",
+        "response.text.delta": "on_text_message_from_llm",
+        "response.audio.delta": "on_audio_message_from_llm",
+        "response.created": "on_llm_starts_generating_response",
+        "response.done": "on_llm_stops_generating_response",
         "input_audio_buffer.speech_started": "on_user_speech_started",
         "input_audio_buffer.speech_stopped": "on_user_speech_ended",
         "conversation.item.input_audio_transcription.completed": "on_user_speech_transcribed",
-        "response.audio_transcript.done": "on_model_speech_transcribed",
+        "response.audio_transcript.done": "on_llm_speech_transcribed",
     }
 
     def __init__(self, parent: Callable, intent_router: IntentRouter, config: Dict[str, Any]):
@@ -53,16 +53,16 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         A client for interacting with the OpenAI Realtime API that lets you manage the WebSocket connection, send text
         and audio data, and handle responses and events.
         """
-        log.debug("Loading %s from config", self.__class__.__name__, model_client_config=config)
+        log.debug("Loading %s from config", self.__class__.__name__, llm_client_config=config)
         super().__init__(parent, intent_router)
 
-        self.model_name = config.get("name")
-        if not self.model_name:
-            raise ValueError("RealtimeAPIClient requires a 'name' configuration key to know which model to use.")
-        if "realtime" not in self.model_name:
+        self.llm_name = config.get("name")
+        if not self.llm_name:
+            raise ValueError("RealtimeAPIClient requires a 'name' configuration key to know which LLM to use.")
+        if "realtime" not in self.llm_name:
             raise ValueError(
-                "RealtimeAPIClient requires a 'realtime' model to use the Realtime API. "
-                "To use any other OpenAI model, use the OpenAIClient instead."
+                "RealtimeAPIClient requires a 'realtime' LLM to use the Realtime API. "
+                "To use any other OpenAI LLM, use the OpenAIClient instead."
             )
 
         self.api_key_name = config.get("api_key_name", "OPENAI_API_KEY")
@@ -103,8 +103,11 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         """
         log.debug("Initializing websocket connection to OpenAI Realtime API")
 
-        url = f"{self.base_url}?model={self.model_name}"
-        headers = {"Authorization": f"Bearer {self.api_key}", "OpenAI-Beta": "realtime=v1"}
+        url = f"{self.base_url}?model={self.llm_name}"
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "OpenAI-Beta": "realtime=v1",
+        }
         self.ws = await websockets.connect(url, additional_headers=headers)
 
         await self._update_session(
@@ -138,7 +141,7 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
             await self.ws.close()
         else:
             log.debug("Attempted disconnection of a OpenAIRealtimeAPIClient that was never connected, nothing done.")
-        await self.emit("on_model_disconnection", {})
+        await self.emit("on_llm_disconnection", {})
 
     async def run(self) -> None:  # pylint: disable=too-many-branches
         """
@@ -161,22 +164,34 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                     # Check why we updated the session and emit the corresponding event
                     if self._connecting:
                         self._connecting = False
-                        await self.emit("on_model_connection", event)
+                        await self.emit("on_llm_connection", event)
                     if self._updating_system_prompt:
                         self._updating_system_prompt = False
-                        await self.emit("on_system_prompt_updated", {"system_prompt": event["session"]["instructions"]})
+                        await self.emit(
+                            "on_system_prompt_updated",
+                            {"system_prompt": event["session"]["instructions"]},
+                        )
 
                 # Track agent response state
                 elif event_name == "response.created":
                     self._current_response_id = event.get("response", {}).get("id")
-                    log.debug("Agent started responding. Response created.", response_id=self._current_response_id)
+                    log.debug(
+                        "Agent started responding. Response created.",
+                        response_id=self._current_response_id,
+                    )
 
                 elif event_name == "response.output_item.added":
                     self._current_item_id = event.get("item", {}).get("id")
-                    log.debug("Agent is responding. Added response item.", response_id=self._current_item_id)
+                    log.debug(
+                        "Agent is responding. Added response item.",
+                        response_id=self._current_item_id,
+                    )
 
                 elif event_name == "response.done":
-                    log.debug("Agent finished generating a response.", response_id=self._current_item_id)
+                    log.debug(
+                        "Agent finished generating a response.",
+                        response_id=self._current_item_id,
+                    )
 
                 # Tool call
                 elif event_name == "response.function_call_arguments.done":
@@ -236,7 +251,10 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         log.debug("Setting new system prompt", system_prompt=self.system_prompt)
         log.debug("Setting new tools", tools=list(self.tools.keys()))
         await self._update_session(
-            {"instructions": self.system_prompt, "tools": [to_openai_tool(t) for t in self.tools.values()]}
+            {
+                "instructions": self.system_prompt,
+                "tools": [to_openai_tool(t) for t in self.tools.values()],
+            }
         )
         # Flag that we're updating the system prompt and look for this event in the run loop
         self._updating_system_prompt = True
@@ -250,19 +268,26 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
                 The length in milliseconds of the audio that was played to the user before the interruption.
                 May be zero if the interruption happened before any audio was played.
         """
-        log.info("[Handling interruption at %s ms]", lenght_to_interruption, interruption_time=lenght_to_interruption)
+        log.info(
+            "[Handling interruption at %s ms]",
+            lenght_to_interruption,
+            interruption_time=lenght_to_interruption,
+        )
 
         # Cancel the current response
-        # Cancelling responses is effective when the response is still being generated by the model.
+        # Cancelling responses is effective when the response is still being generated by the LLM.
         if self._current_response_id:
-            log.debug("Cancelling response due to a user's interruption.", response_id=self._current_response_id)
+            log.debug(
+                "Cancelling response due to a user's interruption.",
+                response_id=self._current_response_id,
+            )
             event = {"type": "response.cancel"}
             await self.ws.send(json.dumps(event))
         else:
             log.warning("No response ID found to cancel.")
 
         # Truncate the conversation item to what was actually played
-        # Truncating the response is effective when the response has already been generated by the model and is being
+        # Truncating the response is effective when the response has already been generated by the LLM and is being
         # played out.
         if lenght_to_interruption:
             log.debug(
@@ -299,10 +324,14 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         """
         event = {
             "type": "conversation.item.create",
-            "item": {"type": "message", "role": "user", "content": [{"type": "input_text", "text": text}]},
+            "item": {
+                "type": "message",
+                "role": "user",
+                "content": [{"type": "input_text", "text": text}],
+            },
         }
         await self.ws.send(json.dumps(event))
-        await self._request_response_from_model()
+        await self._request_response_from_llm()
 
     async def _send_audio_stream(self, audio_bytes: bytes) -> None:
         audio_b64 = base64.b64encode(audio_bytes).decode()
@@ -342,23 +371,30 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         """
         event = {
             "type": "conversation.item.create",
-            "item": {"type": "function_call_output", "call_id": call_id, "output": result},
+            "item": {
+                "type": "function_call_output",
+                "call_id": call_id,
+                "output": result,
+            },
         }
         await self.ws.send(json.dumps(event))
-        await self._request_response_from_model()
+        await self._request_response_from_llm()
 
-    async def _request_response_from_model(self) -> None:
+    async def _request_response_from_llm(self) -> None:
         """
         Asks the LLM for a response to the messages it just received.
         You need to call this function right after sending a messages that is not streamed like the audio (where the
-        model's VAD would decide when to reply instead).
+        LLM's VAD would decide when to reply instead).
         """
-        event = {"type": "response.create", "response": {"modalities": ["text", "audio"]}}
+        event = {
+            "type": "response.create",
+            "response": {"modalities": ["text", "audio"]},
+        }
         await self.ws.send(json.dumps(event))
 
     async def _call_tool(self, event: Dict[str, Any]) -> None:
         """
-        Calls the tool requested by the model.
+        Calls the tool requested by the LLM.
 
         Args:
             event (Dict[str, Any]):
@@ -367,7 +403,12 @@ class RealtimeAPIClient(ContinuousStreamModelClient):
         call_id = event["call_id"]
         tool_name = event["name"]
         tool_arguments = json.loads(event["arguments"])
-        log.debug("Calling tool", tool_name=tool_name, tool_arguments=tool_arguments, call_id=call_id)
+        log.debug(
+            "Calling tool",
+            tool_name=tool_name,
+            tool_arguments=tool_arguments,
+            call_id=call_id,
+        )
 
         # Check if it's the router
         if tool_name == self.intent_router.name:

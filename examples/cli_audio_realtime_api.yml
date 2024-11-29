@@ -5,7 +5,7 @@ plugins:
 interface: terminal
 modality: audio_stream
 bot:
-  type: websocket
+  type: direct_to_llm
   llm:
     client: openai_realtime
     name: gpt-4o-realtime-preview-2024-10-01

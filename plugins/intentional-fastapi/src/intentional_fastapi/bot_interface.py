@@ -10,8 +10,6 @@ import structlog
 from intentional_core import (
     BotInterface,
     BotStructure,
-    TurnBasedBotStructure,
-    ContinuousStreamBotStructure,
     load_bot_structure_from_dict,
     IntentRouter,
 )
@@ -72,7 +70,7 @@ class FastAPIBotInterface(BotInterface):
         """
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
-        if isinstance(self.bot, TurnBasedBotStructure):
+        if isinstance(self.bot, BotStructure):
             if self.modality == "text_messages":
                 await self._run_text_messages(self.bot)
             else:
@@ -80,7 +78,7 @@ class FastAPIBotInterface(BotInterface):
                     f"Modality '{self.modality}' is not yet supported by '{self.bot.name}' bots."
                     "These are the supported modalities: 'text_messages'."
                 )
-        elif isinstance(self.bot, ContinuousStreamBotStructure):
+        elif isinstance(self.bot, BotStructure):
             if self.modality == "audio_stream":
                 await self._run_audio_stream(self.bot)
             else:
@@ -98,7 +96,7 @@ class FastAPIBotInterface(BotInterface):
         if event["delta"]:
             await response.asend(event["delta"])
 
-    async def _run_text_messages(self, bot: TurnBasedBotStructure) -> None:
+    async def _run_text_messages(self, bot: BotStructure) -> None:
         """
         Runs the interface for the text turns modality.
         """
@@ -111,7 +109,8 @@ class FastAPIBotInterface(BotInterface):
             """
             response = ResponseChunksIterator()
             bot.add_event_handler(
-                "on_text_message_from_model", lambda event: self.handle_response_chunks(response, event)
+                "on_text_message_from_llm",
+                lambda event: self.handle_response_chunks(response, event),
             )
             await self.bot.send({"role": "user", "content": message})
             return StreamingResponse(response)
@@ -123,7 +122,7 @@ class FastAPIBotInterface(BotInterface):
         await server.serve()
 
     # TODO TEST THIS MODALITY!
-    async def _run_audio_stream(self, bot: ContinuousStreamBotStructure) -> None:
+    async def _run_audio_stream(self, bot: BotStructure) -> None:
         """
         Runs the interface for the audio stream modality.
         """
@@ -146,7 +145,7 @@ class FastAPIBotInterface(BotInterface):
                     await websocket.send_bytes(event["delta"])
 
             response = ResponseChunksIterator()
-            bot.add_event_handler("on_audio_message_from_model", send_audio_chunk)
+            bot.add_event_handler("on_audio_message_from_llm", send_audio_chunk)
             return StreamingResponse(response)
 
         await bot.connect()

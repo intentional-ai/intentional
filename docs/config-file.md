@@ -126,9 +126,9 @@ First, we need to specify the `type`. Right now Intentional supports a few types
 
 Next, we need to specify what LLM we want to use. The `llm` field takes two parameters:
 
-- `client`: which client to use to connect to the model. For example, `openai` (provided by the `intentional-openai` plugin, see below) will tell Intentional to use the OpenAI SDK to connect to the model.
+- `client`: which client to use to connect to the LLM. For example, `openai` (provided by the `intentional-openai` plugin, see below) will tell Intentional to use the OpenAI SDK to connect to the LLM.
 
-- `name`: the name of the model (if required by the specified client). In this case, we specify `gpt-4o`.
+- `name`: the name of the LLM (if required by the specified client). In this case, we specify `gpt-4o`.
 
 If the client you specified requires any other parameters, they can be listed in this section.
 

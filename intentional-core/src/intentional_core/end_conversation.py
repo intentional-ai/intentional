@@ -34,4 +34,7 @@ class EndConversationTool(Tool):
         """
         log.debug("The conversation has ended.")
         self.router.current_stage_name = self.router.initial_stage
-        log.debug("Intent router reset to initial stage.", initial_stage=self.router.initial_stage)
+        log.debug(
+            "Intent router reset to initial stage.",
+            initial_stage=self.router.initial_stage,
+        )
