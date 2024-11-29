@@ -53,16 +53,12 @@ class TelegramBotInterface(BotInterface):
         """
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
-        if isinstance(self.bot, BotStructure):
-            if self.modality == "text_messages":
-                await self._run_text_messages(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-                    "These are the supported modalities: 'text_messages'."
-                )
+        if self.modality == "text_messages":
+            await self._run_text_messages(self.bot)
         else:
-            raise ValueError(f"Bot '{self.bot.name}' is not yet supported for {self.__class__.__name__}.")
+            raise ValueError(
+                f"Modality '{self.modality}' is not yet supported. These are the supported modalities: 'text_messages'."
+            )
 
     async def _run_text_messages(self, bot: BotStructure) -> None:
         """
@@ -113,14 +109,16 @@ class TelegramBotInterface(BotInterface):
             if update.message:
                 # If the message is a text message, send it to the bot
                 if update.message.text:
-                    await self.bot.send({"role": "user", "content": update.message.text})
+                    await self.bot.send({"text_message": {"role": "user", "content": update.message.text}})
                     self.latest_update = update
 
             if update.message_reaction:
                 await self.bot.send(
                     {
-                        "role": "user",
-                        "content": (update.message_reaction.new_reaction)[0].emoji,
+                        "text_message": {
+                            "role": "user",
+                            "content": (update.message_reaction.new_reaction)[0].emoji,
+                        }
                     }
                 )
 

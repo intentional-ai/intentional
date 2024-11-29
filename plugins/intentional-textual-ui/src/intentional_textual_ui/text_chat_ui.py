@@ -87,7 +87,7 @@ class TextChatInterface(App):
         self.conversation += "\n\n**User**: " + event.value
         self.query_one(MessageBox).clear()
         self.query_one(ChatHistory).update(self.conversation)
-        await self.bot.send({"role": "user", "content": event.value})
+        await self.bot.send({"text_message": {"role": "user", "content": event.value}})
 
     async def handle_start_text_response(self, _) -> None:
         """

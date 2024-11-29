@@ -70,24 +70,15 @@ class FastAPIBotInterface(BotInterface):
         """
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
-        if isinstance(self.bot, BotStructure):
-            if self.modality == "text_messages":
-                await self._run_text_messages(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported by '{self.bot.name}' bots."
-                    "These are the supported modalities: 'text_messages'."
-                )
-        elif isinstance(self.bot, BotStructure):
-            if self.modality == "audio_stream":
-                await self._run_audio_stream(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported by '{self.bot.name}' bots."
-                    "These are the supported modalities: 'audio_stream'."
-                )
+        if self.modality == "text_messages":
+            await self._run_text_messages(self.bot)
+        elif self.modality == "audio_stream":
+            await self._run_audio_stream(self.bot)
         else:
-            raise ValueError(f"Bot '{self.bot.name}' is not yet supported by {self.__class__.__name__}.")
+            raise ValueError(
+                f"Modality '{self.modality}' is not yet supported."
+                "These are the supported modalities: 'text_messages', 'audio_stream'."
+            )
 
     async def handle_response_chunks(self, response: ResponseChunksIterator, event: Dict[str, Any]) -> None:
         """
@@ -112,7 +103,7 @@ class FastAPIBotInterface(BotInterface):
                 "on_text_message_from_llm",
                 lambda event: self.handle_response_chunks(response, event),
             )
-            await self.bot.send({"role": "user", "content": message})
+            await self.bot.send({"text_message": {"role": "user", "content": message}})
             return StreamingResponse(response)
 
         await bot.connect()

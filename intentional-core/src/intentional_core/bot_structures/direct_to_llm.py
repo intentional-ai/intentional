@@ -34,25 +34,25 @@ class DirectToLLMBotStructure(BotStructure):
         llm_config = config.pop("llm", None)
         if not llm_config:
             raise ValueError(f"{self.__class__.__name__} requires a 'llm' configuration key.")
-        self.model: LLMClient = load_llm_client_from_dict(parent=self, intent_router=intent_router, config=llm_config)
+        self.llm: LLMClient = load_llm_client_from_dict(parent=self, intent_router=intent_router, config=llm_config)
 
     async def connect(self) -> None:
         """
         Initializes the model and connects to it as/if necessary.
         """
-        await self.model.connect()
+        await self.llm.connect()
 
     async def disconnect(self) -> None:
         """
         Disconnects from the model and unloads/closes it as/if necessary.
         """
-        await self.model.disconnect()
+        await self.llm.disconnect()
 
     async def run(self) -> None:
         """
         Main loop for the bot.
         """
-        await self.model.run()
+        await self.llm.run()
 
     async def send(self, data: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
         """
@@ -61,7 +61,7 @@ class DirectToLLMBotStructure(BotStructure):
         Args:
             data: The message to send to the model in OpenAI format, like {"role": "user", "content": "Hello!"}
         """
-        await self.model.send({"text_message": data})
+        await self.llm.send(data)
 
     async def handle_interruption(self, lenght_to_interruption: int) -> None:
         """
@@ -72,4 +72,4 @@ class DirectToLLMBotStructure(BotStructure):
                 This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
                 depending on the bot structure that implements it.
         """
-        await self.model.handle_interruption(lenght_to_interruption)
+        await self.llm.handle_interruption(lenght_to_interruption)

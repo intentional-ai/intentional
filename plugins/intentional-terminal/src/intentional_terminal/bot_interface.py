@@ -50,29 +50,16 @@ class TerminalBotInterface(BotInterface):
         """
         Chooses the specific loop to use for this combination of bot and modality and kicks it off.
         """
-        log.debug(
-            "Running the bot",
-            bot_type=self.bot.__class__.__name__,
-            modality=self.modality,
-        )
-
-        if isinstance(self.bot, BotStructure):
-            if self.modality == "audio_stream":
-                await self._run_audio_stream(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-                    "These are the supported modalities: 'audio_stream'."
-                )
-
-        if isinstance(self.bot, BotStructure):
-            if self.modality == "text_messages":
-                await self._run_text_messages(self.bot)
-            else:
-                raise ValueError(
-                    f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
-                    "These are the supported modalities: 'text_messages'."
-                )
+        log.debug("Running the bot", bot_type=self.bot.__class__.__name__, modality=self.modality)
+        if self.modality == "audio_stream":
+            await self._run_audio_stream(self.bot)
+        elif self.modality == "text_messages":
+            await self._run_text_messages(self.bot)
+        else:
+            raise ValueError(
+                f"Modality '{self.modality}' is not yet supported for '{self.bot.name}' bots."
+                "These are the supported modalities: 'text_messages', 'audio_stream'."
+            )
 
     async def _run_text_messages(self, bot: BotStructure) -> None:
         """
@@ -154,7 +141,7 @@ class TerminalBotInterface(BotInterface):
         Prints to the console when the bot starts generating a text response.
         """
         print("")
-        await self.bot.send({"role": "user", "content": input("User: ")})
+        await self.bot.send({"text_message": {"role": "user", "content": input("User: ")}})
 
     async def handle_llm_connection(self, event: Dict[str, Any]) -> None:
         """
