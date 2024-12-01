@@ -49,7 +49,7 @@ class AudioHandler:
         audio_format: int = pyaudio.paInt16,
         channels: int = 1,
         rate: int = 24000,
-        chunk: int = 1024,
+        chunk: int = 512,
     ):
         # Audio parameters
         self.audio_format = audio_format
@@ -152,7 +152,6 @@ class AudioHandler:
                 self._play_audio_chunk(audio_segment)
             except queue.Empty:
                 self.playback_play_time = 0
-                log.debug("Audio buffer empty")
                 continue
 
             if self.playback_event.is_set():

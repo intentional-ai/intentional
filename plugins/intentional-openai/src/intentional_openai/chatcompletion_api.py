@@ -18,7 +18,7 @@ from intentional_core.end_conversation import EndConversationTool
 from intentional_openai.tools import to_openai_tool
 
 if TYPE_CHECKING:
-    from intentional_core.bot_structures.bot_structure import BotStructure
+    from intentional_core.bot_structure import BotStructure
 
 
 log = structlog.get_logger(logger_name=__name__)

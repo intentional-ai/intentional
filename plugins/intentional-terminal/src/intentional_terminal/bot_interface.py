@@ -8,7 +8,6 @@ from typing import Any, Dict
 
 import sys
 import asyncio
-import base64
 
 import structlog
 from pynput import keyboard
@@ -170,7 +169,7 @@ class TerminalBotInterface(BotInterface):
         Args:
             event: The event dictionary containing the audio message.
         """
-        self.audio_handler.play_audio(base64.b64decode(event["delta"]))
+        self.audio_handler.play_audio(event["delta"])
 
     async def speech_started(self, event: Dict[str, Any]) -> None:  # pylint: disable=unused-argument
         """

@@ -4,7 +4,7 @@
 Functions to load bot structure classes from config files.
 """
 
-from typing import Dict, Any, Optional, Set, Callable
+from typing import Dict, Any, Optional, Set, Callable, AsyncGenerator
 
 from abc import abstractmethod
 
@@ -13,6 +13,7 @@ import structlog
 from intentional_core.utils import inheritors
 from intentional_core.intent_routing import IntentRouter
 from intentional_core.events import EventListener
+from intentional_core.llm_client import LLMClient, load_llm_client_from_dict
 
 
 log = structlog.get_logger(logger_name=__name__)
@@ -26,9 +27,9 @@ class BotStructure(EventListener):
     """
     Tiny base class used to recognize Intentional bot structure classes.
 
-    The bot structure's name is meant to represent the **structure** of the bot. For example a bot that uses a direct
-    WebSocket connection to a LLM such as OpenAI's Realtime API could be called "RealtimeAPIBotStructure", one that
-    uses a VAD-STT-LLM-TTS stack could be called "AudioToTextBotStructure", and so on
+    The bot structure's name is meant to represent the **structure** of the bot. For example a bot that simply sends the
+    user's input to the LLM can be called DirectToLLMBotStructure, one that uses a VAD-STT-LLM-TTS stack could be called
+    "AudioToTextBotStructure", and so on.
 
     In order for your bot structure to be usable, you need to assign a value to the `name` class variable in the bot
     structure class' definition.
@@ -113,6 +114,68 @@ class BotStructure(EventListener):
             await self.event_handlers[event_name](event)
         else:
             log.debug("No event handler for event", event_name=event_name)
+
+
+class DirectToLLMBotStructure(BotStructure):
+    """
+    Bot structure that sends the user's input directly to the LLM and vice-versa.
+    """
+
+    name = "direct_to_llm"
+
+    def __init__(self, config: Dict[str, Any], intent_router: IntentRouter):
+        """
+        Args:
+            config:
+                The configuration dictionary for the bot structure.
+                It includes only the LLM definition under the `llm` key.
+        """
+        super().__init__()
+        log.debug("Loading bot structure from config", bot_structure_config=config)
+
+        # Init the model client
+        llm_config = config.pop("llm", None)
+        if not llm_config:
+            raise ValueError(f"{self.__class__.__name__} requires a 'llm' configuration key.")
+        self.llm: LLMClient = load_llm_client_from_dict(parent=self, intent_router=intent_router, config=llm_config)
+
+    async def connect(self) -> None:
+        """
+        Initializes the model and connects to it as/if necessary.
+        """
+        await self.llm.connect()
+
+    async def disconnect(self) -> None:
+        """
+        Disconnects from the model and unloads/closes it as/if necessary.
+        """
+        await self.llm.disconnect()
+
+    async def run(self) -> None:
+        """
+        Main loop for the bot.
+        """
+        await self.llm.run()
+
+    async def send(self, data: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
+        """
+        Sends a message to the model and forward the response.
+
+        Args:
+            data: The message to send to the model in OpenAI format, like {"role": "user", "content": "Hello!"}
+        """
+        await self.llm.send(data)
+
+    async def handle_interruption(self, lenght_to_interruption: int) -> None:
+        """
+        Handle an interruption in the streaming.
+
+        Args:
+            lenght_to_interruption: The length of the data that was produced to the user before the interruption.
+                This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
+                depending on the bot structure that implements it.
+        """
+        await self.llm.handle_interruption(lenght_to_interruption)
 
 
 def load_bot_structure_from_dict(intent_router: IntentRouter, config: Dict[str, Any]) -> BotStructure:

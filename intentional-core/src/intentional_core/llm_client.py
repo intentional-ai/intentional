@@ -14,7 +14,7 @@ from intentional_core.events import EventEmitter
 from intentional_core.intent_routing import IntentRouter
 
 if TYPE_CHECKING:
-    from intentional_core.bot_structures.bot_structure import BotStructure
+    from intentional_core.bot_structure import BotStructure
 
 
 log = structlog.get_logger(logger_name=__name__)

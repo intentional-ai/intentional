@@ -18,15 +18,18 @@ nav:
          - 'FastAPI':
             - 'Getting Started': plugins/intentional-fastapi/README.md
             - 'API Reference': plugins/intentional-fastapi/docs/reference.md
-         - 'Local Terminal':
-            - 'Getting Started': plugins/intentional-terminal/README.md
-            - 'API Reference': plugins/intentional-terminal/docs/reference.md
          - 'OpenAI':
             - 'Getting Started': plugins/intentional-openai/README.md
             - 'API Reference': plugins/intentional-openai/docs/reference.md
+         - 'Pipecat':
+            - 'Getting Started': plugins/intentional-pipecat/README.md
+            - 'API Reference': plugins/intentional-pipecat/docs/reference.md
          - 'Telegram UI':
             - 'Getting Started': plugins/intentional-telegram/README.md
             - 'API Reference': plugins/intentional-telegram/docs/reference.md
+         - 'Terminal':
+            - 'Getting Started': plugins/intentional-terminal/README.md
+            - 'API Reference': plugins/intentional-terminal/docs/reference.md
          - 'Textual UI':
             - 'Getting Started': plugins/intentional-textual-ui/README.md
             - 'API Reference': plugins/intentional-textual-ui/docs/reference.md

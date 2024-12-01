@@ -5,7 +5,6 @@ Textual UI for audio stream bots.
 """
 
 from typing import Dict, Any
-import base64
 import structlog
 from textual.app import App, ComposeResult
 from textual.containers import ScrollableContainer
@@ -123,4 +122,4 @@ class AudioStreamInterface(App):
         """
         # self.query_one(BotStatus).update("# Bot is speaking...")
         if event["delta"]:
-            self.audio_handler.play_audio(base64.b64decode(event["delta"]))
+            self.audio_handler.play_audio(event["delta"])

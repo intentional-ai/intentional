@@ -1,13 +1,14 @@
 plugins:
 - intentional_textual_ui
+- intentional_terminal
 - intentional_openai
+- intentional_pipecat
 
-interface: textual_ui
-modality: text_messages
+interface: terminal
+modality: audio_stream
 bot:
-  type: direct_to_llm
+  type: pipecat
   llm:
-    client: openai
     client: openai
     name: gpt-4o
 
