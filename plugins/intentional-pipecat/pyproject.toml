@@ -27,7 +27,7 @@ classifiers = [
 
 dependencies = [
   "intentional-core",
-  "pipecat-ai",
+  "pipecat-ai[deepgram,silero,azure]",  # FIXME
 ]
 
 [project.optional-dependencies]
