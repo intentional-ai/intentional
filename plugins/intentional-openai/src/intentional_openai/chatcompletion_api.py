@@ -90,6 +90,7 @@ class ChatCompletionAPIClient(LLMClient):
         """
         Update the system prompt in the LLM.
         """
+        log.warning("Updating system prompt! New prompt: ", self.system_prompt)
         self.conversation = [{"role": "system", "content": self.system_prompt}] + self.conversation[1:]
         await self.emit("on_system_prompt_updated", {"system_prompt": self.system_prompt})
 

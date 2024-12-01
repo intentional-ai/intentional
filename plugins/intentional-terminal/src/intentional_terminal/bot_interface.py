@@ -44,6 +44,7 @@ class TerminalBotInterface(BotInterface):
 
         self.audio_handler = None
         self.input_handler = None
+        self.conversation_log = []
 
     async def run(self) -> None:
         """
@@ -84,6 +85,7 @@ class TerminalBotInterface(BotInterface):
         bot.add_event_handler("*", self.check_for_transcripts)
         bot.add_event_handler("on_conversation_ended", self.handle_conversation_ended)
         # bot.add_event_handler("on_text_message_from_llm", self.handle_text_messages)
+        bot.add_event_handler("on_system_prompt_updated", self.handle_new_system_prompt)
         bot.add_event_handler("on_audio_message_from_llm", self.handle_audio_messages)
         bot.add_event_handler("on_user_speech_started", self.speech_started)
         bot.add_event_handler("on_user_speech_ended", self.speech_stopped)
@@ -127,20 +129,25 @@ class TerminalBotInterface(BotInterface):
             event: The event dictionary containing the transcript.
         """
         if "transcript" in event:
-            print(f"[{event['type']}] Transcript: {event['transcript']}")
+            entry = f"{event['type']}: {event['transcript']}"
+            print(entry)
+            self.conversation_log.append(entry)
 
     async def handle_start_text_response(self, _) -> None:
         """
         Prints to the console when the bot starts generating a text response.
         """
-        print("Assistant: ", end="")
+        print("assistant: ", end="")
+        self.conversation_log.append("assistant: ")
 
     async def handle_finish_text_response(self, _) -> None:
         """
         Prints to the console when the bot starts generating a text response.
         """
         print("")
-        await self.bot.send({"text_message": {"role": "user", "content": input("User: ")}})
+        user_message = input("user: ")
+        await self.bot.send({"text_message": {"role": "user", "content": user_message}})
+        self.conversation_log.append("user: " + user_message)
 
     async def handle_llm_connection(self, event: Dict[str, Any]) -> None:
         """
@@ -161,6 +168,7 @@ class TerminalBotInterface(BotInterface):
         """
         if event["delta"]:
             print(event["delta"], end="", flush=True)
+            self.conversation_log[-1] += event["delta"]
 
     async def handle_audio_messages(self, event: Dict[str, Any]) -> None:
         """
@@ -206,5 +214,15 @@ class TerminalBotInterface(BotInterface):
         if "y" not in restart.lower():
             sys.exit(0)
 
+        self.conversation_log = []
         self.bot: BotStructure = load_bot_structure_from_dict(self.intent_router, self.bot_structure_config)
         await self.run()
+
+    async def handle_new_system_prompt(self, event: Dict[str, Any]) -> None:
+        """
+        Prints to the console the new system prompt.
+
+        Args:
+            event: The event dictionary containing the new system prompt.
+        """
+        self.conversation_log = [event["prompt"]] + self.conversation_log[1:]

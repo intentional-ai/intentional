@@ -99,19 +99,19 @@ class AudioStreamInterface(App):
         Args:
             event: The event dictionary containing the message.
         """
-        self.query_one(SystemPrompt).update(event["system_prompt"])  # self.bot.llm.system_prompt)
+        self.call_from_thread(self.query_one(SystemPrompt).update(event["system_prompt"]))
 
     async def handle_start_user_response(self, _) -> None:
         """
         Updates the user status when they start speaking.
         """
-        self.query_one(UserStatus).update("# User is speaking...")
+        self.call_from_thread(self.query_one(UserStatus).update("# User is speaking..."))
 
     async def handle_finish_user_response(self, _) -> None:
         """
         Updates the user status when they stop speaking.
         """
-        self.query_one(UserStatus).update("# User is silent...")
+        self.call_from_thread(self.query_one(UserStatus).update("# User is silent..."))
 
     async def handle_audio_messages(self, event: Dict[str, Any]) -> None:
         """

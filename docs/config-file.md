@@ -3,10 +3,10 @@
 
 The configuration file is the core of Intentional bots. They are YAML files that define a conversation such as the one we've seen above.
 
-Here is an example of a conversation file. Don't feel overwhelmed just yet! Each part will be explained separately.
+Here is an example of a conversation file, which we are going to explain line by line.
 
 ```yaml
-interface: textual_ui
+interface: terminal
 modality: text_messages
 bot:
   type: direct_to_llm
@@ -14,8 +14,9 @@ bot:
     client: openai
     name: gpt-4o
 
+# Optional section
 plugins:
-- intentional_textual_ui
+- intentional_terminal
 - intentional_openai
 
 conversation:
@@ -97,10 +98,10 @@ conversation:
 ### Bot configuration
 
 ```yaml
-interface: textual_ui
+interface: terminal
 modality: text_messages
 bot:
-  type: text_chat
+  type: direct_to_llm
   llm:
     client: openai
     name: gpt-4o
@@ -136,15 +137,23 @@ First, we need to specify the `type`, which defines the implementation style of 
 
 - `direct_to_llm`: the LLM is able to handle directly the messages of the user. For example, if the user is using text, the LLM is able to read the messages as they are. If the user is talking, the LLM is able to understand their voice without transcription.
 
+- `pipecat`: uses [Pipecat](https://www.pipecat.ai/) to implement an audio/text pipeline for voice chatbots. Pipecat takes the audio from the user, passes it through a Voice Activity Detection (VAD), then sends the sections to be transcribed to an Speech To Text (STT) client, and only then sends the resulting text to the LLM. The LLM's reply then goes to a Text to Speech (TTS) engine and eventually back to the user. This architecture makes possible to use text-only models such as GPT-4 for voice bots as well, but is inherently a bit slower than the `direct_to_llm` approach due to the number of components involved.
+
 !!! note
 
-    More documentation on the `type` field coming soon!
+    To use the `pipecat` type you need to install the `intentional-pipecat` plugin:
+
+    ```
+    pip install intentional-pipecat
+    ```
+
+    and to make all the relevant API keys available to the bot. See `intentional-pipecat`'s documentation for more information.
 
 #### LLM
 
 Next, we need to specify what LLM we want to use. The `llm` field takes two parameters:
 
-- `client`: which client to use to connect to the LLM. For example, `openai` (provided by the `intentional-openai` plugin, see below) will tell Intentional to use the OpenAI SDK to connect to the LLM.
+- `client`: which client to use to connect to the LLM. For example, `openai` (provided by the `intentional-openai` plugin, installed by default with `intentional`) will tell Intentional to use the OpenAI SDK to connect to the LLM.
 
 - `name`: the name of the LLM (if required by the specified client). In this case, we specify `gpt-4o`.
 
@@ -152,19 +161,23 @@ If the client you specified requires any other parameters, they can be listed in
 
 ### Plugins
 
+!!! note
+
+    This section is optional.
+
 ```yaml
 plugins:
-- intentional_textual_ui
+- intentional_terminal
 - intentional_openai
 ```
 
 Intentional is highly modular, and some of the parameters highlighted above require their own plugins. You can specify which plugins your bot needs by listing them in this section.
 
-In our example we're using OpenAI as the LLM provider and Textual UI as our UI. Therefore we can list these two plugins to make sure Intentional loads them properly.
+In our example we're using OpenAI as the LLM provider and the terminal as our UI. Therefore we can list these two plugins to make sure Intentional loads them properly.
 
 !!! note
 
-    If this section is not specified, Intentional will search your virtual environment for any package that begins with `intentional_` and will try to import it. In many cases this may be sufficient.
+    If this section is not specified, Intentional will search your virtual environment for any package that begins with `intentional_` and will try to import it. In many cases this is sufficient. However, if your virtualenv is huge or you have plenty of plugins you don't want to load, specifying the required plugins here can speed up the startup time significantly.
 
 ### Conversation
 

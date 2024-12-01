@@ -1,17 +1,10 @@
-plugins:
-- intentional_textual_ui
-- intentional_terminal
-- intentional_openai
-- intentional_pipecat
-
-interface: terminal
+interface: textual_ui
 modality: audio_stream
 bot:
   type: pipecat
   llm:
     client: openai
     name: gpt-4o
-
 
 conversation:
   background: "You're Jane, an interviewer calling a person to ask a few questions."

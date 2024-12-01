@@ -60,6 +60,7 @@ class PipecatBotStructure(BotStructure):
         self.pipecat_task = None
         self.publisher = None
         self.transport = None
+        self.assistant_reply = ""
 
     async def connect(self) -> None:
         """
@@ -113,6 +114,7 @@ class PipecatBotStructure(BotStructure):
         """
         if event["delta"]:
             await self.publisher.push_frame(TextFrame(event["delta"]), FrameDirection.DOWNSTREAM)
+            self.assistant_reply += event["delta"]
 
     async def handle_llm_starts_generating_response(self, _: Dict[str, Any]) -> None:
         """
@@ -125,6 +127,9 @@ class PipecatBotStructure(BotStructure):
         Warns the Pipecat pipeline of the end of a response from the LLM by sending an LLMFullResponseEndFrame()
         """
         await self.publisher.push_frame(LLMFullResponseEndFrame(), FrameDirection.DOWNSTREAM)
+        if self.assistant_reply:
+            await self.llm.emit("on_llm_speech_transcribed", {"type": "assistant", "transcript": self.assistant_reply})
+            self.assistant_reply = ""
 
     async def disconnect(self) -> None:
         """
