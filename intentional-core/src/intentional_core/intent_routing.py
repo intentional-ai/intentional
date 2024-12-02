@@ -46,6 +46,7 @@ class IntentRouter(Tool):
     Special tool used to alter the system prompt depending on the user's response.
     """
 
+    id = "classify_response"
     name = "classify_response"
     description = "Classify the user's response for later use."
     parameters = [

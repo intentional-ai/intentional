@@ -102,8 +102,9 @@ def to_mermaid_diagram(intent_router: IntentRouter) -> str:
     processed_nodes = set()
     for origin, target, key in intent_router.graph.edges:
         # 'end' is reserved in Mermaid
-        if target == "end":
-            edge_string = f'{stages[origin]} -- {key} --> END["<b>end</b>"]'
+        if target == "_end_":
+            unique_counter += 1
+            edge_string = f'{stages[origin]} -- {key} --> END{unique_counter}["<b>end</b>"]:::highlight'
         elif target == "_backtrack_":
             unique_counter += 1
             edge_string = f'{stages[origin]} -- {key} --> BACKTRACK{unique_counter}("<b>backtrack</b>"):::highlight'

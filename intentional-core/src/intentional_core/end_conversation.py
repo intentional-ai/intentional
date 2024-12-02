@@ -21,6 +21,7 @@ class EndConversationTool(Tool):
     Tool to end the conversation. Resets the intent router to its initial stage.
     """
 
+    id = "end_conversation"
     name = "end_conversation"
     description = "End the conversation."
     parameters = []
