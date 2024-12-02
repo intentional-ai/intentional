@@ -53,6 +53,7 @@ class AudioStreamInterface(App):
         self.bot.add_event_handler("on_user_speech_started", self.handle_start_user_response)
         self.bot.add_event_handler("on_user_speech_ended", self.handle_finish_user_response)
         self.bot.add_event_handler("on_system_prompt_updated", self.handle_system_prompt_updated)
+        self.bot.add_event_handler("on_conversation_ended", self.handle_conversation_end)
 
         self.conversation = ""
 
@@ -100,7 +101,7 @@ class AudioStreamInterface(App):
         Args:
             event: The event dictionary containing the message.
         """
-        self.query_one(SystemPrompt).update(event["system_prompt"])  # self.bot.llm.system_prompt)
+        self.query_one(SystemPrompt).update(event["system_prompt"])
 
     async def handle_start_user_response(self, _) -> None:
         """
@@ -124,3 +125,11 @@ class AudioStreamInterface(App):
         # self.query_one(BotStatus).update("# Bot is speaking...")
         if event["delta"]:
             self.audio_handler.play_audio(base64.b64decode(event["delta"]))
+
+    async def handle_conversation_end(self, _) -> None:
+        """
+        At the end of the conversation, closes the UI.
+        """
+        self.exit(0)
+        self.audio_handler.stop_streaming()
+        self.audio_handler.cleanup()

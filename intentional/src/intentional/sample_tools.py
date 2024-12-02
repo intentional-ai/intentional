@@ -12,12 +12,42 @@ from intentional_core.tools import Tool, ToolParameter
 log = structlog.get_logger(logger_name=__name__)
 
 
+class MockTool(Tool):
+    """
+    Simple tool that returns a fixed response to a fixed parameter value.
+
+    Accepts a single parameter, "request", which is a string.
+    """
+
+    id = "mock_tool"
+
+    def __init__(
+        self, name, description, input_description, responses_dictionary=None, default_response=None
+    ):  # pylint: disable=too-many-arguments,too-many-positional-arguments
+        self.name = name
+        self.description = description
+        self.parameters = [ToolParameter("request", input_description, "string", True, None)]
+        self.responses_dictionary = responses_dictionary or {}
+        self.default_response = default_response
+
+    async def run(self, params: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Returns a fixed response to a fixed parameter value.
+        """
+        response = self.responses_dictionary.get(params["request"], self.default_response)
+        if response:
+            log.debug("ExampleTool found a match", request=params["request"], response=response)
+        else:
+            log.debug("ExampleTool did not find a match", request=params["request"])
+        return response
+
+
 class GetCurrentDateTimeTool(Tool):
     """
     Simple tool to get the current date and time.
     """
 
-    name = "get_current_date_and_time"
+    id = "get_current_date_and_time"
     description = "Get the current date and time in the format 'YYYY-MM-DD HH:MM:SS'."
     parameters = []
 
@@ -35,7 +65,7 @@ class RescheduleInterviewTool(Tool):
     Mock tool to reschedule an interview.
     """
 
-    name = "reschedule_interview"
+    id = "reschedule_interview"
     description = "Set a new date and time for the interview in the database."
     parameters = [
         ToolParameter(
