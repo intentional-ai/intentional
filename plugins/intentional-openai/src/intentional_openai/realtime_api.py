@@ -426,10 +426,10 @@ class RealtimeAPIClient(LLMClient):
         # Check if the conversation should end
         if tool_name == EndConversationTool.name:
             await self.tools[EndConversationTool.name].run()
-            await self.disconnect()
-            self.setup_initial_prompt()
+            # await self.disconnect()
+            # self.setup_initial_prompt()
             await self.emit("on_conversation_ended", {})
-            await self.connect()
+            # await self.connect()
             return
 
         # Emit the event
