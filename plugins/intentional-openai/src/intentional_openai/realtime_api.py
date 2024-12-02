@@ -108,7 +108,7 @@ class RealtimeAPIClient(LLMClient):
             "Authorization": f"Bearer {self.api_key}",
             "OpenAI-Beta": "realtime=v1",
         }
-        self.ws = await websockets.connect(url, additional_headers=headers)
+        self.ws = await websockets.connect(url, extra_headers=headers)
 
         await self._update_session(
             {
