@@ -5,4 +5,4 @@
 Package descriptors for intentional-openai.
 """
 
-__version__ = "0.0.1rc0"
+__version__ = "0.0.1"

@@ -8,5 +8,5 @@ You can make your own plugins by using the [Copier](https://copier.readthedocs.i
 
 ```
 cd plugins/
-copier copy .template .
+copier copy .template <target_directory>
 ```
