@@ -5,6 +5,7 @@ on:
     tags:
     - "*/v[0-9]+.[0-9]+.[0-9]+"  # package-name/v0.0.1
     - "*/v[0-9]+.[0-9]+.[0-9]+rc[0-9]+"  # package-name/v0.0.1rc0
+    - "*/v[0-9]+.[0-9]+.[0-9]+post[0-9]+"  # package-name/v0.0.1post0
 
 env:
   HATCH_INDEX_USER: __token__
