@@ -60,7 +60,7 @@ repos:
         files: \.py$
         args:
           - --license-filepath
-          - license-header.txt
+          - header.txt
 
   - repo: local
     hooks:
