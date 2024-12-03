@@ -64,7 +64,11 @@ jobs:
       - name: Build wheel
         run: |
           cd ${{ steps.parse_tag.outputs.path }}
-          hatch version "${{ steps.parse_tag.outputs.version }}"
+          # Check that the hatch version is identical to the tag version
+          if [ "v$(hatch version)" != "${{ steps.parse_tag.outputs.version }}" ]; then
+            echo "Version mismatch: v$(hatch version) != ${{ steps.parse_tag.outputs.version }}"
+            exit 1
+          fi
           hatch build
 
       - name: Publish to PyPI
