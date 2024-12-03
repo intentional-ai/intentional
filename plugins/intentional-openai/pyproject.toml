@@ -28,7 +28,7 @@ classifiers = [
 dependencies = [
   "intentional-core",
   "openai",
-  "websockets",
+  "websockets==13.1",  # FIXME upgrade to 14.1
 ]
 
 [project.optional-dependencies]

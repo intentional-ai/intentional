@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "intentional"
 dynamic = ["version"]
-description = 'TBD'
+description = 'Intentional is an open-source framework to build reliable, multimodal and multi-channel LLM chatbots that actually talk and behave as you expect.'
 readme = "README.md"
 requires-python = ">=3.9"
 license = "AGPL-3.0-or-later"

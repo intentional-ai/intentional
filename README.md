@@ -1,6 +1,6 @@
 # Intentional
 
-Intentional is an open-source framework to build reliable LLM chatbots that actually talk and behave as you expect.
+Intentional is an open-source framework to build reliable, multimodal and multi-channel LLM chatbots that actually talk and behave as you expect.
 
 NOTE: Intentional is still in its very early stages, and there are a lot of rough edges to it. To give any feedback or contribute, [get in touch](https://github.com/intentional-ai/intentional/issues/new)!
 
