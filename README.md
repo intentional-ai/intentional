@@ -48,8 +48,6 @@ The graph will be saved next to your configuration file as `example.png`.
 
 You can find all the documentation [here](https://intentional-ai.github.io/intentional/), including the API reference for the core packages and all the plugins hosted in this repository.
 
------
-
 ## License
 
-All the content of this repository is distributed under the terms of the [AGPL](LICENSE) license.
+All the content of this repository is distributed under the terms of the [AGPL](LICENSE) license. If that doesn't work for you, [get in touch](mailto:github@zansara.dev).
