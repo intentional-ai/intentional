@@ -13,7 +13,7 @@ from abc import ABC, abstractmethod
 import yaml
 import structlog
 
-from intentional_core.utils import import_plugin, inheritors
+from intentional_core.utils import import_plugin, inheritors, import_all_plugins
 from intentional_core.intent_routing import IntentRouter
 
 
@@ -88,11 +88,14 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
     )
 
     # Import all the necessary plugins
-    plugins = config.pop("plugins")
-    log.debug("Found plugins to import", plugins=plugins)
-    for plugin in plugins:
-        log.debug("Importing plugin", plugin=plugin)
-        import_plugin(plugin)
+    plugins = config.pop("plugins", None)
+    if plugins:
+        log.debug("Found plugins to import", plugins=plugins)
+        for plugin in plugins:
+            log.debug("Importing plugin", plugin=plugin)
+            import_plugin(plugin)
+    else:
+        import_all_plugins()
 
     # Initialize the intent router
     log.debug("Creating intent router")
