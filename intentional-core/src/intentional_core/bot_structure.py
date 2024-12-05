@@ -4,7 +4,7 @@
 Functions to load bot structure classes from config files.
 """
 
-from typing import Dict, Any, Optional, Set, Callable
+from typing import Dict, Any, Optional, Set, AsyncGenerator
 
 from abc import abstractmethod
 
@@ -13,6 +13,7 @@ import structlog
 from intentional_core.utils import inheritors
 from intentional_core.intent_routing import IntentRouter
 from intentional_core.events import EventListener
+from intentional_core.llm_client import LLMClient, load_llm_client_from_dict
 
 
 log = structlog.get_logger(logger_name=__name__)
@@ -26,9 +27,9 @@ class BotStructure(EventListener):
     """
     Tiny base class used to recognize Intentional bot structure classes.
 
-    The bot structure's name is meant to represent the **structure** of the bot. For example a bot that uses a direct
-    WebSocket connection to a LLM such as OpenAI's Realtime API could be called "RealtimeAPIBotStructure", one that
-    uses a VAD-STT-LLM-TTS stack could be called "AudioToTextBotStructure", and so on
+    The bot structure's name is meant to represent the **structure** of the bot. For example a bot that simply sends the
+    user's input to the LLM can be called DirectToLLMBotStructure, one that uses a VAD-STT-LLM-TTS stack could be called
+    "AudioToTextBotStructure", and so on.
 
     In order for your bot structure to be usable, you need to assign a value to the `name` class variable in the bot
     structure class' definition.
@@ -42,12 +43,6 @@ class BotStructure(EventListener):
     "WebsocketBotStructure" should be "websocket", the name of "AudioToTextBotStructure" should be "audio_to_text",
     etc.
     """
-
-    def __init__(self) -> None:
-        """
-        Initialize the bot structure.
-        """
-        self.event_handlers: Dict[str, Callable] = {}
 
     async def connect(self) -> None:
         """
@@ -82,37 +77,67 @@ class BotStructure(EventListener):
                 depending on the bot structure that implements it.
         """
 
-    def add_event_handler(self, event_name: str, handler: Callable) -> None:
+
+class DirectToLLMBotStructure(BotStructure):
+    """
+    Bot structure that sends the user's input directly to the LLM and vice-versa.
+    """
+
+    name = "direct_to_llm"
+
+    def __init__(self, config: Dict[str, Any], intent_router: IntentRouter):
         """
-        Add an event handler for a specific event type.
+        Args:
+            config:
+                The configuration dictionary for the bot structure.
+                It includes only the LLM definition under the `llm` key.
+        """
+        super().__init__()
+        log.debug("Loading bot structure from config", bot_structure_config=config)
+
+        # Init the model client
+        llm_config = config.pop("llm", None)
+        if not llm_config:
+            raise ValueError(f"{self.__class__.__name__} requires a 'llm' configuration key.")
+        self.llm: LLMClient = load_llm_client_from_dict(parent=self, intent_router=intent_router, config=llm_config)
+
+    async def connect(self) -> None:
+        """
+        Initializes the model and connects to it as/if necessary.
+        """
+        await self.llm.connect()
+
+    async def disconnect(self) -> None:
+        """
+        Disconnects from the model and unloads/closes it as/if necessary.
+        """
+        await self.llm.disconnect()
+
+    async def run(self) -> None:
+        """
+        Main loop for the bot.
+        """
+        await self.llm.run()
+
+    async def send(self, data: Dict[str, Any]) -> AsyncGenerator[Dict[str, Any], None]:
+        """
+        Sends a message to the model and forward the response.
 
         Args:
-            event_name: The name of the event to handle.
-            handler: The handler function to call when the event is received.
+            data: The message to send to the model in OpenAI format, like {"role": "user", "content": "Hello!"}
         """
-        if event_name in self.event_handlers:
-            log.debug(
-                "Event handler for '%s' was already assigned. The older handler will be replaced by the new one.",
-                event_name,
-                event_name=event_name,
-                event_handler=self.event_handlers[event_name],
-            )
-        log.debug("Adding event handler", event_name=event_name, event_handler=handler)
-        self.event_handlers[event_name] = handler
+        await self.llm.send(data)
 
-    async def handle_event(self, event_name: str, event: Dict[str, Any]) -> None:
+    async def handle_interruption(self, lenght_to_interruption: int) -> None:
         """
-        Handle different types of events that the LLM may generate.
-        """
-        if "*" in self.event_handlers:
-            log.debug("Calling wildcard event handler", event_name=event_name)
-            await self.event_handlers["*"](event)
+        Handle an interruption in the streaming.
 
-        if event_name in self.event_handlers:
-            log.debug("Calling event handler", event_name=event_name)
-            await self.event_handlers[event_name](event)
-        else:
-            log.debug("No event handler for event", event_name=event_name)
+        Args:
+            lenght_to_interruption: The length of the data that was produced to the user before the interruption.
+                This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
+                depending on the bot structure that implements it.
+        """
+        await self.llm.handle_interruption(lenght_to_interruption)
 
 
 def load_bot_structure_from_dict(intent_router: IntentRouter, config: Dict[str, Any]) -> BotStructure:

@@ -204,6 +204,12 @@ class RealtimeAPIClient(LLMClient):
                 elif event_name == "input_audio_buffer.speech_stopped":
                     log.debug("Speech ended.")
 
+                # Decode the audio from base64
+                elif event_name == "response.audio.delta":
+                    audio_b64 = event.get("delta", "")
+                    audio_bytes = base64.b64decode(audio_b64)
+                    event["delta"] = audio_bytes
+
                 # Relay the event to the parent BotStructure - regardless whether it was processed above or not
                 if event_name in self.events_translation:
                     log.debug(

@@ -43,6 +43,10 @@ def import_all_plugins():
             log.debug("'_path' not found in '%s', ignoring", dist, dist=dist)
         path = dist._path  # pylint: disable=protected-access
         if path.name.startswith("intentional_"):
-            with open(path / "top_level.txt", encoding="utf-8") as file:
-                for name in file.read().splitlines():
-                    import_plugin(name)
+            if (path / "top_level.txt").exists():
+                with open(path / "top_level.txt", encoding="utf-8") as file:
+                    for name in file.read().splitlines():
+                        import_plugin(name)
+            else:
+                name = path.name.split("-", 1)[0]
+                import_plugin(name)

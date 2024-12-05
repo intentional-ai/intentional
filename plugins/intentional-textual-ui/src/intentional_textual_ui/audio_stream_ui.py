@@ -5,7 +5,6 @@ Textual UI for audio stream bots.
 """
 
 from typing import Dict, Any
-import base64
 import structlog
 from textual.app import App, ComposeResult
 from textual.containers import ScrollableContainer
@@ -107,13 +106,13 @@ class AudioStreamInterface(App):
         """
         Updates the user status when they start speaking.
         """
-        self.query_one(UserStatus).update("# User is speaking...")
+        self.call_from_thread(self.query_one(UserStatus).update("# User is speaking..."))
 
     async def handle_finish_user_response(self, _) -> None:
         """
         Updates the user status when they stop speaking.
         """
-        self.query_one(UserStatus).update("# User is silent...")
+        self.call_from_thread(self.query_one(UserStatus).update("# User is silent..."))
 
     async def handle_audio_messages(self, event: Dict[str, Any]) -> None:
         """
@@ -124,7 +123,7 @@ class AudioStreamInterface(App):
         """
         # self.query_one(BotStatus).update("# Bot is speaking...")
         if event["delta"]:
-            self.audio_handler.play_audio(base64.b64decode(event["delta"]))
+            self.audio_handler.play_audio(event["delta"])
 
     async def handle_conversation_end(self, _) -> None:
         """

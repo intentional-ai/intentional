@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 import pytest
-from intentional_core.bot_structures.direct_to_llm import DirectToLLMBotStructure
+from intentional_core.bot_structure import DirectToLLMBotStructure
 
 
 def test_bot_structure_init(intent_router):
