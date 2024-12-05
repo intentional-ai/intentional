@@ -18,4 +18,4 @@ pip install intentional-core
 
 ## License
 
-`intentional` is distributed under the terms of the [AGPL](LICENSE.txt) license.
+`intentional` is distributed under the terms of the [AGPL](LICENSE.txt) license. If that doesn't work for you, [get in touch](mailto:github@zansara.dev).

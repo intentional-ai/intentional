@@ -55,6 +55,7 @@ plugins:
       - intentional/README.md
       - intentional-core/README.md
       - plugins/README.md
+      - header.txt
 - redirects:
       redirect_maps:
         'index.md': 'docs/home.md'

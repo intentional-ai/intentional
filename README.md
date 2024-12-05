@@ -1,6 +1,6 @@
 # Intentional
 
-Intentional is an open-source framework to build reliable LLM chatbots that actually talk and behave as you expect.
+Intentional is an open-source framework to build reliable, multimodal and multi-channel LLM chatbots that actually talk and behave as you expect.
 
 NOTE: Intentional is still in its very early stages, and there are a lot of rough edges to it. To give any feedback or contribute, [get in touch](https://github.com/intentional-ai/intentional/issues/new)!
 
@@ -14,7 +14,7 @@ pip install intentional
 
 **NOTE**: you may also need to install `portaudio` with `sudo apt install portaudio19-dev`.
 
-Next, get a configuration file. For your first test run you should pick [this file](https://github.com/intentional-ai/intentional/blob/main/examples/example_cli_text_chat.yml), which needs no additional plugins, but you can find a few other examples [here](https://github.com/intentional-ai/intentional/tree/main/examples).
+Next, get a configuration file. For your first test run you should pick [this file](https://github.com/intentional-ai/intentional/blob/main/examples/cli_text_chat.yml), which needs no additional plugins, but you can find a few other examples [here](https://github.com/intentional-ai/intentional/tree/main/examples).
 
 **NOTE**: The example here also requires an OpenAI key. Export it as an environment variable called `OPENAI_API_KEY` before proceeding.
 
@@ -48,8 +48,6 @@ The graph will be saved next to your configuration file as `example.png`.
 
 You can find all the documentation [here](https://intentional-ai.github.io/intentional/), including the API reference for the core packages and all the plugins hosted in this repository.
 
------
-
 ## License
 
-All the content of this repository is distributed under the terms of the [AGPL](LICENSE) license.
+All the content of this repository is distributed under the terms of the [AGPL](LICENSE) license. If that doesn't work for you, [get in touch](mailto:github@zansara.dev).
