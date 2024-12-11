@@ -46,8 +46,8 @@ conversation:
       description: user wants to reschedule the interview to another time.
       goal: ask the user if they want to reschedule the interview. If the user says a relative time (such as, "in one hour"), use the get_current_date_and_time tool to convert it to an absolute time. Once you have an absolute date and time, use the reschedule_interview tool to reschedule the interview. You MUST use the  reschedule_interview tools before moving onto the next step.
       tools:
-        - name: get_current_date_and_time
-        - name: reschedule_interview
+        - id: get_current_date_and_time
+        - id: reschedule_interview
       outcomes:
         ok:
           description: user says they want to reschedule the interview
