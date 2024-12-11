@@ -2,6 +2,7 @@
 
 [![PyPI - Version](https://img.shields.io/pypi/v/intentional-core.svg)](https://pypi.org/project/intentional-core)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/intentional-core.svg)](https://pypi.org/project/intentional-core)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/intentional-core)](https://pypistats.org/packages/intentional-core)
 
 -----
 
