@@ -89,13 +89,14 @@ def load_bot_interface_from_dict(config: Dict[str, Any]) -> BotInterface:
 
     # Import all the necessary plugins
     plugins = config.pop("plugins", None)
-    if not plugins:
-        import_all_plugins()
-    else:
+    if plugins:
         log.debug("Found plugins to import", plugins=plugins)
         for plugin in plugins:
             log.debug("Importing plugin", plugin=plugin)
             import_plugin(plugin)
+    else:
+        log.debug("Plugins list not found, importing everything that starts with intentional-*", plugins=plugins)
+        import_all_plugins()
 
     # Initialize the intent router
     log.debug("Creating intent router")

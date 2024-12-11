@@ -70,27 +70,26 @@ def load_tools_from_dict(config: List[Dict[str, Any]]) -> Dict[str, Tool]:
         A list of Tool instances.
     """
     # Get all the subclasses of Tool
-    if not _TOOL_CLASSES:
-        subclasses: Set[Tool] = inheritors(Tool)
-        log.debug("Collected tool classes", tool_classes=subclasses)
-        for subclass in subclasses:
-            if not subclass.id:
-                log.error(
-                    "Tool class '%s' does not have an id. This tool will not be usable.",
-                    subclass,
-                    tool_class=subclass,
-                )
-                continue
+    subclasses: Set[Tool] = inheritors(Tool)
+    log.debug("Collected tool classes", tool_classes=subclasses)
+    for subclass in subclasses:
+        if not subclass.id:
+            log.error(
+                "Tool class '%s' does not have an id. This tool will not be usable.",
+                subclass.__name__,
+                tool_class=subclass,
+            )
+            continue
 
-            if subclass.id in _TOOL_CLASSES:
-                log.warning(
-                    "Duplicate tool '%s' found. The older class will be replaced by the newly imported one.",
-                    subclass.id,
-                    old_tool_id=subclass.id,
-                    old_tool_class=_TOOL_CLASSES[subclass.id],
-                    new_tool_class=subclass,
-                )
-            _TOOL_CLASSES[subclass.id] = subclass
+        if subclass.id in _TOOL_CLASSES:
+            log.warning(
+                "Duplicate tool '%s' found. The older class will be replaced by the newly imported one.",
+                subclass.id,
+                old_tool_id=subclass.id,
+                old_tool_class=_TOOL_CLASSES[subclass.id],
+                new_tool_class=subclass,
+            )
+        _TOOL_CLASSES[subclass.id] = subclass
 
     # Initialize the tools
     tools = {}

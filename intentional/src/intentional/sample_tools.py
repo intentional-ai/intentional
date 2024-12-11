@@ -48,6 +48,7 @@ class GetCurrentDateTimeTool(Tool):
     """
 
     id = "get_current_date_and_time"
+    name = "get_current_date_and_time"
     description = "Get the current date and time in the format 'YYYY-MM-DD HH:MM:SS'."
     parameters = []
 
@@ -66,6 +67,7 @@ class RescheduleInterviewTool(Tool):
     """
 
     id = "reschedule_interview"
+    name = "reschedule_interview"
     description = "Set a new date and time for the interview in the database."
     parameters = [
         ToolParameter(

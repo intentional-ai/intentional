@@ -3,7 +3,7 @@
 """
 Module import functions to handle dynamic plugins import.
 """
-
+import os
 import inspect
 import importlib
 import structlog
@@ -43,7 +43,7 @@ def import_all_plugins():
             log.debug("'_path' not found in '%s', ignoring", dist, dist=dist)
         path = dist._path  # pylint: disable=protected-access
         if path.name.startswith("intentional_"):
-            if (path / "top_level.txt").exists():
+            if os.path.exists(path / "top_level.txt"):
                 with open(path / "top_level.txt", encoding="utf-8") as file:
                     for name in file.read().splitlines():
                         import_plugin(name)
