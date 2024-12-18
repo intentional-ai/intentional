@@ -5,6 +5,20 @@ bot:
   llm:
     client: openai
     name: gpt-4o
+  vad:
+    module: silero
+    class: SileroVADAnalyzer
+  stt:
+    module: deepgram
+    class: DeepgramSTTService
+    params:
+      api_key__envvar: DEEPGRAM_API_KEY
+  tts:
+    module: azure
+    class: AzureTTSService
+    params:
+      api_key__envvar: AZURE_SPEECH_API_KEY
+      region__envvar: AZURE_SPEECH_REGION
 
 conversation:
   background: "You're Jane, an interviewer calling a person to ask a few questions."
