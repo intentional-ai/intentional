@@ -1,0 +1,3843 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../">
+      
+      
+        <link rel="next" href="../../../intentional-telegram/">
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>API Reference - Intentional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference-pipecat" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Intentional" class="md-header__button md-logo" aria-label="Intentional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Intentional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/intentional-ai/intentional" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Intentional" class="md-nav__button md-logo" aria-label="Intentional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Intentional
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/intentional-ai/intentional" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/concepts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    High-level Concepts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/config-file/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration File
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Main Package
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/core-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Core Package
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Plugins
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            Plugins
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_1" id="__nav_6_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    FastAPI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            FastAPI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-fastapi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-fastapi/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_2" id="__nav_6_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    OpenAI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            OpenAI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-openai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-openai/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_3" id="__nav_6_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Pipecat
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Pipecat
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat" class="md-nav__link">
+    <span class="md-ellipsis">
+      intentional-pipecat
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src" class="md-nav__link">
+    <span class="md-ellipsis">
+      src
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat" class="md-nav__link">
+    <span class="md-ellipsis">
+      intentional_pipecat
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="intentional_pipecat">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.__about__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __about__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      bot_structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="bot_structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      PipecatBotStructure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PipecatBotStructure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      connect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      disconnect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_interruption" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_interruption
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_starts_generating_response" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_llm_starts_generating_response
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_stops_generating_response" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_llm_stops_generating_response
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_text_messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_llm_text_messages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.send" class="md-nav__link">
+    <span class="md-ellipsis">
+      send
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame_processor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="frame_processor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.LLMToUserFrameProcessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      LLMToUserFrameProcessor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LLMToUserFrameProcessor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.LLMToUserFrameProcessor.process_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      process_frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.UserToLLMFrameProcessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      UserToLLMFrameProcessor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="UserToLLMFrameProcessor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.UserToLLMFrameProcessor.process_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      process_frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport" class="md-nav__link">
+    <span class="md-ellipsis">
+      transport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="transport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioInputTransport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AudioInputTransport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      cleanup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.send_audio_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      send_audio_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.start" class="md-nav__link">
+    <span class="md-ellipsis">
+      start
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioOutputTransport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AudioOutputTransport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      cleanup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.process_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      process_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.start" class="md-nav__link">
+    <span class="md-ellipsis">
+      start
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioTransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioTransport
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_4" id="__nav_6_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Telegram UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Telegram UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-telegram/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-telegram/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_5" id="__nav_6_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Terminal
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Terminal
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-terminal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-terminal/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_6" id="__nav_6_3_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Textual UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            Textual UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-textual-ui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-textual-ui/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contribute
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/cla/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat" class="md-nav__link">
+    <span class="md-ellipsis">
+      intentional-pipecat
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src" class="md-nav__link">
+    <span class="md-ellipsis">
+      src
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat" class="md-nav__link">
+    <span class="md-ellipsis">
+      intentional_pipecat
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="intentional_pipecat">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.__about__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __about__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      bot_structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="bot_structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      PipecatBotStructure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PipecatBotStructure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      connect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      disconnect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_interruption" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_interruption
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_starts_generating_response" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_llm_starts_generating_response
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_stops_generating_response" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_llm_stops_generating_response
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_text_messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_llm_text_messages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.send" class="md-nav__link">
+    <span class="md-ellipsis">
+      send
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame_processor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="frame_processor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.LLMToUserFrameProcessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      LLMToUserFrameProcessor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LLMToUserFrameProcessor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.LLMToUserFrameProcessor.process_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      process_frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.UserToLLMFrameProcessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      UserToLLMFrameProcessor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="UserToLLMFrameProcessor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.UserToLLMFrameProcessor.process_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      process_frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport" class="md-nav__link">
+    <span class="md-ellipsis">
+      transport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="transport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioInputTransport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AudioInputTransport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      cleanup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.send_audio_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      send_audio_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.start" class="md-nav__link">
+    <span class="md-ellipsis">
+      start
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioOutputTransport
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AudioOutputTransport">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      cleanup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.process_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      process_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.start" class="md-nav__link">
+    <span class="md-ellipsis">
+      start
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioTransport" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioTransport
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="api-reference-pipecat">API Reference - Pipecat<a class="headerlink" href="#api-reference-pipecat" title="Permanent link">#</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="plugins.intentional-pipecat"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="plugins.intentional-pipecat.src" class="doc doc-heading">
+            <code>src</code>
+
+
+<a href="#plugins.intentional-pipecat.src" class="headerlink" title="Permanent link">#</a></h2>
+
+    <div class="doc doc-contents ">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h3 id="plugins.intentional-pipecat.src.intentional_pipecat" class="doc doc-heading">
+            <code>intentional_pipecat</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat" class="headerlink" title="Permanent link">#</a></h3>
+
+    <div class="doc doc-contents ">
+
+        <p>Intentional plugin for Pipecat</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h4 id="plugins.intentional-pipecat.src.intentional_pipecat.__about__" class="doc doc-heading">
+            <code>__about__</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.__about__" class="headerlink" title="Permanent link">#</a></h4>
+
+    <div class="doc doc-contents ">
+
+        <p>Package descriptors for intentional-pipecat.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h4 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure" class="doc doc-heading">
+            <code>bot_structure</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure" class="headerlink" title="Permanent link">#</a></h4>
+
+    <div class="doc doc-contents ">
+
+        <p>Pipecat bot structure implementation.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h5 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure" class="doc doc-heading">
+            <code>PipecatBotStructure</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure" class="headerlink" title="Permanent link">#</a></h5>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="intentional_core.bot_structures.BotStructure">BotStructure</span></code></p>
+
+
+        <p>Bot structure that uses Pipecat to make text-only models able to handle spoken input.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">PipecatBotStructure</span><span class="p">(</span><span class="n">BotStructure</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-many-instance-attributes</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bot structure that uses Pipecat to make text-only models able to handle spoken input.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;pipecat&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">intent_router</span><span class="p">:</span> <span class="n">IntentRouter</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            config:</span>
+<span class="sd">                The configuration dictionary for the bot structure.</span>
+<span class="sd">                It includes only the LLM definition under the `llm` key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Loading bot structure from config&quot;</span><span class="p">,</span> <span class="n">bot_structure_config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="c1"># Init the model client</span>
+        <span class="n">llm_config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;llm&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">llm_config</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires a &#39;llm&#39; configuration key.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="p">:</span> <span class="n">LLMClient</span> <span class="o">=</span> <span class="n">load_llm_client_from_dict</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent_router</span><span class="o">=</span><span class="n">intent_router</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">llm_config</span><span class="p">)</span>
+
+        <span class="c1"># Import the correct VAD, STT and TTS clients from Pipecat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vad_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vad_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_class_from_config</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;vad&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;vad&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;start_secs&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;stop_secs&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;min_volume&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stt_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stt_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_class_from_config</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;stt&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;stt&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;sample_rate&quot;</span><span class="p">:</span> <span class="mi">16000</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tts_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tts_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_class_from_config</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;tts&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;tts&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="c1"># Pipecat pipeline</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipecat_task</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_load_class_from_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">defaults</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires a &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; configuration key.&quot;</span><span class="p">)</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">PIPECAT_MODULES_FOR_KEY</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">])</span>
+        <span class="n">class_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">])</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;params&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="c1"># Load env vars if necessary</span>
+        <span class="n">usable_params</span> <span class="o">=</span> <span class="n">defaults</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">param_key</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">param_key</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;__envvar&quot;</span><span class="p">):</span>
+                <span class="n">usable_params</span><span class="p">[</span><span class="n">param_key</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;__envvar&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">param_key</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">usable_params</span><span class="p">[</span><span class="n">param_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">param_key</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">class_</span><span class="p">,</span> <span class="n">usable_params</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the model and connects to it as/if necessary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Prepares the Pipecat pipeline</span>
+        <span class="n">transport_params</span> <span class="o">=</span> <span class="n">TransportParams</span><span class="p">(</span>
+            <span class="n">audio_in_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">audio_out_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">transcription_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">vad_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">vad_analyzer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vad_class</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">VADParams</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">vad_params</span><span class="p">)),</span>
+            <span class="n">vad_audio_passthrough</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">AudioTransport</span><span class="p">(</span><span class="n">transport_params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">emit</span><span class="p">)</span>
+
+        <span class="n">stt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stt_class</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">stt_params</span><span class="p">)</span>
+        <span class="n">tts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tts_class</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">tts_params</span><span class="p">)</span>
+        <span class="n">user_response</span> <span class="o">=</span> <span class="n">LLMUserResponseAggregator</span><span class="p">()</span>
+        <span class="n">send_to_llm</span> <span class="o">=</span> <span class="n">UserToLLMFrameProcessor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span> <span class="o">=</span> <span class="n">LLMToUserFrameProcessor</span><span class="p">()</span>
+        <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">input</span><span class="p">(),</span>
+                <span class="n">stt</span><span class="p">,</span>
+                <span class="n">user_response</span><span class="p">,</span>
+                <span class="n">send_to_llm</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="p">,</span>
+                <span class="n">tts</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">output</span><span class="p">(),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipecat_task</span> <span class="o">=</span> <span class="n">PipelineTask</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">PipelineParams</span><span class="p">(</span><span class="n">allow_interruptions</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_text_message_from_llm&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_llm_text_messages</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_llm_starts_generating_response&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_llm_starts_generating_response</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_llm_stops_generating_response&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_llm_stops_generating_response</span><span class="p">)</span>
+        <span class="c1"># Start the pipeline</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipecat_task</span><span class="o">.</span><span class="n">run</span><span class="p">())</span>
+        <span class="c1"># Wait for the pipeline to actually connect and start</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">input</span><span class="p">()</span><span class="o">.</span><span class="n">ready</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="c1"># Connects to the model, if necessary</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_llm_text_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sends the text message to the Pipecat pipeline to be converted into audio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">TextFrame</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]),</span> <span class="n">FrameDirection</span><span class="o">.</span><span class="n">DOWNSTREAM</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span> <span class="o">+=</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_llm_starts_generating_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Warns the Pipecat pipeline of the start of a response from the LLM by sending an LLMFullResponseStartFrame()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">LLMFullResponseStartFrame</span><span class="p">(),</span> <span class="n">FrameDirection</span><span class="o">.</span><span class="n">DOWNSTREAM</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_llm_stops_generating_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Warns the Pipecat pipeline of the end of a response from the LLM by sending an LLMFullResponseEndFrame()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">LLMFullResponseEndFrame</span><span class="p">(),</span> <span class="n">FrameDirection</span><span class="o">.</span><span class="n">DOWNSTREAM</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;on_llm_speech_transcribed&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;transcript&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span><span class="p">})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Disconnects from the LLM and unloads/closes it as/if necessary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Main loop for the bot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;.run() is no-op for PipecatBotStructure, the Pipecat pipeline is self-sufficient.&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sends a message to the LLM and forward the response.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data: The message to send to the model in OpenAI format, like {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello!&quot;}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;audio_chunk&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">input</span><span class="p">()</span><span class="o">.</span><span class="n">send_audio_frame</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;audio_chunk&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;PipecatBotStructure only supports audio data for now.&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_interruption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lenght_to_interruption</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle an interruption in the streaming.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            lenght_to_interruption: The length of the data that was produced to the user before the interruption.</span>
+<span class="sd">                This value could be number of characters, number of words, milliseconds, number of audio frames, etc.</span>
+<span class="sd">                depending on the bot structure that implements it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;handle interruptions: TODO&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">intent_router</span><span class="p">)</span></code>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.__init__" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>config</code>
+            </td>
+            <td>
+                  <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The configuration dictionary for the bot structure.
+It includes only the LLM definition under the <code>llm</code> key.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">intent_router</span><span class="p">:</span> <span class="n">IntentRouter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        config:</span>
+<span class="sd">            The configuration dictionary for the bot structure.</span>
+<span class="sd">            It includes only the LLM definition under the `llm` key.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Loading bot structure from config&quot;</span><span class="p">,</span> <span class="n">bot_structure_config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># Init the model client</span>
+    <span class="n">llm_config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;llm&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">llm_config</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires a &#39;llm&#39; configuration key.&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="p">:</span> <span class="n">LLMClient</span> <span class="o">=</span> <span class="n">load_llm_client_from_dict</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent_router</span><span class="o">=</span><span class="n">intent_router</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">llm_config</span><span class="p">)</span>
+
+    <span class="c1"># Import the correct VAD, STT and TTS clients from Pipecat</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">vad_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vad_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_class_from_config</span><span class="p">(</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;vad&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;vad&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;start_secs&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;stop_secs&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;min_volume&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">stt_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stt_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_class_from_config</span><span class="p">(</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;stt&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;stt&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;sample_rate&quot;</span><span class="p">:</span> <span class="mi">16000</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tts_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tts_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_class_from_config</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;tts&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;tts&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="c1"># Pipecat pipeline</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pipecat_task</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.connect" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">connect</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.connect" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Initializes the model and connects to it as/if necessary.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes the model and connects to it as/if necessary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Prepares the Pipecat pipeline</span>
+    <span class="n">transport_params</span> <span class="o">=</span> <span class="n">TransportParams</span><span class="p">(</span>
+        <span class="n">audio_in_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">audio_out_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">transcription_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">vad_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">vad_analyzer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vad_class</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">VADParams</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">vad_params</span><span class="p">)),</span>
+        <span class="n">vad_audio_passthrough</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">AudioTransport</span><span class="p">(</span><span class="n">transport_params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">emit</span><span class="p">)</span>
+
+    <span class="n">stt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stt_class</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">stt_params</span><span class="p">)</span>
+    <span class="n">tts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tts_class</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">tts_params</span><span class="p">)</span>
+    <span class="n">user_response</span> <span class="o">=</span> <span class="n">LLMUserResponseAggregator</span><span class="p">()</span>
+    <span class="n">send_to_llm</span> <span class="o">=</span> <span class="n">UserToLLMFrameProcessor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span> <span class="o">=</span> <span class="n">LLMToUserFrameProcessor</span><span class="p">()</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">input</span><span class="p">(),</span>
+            <span class="n">stt</span><span class="p">,</span>
+            <span class="n">user_response</span><span class="p">,</span>
+            <span class="n">send_to_llm</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="p">,</span>
+            <span class="n">tts</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">output</span><span class="p">(),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pipecat_task</span> <span class="o">=</span> <span class="n">PipelineTask</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">PipelineParams</span><span class="p">(</span><span class="n">allow_interruptions</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_text_message_from_llm&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_llm_text_messages</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_llm_starts_generating_response&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_llm_starts_generating_response</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_llm_stops_generating_response&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_llm_stops_generating_response</span><span class="p">)</span>
+    <span class="c1"># Start the pipeline</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipecat_task</span><span class="o">.</span><span class="n">run</span><span class="p">())</span>
+    <span class="c1"># Wait for the pipeline to actually connect and start</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">input</span><span class="p">()</span><span class="o">.</span><span class="n">ready</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="c1"># Connects to the model, if necessary</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.disconnect" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">disconnect</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.disconnect" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Disconnects from the LLM and unloads/closes it as/if necessary.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Disconnects from the LLM and unloads/closes it as/if necessary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_interruption" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_interruption</span><span class="p">(</span><span class="n">lenght_to_interruption</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_interruption" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Handle an interruption in the streaming.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>lenght_to_interruption</code>
+            </td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The length of the data that was produced to the user before the interruption.
+This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
+depending on the bot structure that implements it.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_interruption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lenght_to_interruption</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handle an interruption in the streaming.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lenght_to_interruption: The length of the data that was produced to the user before the interruption.</span>
+<span class="sd">            This value could be number of characters, number of words, milliseconds, number of audio frames, etc.</span>
+<span class="sd">            depending on the bot structure that implements it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;handle interruptions: TODO&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_starts_generating_response" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_llm_starts_generating_response</span><span class="p">(</span><span class="n">_</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_starts_generating_response" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Warns the Pipecat pipeline of the start of a response from the LLM by sending an LLMFullResponseStartFrame()</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_llm_starts_generating_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Warns the Pipecat pipeline of the start of a response from the LLM by sending an LLMFullResponseStartFrame()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">LLMFullResponseStartFrame</span><span class="p">(),</span> <span class="n">FrameDirection</span><span class="o">.</span><span class="n">DOWNSTREAM</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_stops_generating_response" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_llm_stops_generating_response</span><span class="p">(</span><span class="n">_</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_stops_generating_response" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Warns the Pipecat pipeline of the end of a response from the LLM by sending an LLMFullResponseEndFrame()</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_llm_stops_generating_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Warns the Pipecat pipeline of the end of a response from the LLM by sending an LLMFullResponseEndFrame()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">LLMFullResponseEndFrame</span><span class="p">(),</span> <span class="n">FrameDirection</span><span class="o">.</span><span class="n">DOWNSTREAM</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span><span class="p">:</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;on_llm_speech_transcribed&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;assistant&quot;</span><span class="p">,</span> <span class="s2">&quot;transcript&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_text_messages" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_llm_text_messages</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.handle_llm_text_messages" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Sends the text message to the Pipecat pipeline to be converted into audio.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_llm_text_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sends the text message to the Pipecat pipeline to be converted into audio.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]:</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">TextFrame</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]),</span> <span class="n">FrameDirection</span><span class="o">.</span><span class="n">DOWNSTREAM</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assistant_reply</span> <span class="o">+=</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.run" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Main loop for the bot.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main loop for the bot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;.run() is no-op for PipecatBotStructure, the Pipecat pipeline is self-sufficient.&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.send" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.bot_structure.PipecatBotStructure.send" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Sends a message to the LLM and forward the response.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>data</code>
+            </td>
+            <td>
+                  <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The message to send to the model in OpenAI format, like {"role": "user", "content": "Hello!"}</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/bot_structure.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sends a message to the LLM and forward the response.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: The message to send to the model in OpenAI format, like {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello!&quot;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;audio_chunk&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">input</span><span class="p">()</span><span class="o">.</span><span class="n">send_audio_frame</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;audio_chunk&quot;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;PipecatBotStructure only supports audio data for now.&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h4 id="plugins.intentional-pipecat.src.intentional_pipecat.frame_processor" class="doc doc-heading">
+            <code>frame_processor</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor" class="headerlink" title="Permanent link">#</a></h4>
+
+    <div class="doc doc-contents ">
+
+        <p>Pipecat frame processor implementation</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h5 id="plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.LLMToUserFrameProcessor" class="doc doc-heading">
+            <code>LLMToUserFrameProcessor</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.LLMToUserFrameProcessor" class="headerlink" title="Permanent link">#</a></h5>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pipecat.processors.frame_processor.FrameProcessor">FrameProcessor</span></code></p>
+
+
+        <p>FrameProcessor that takes the LLM output and sends it to the user.</p>
+<p>Note: this processor itself is doing nothing else than changing the default behavior of <code>process_frame()</code> to not
+swallow frames when they reach it. The processor is actually used by <code>PipecatBotStructure</code> to generate frames when
+a reply from the LLM is received.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/frame_processor.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">LLMToUserFrameProcessor</span><span class="p">(</span><span class="n">FrameProcessor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    FrameProcessor that takes the LLM output and sends it to the user.</span>
+
+<span class="sd">    Note: this processor itself is doing nothing else than changing the default behavior of `process_frame()` to not</span>
+<span class="sd">    swallow frames when they reach it. The processor is actually used by `PipecatBotStructure` to generate frames when</span>
+<span class="sd">    a reply from the LLM is received.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">process_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">FrameDirection</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simply forwards all framews ahead. The default behavior of FrameProcessor is to block them instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">process_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.LLMToUserFrameProcessor.process_frame" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">process_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.LLMToUserFrameProcessor.process_frame" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Simply forwards all framews ahead. The default behavior of FrameProcessor is to block them instead.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/frame_processor.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">process_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">FrameDirection</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simply forwards all framews ahead. The default behavior of FrameProcessor is to block them instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">process_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h5 id="plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.UserToLLMFrameProcessor" class="doc doc-heading">
+            <code>UserToLLMFrameProcessor</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.UserToLLMFrameProcessor" class="headerlink" title="Permanent link">#</a></h5>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pipecat.processors.frame_processor.FrameProcessor">FrameProcessor</span></code></p>
+
+
+        <p>FrameProcessor that takes the user input and sends it to the LLM.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/frame_processor.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">UserToLLMFrameProcessor</span><span class="p">(</span><span class="n">FrameProcessor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    FrameProcessor that takes the user input and sends it to the LLM.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">llm_client</span><span class="p">:</span> <span class="n">LLMClient</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_client</span> <span class="o">=</span> <span class="n">llm_client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transcription</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">process_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">FrameDirection</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes the incoming frames if relevant.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">process_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">LLMMessagesFrame</span><span class="p">):</span>
+            <span class="n">user_message</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;LLMMessageFrame received, sending message to LLM&quot;</span><span class="p">,</span> <span class="n">user_message</span><span class="o">=</span><span class="n">user_message</span><span class="p">)</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;on_user_speech_transcribed&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;transcript&quot;</span><span class="p">:</span> <span class="n">user_message</span><span class="p">})</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_client</span><span class="o">.</span><span class="n">send</span><span class="p">({</span><span class="s2">&quot;text_message&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_message</span><span class="p">}})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">UserStartedSpeakingFrame</span><span class="p">):</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;on_user_speech_started&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">UserStoppedSpeakingFrame</span><span class="p">):</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;on_user_speech_ended&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.UserToLLMFrameProcessor.process_frame" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">process_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.frame_processor.UserToLLMFrameProcessor.process_frame" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Processes the incoming frames if relevant.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/frame_processor.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">process_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">FrameDirection</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Processes the incoming frames if relevant.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">process_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">LLMMessagesFrame</span><span class="p">):</span>
+        <span class="n">user_message</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;LLMMessageFrame received, sending message to LLM&quot;</span><span class="p">,</span> <span class="n">user_message</span><span class="o">=</span><span class="n">user_message</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;on_user_speech_transcribed&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;transcript&quot;</span><span class="p">:</span> <span class="n">user_message</span><span class="p">})</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_client</span><span class="o">.</span><span class="n">send</span><span class="p">({</span><span class="s2">&quot;text_message&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user_message</span><span class="p">}})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">UserStartedSpeakingFrame</span><span class="p">):</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;on_user_speech_started&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">UserStoppedSpeakingFrame</span><span class="p">):</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_client</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;on_user_speech_ended&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h4 id="plugins.intentional-pipecat.src.intentional_pipecat.transport" class="doc doc-heading">
+            <code>transport</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport" class="headerlink" title="Permanent link">#</a></h4>
+
+    <div class="doc doc-contents ">
+
+        <p>Pipecat transport class implementation that is compatible with Intentional.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h5 id="plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport" class="doc doc-heading">
+            <code>AudioInputTransport</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport" class="headerlink" title="Permanent link">#</a></h5>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pipecat.transports.base_input.BaseInputTransport">BaseInputTransport</span></code></p>
+
+
+        <p>Pipecat input transport class implementation that is compatible with Intentional (supports audio only).</p>
+<p>This class' task is to take the user's input and convert it into frames that Pipecat can process.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/transport.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">AudioInputTransport</span><span class="p">(</span><span class="n">BaseInputTransport</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pipecat input transport class implementation that is compatible with Intentional (supports audio only).</span>
+
+<span class="sd">    This class&#39; task is to take the user&#39;s input and convert it into frames that Pipecat can process.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">TransportParams</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ready</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">send_audio_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">audio</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Public method used by the Intentional bot structure to publish audio of user&#39;s speech to the Pipecat pipeline.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ready</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Audio input transport not ready yet, won&#39;t send this audio frame&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">InputAudioRawFrame</span><span class="p">(</span>
+            <span class="n">audio</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span>
+            <span class="n">sample_rate</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span>
+            <span class="n">num_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="o">.</span><span class="n">audio_in_channels</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">push_audio_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">StartFrame</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts the transport&#39;s resources.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Starting audio input transport&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ready</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cleans up the transport&#39;s resources.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.cleanup" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cleanup</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.cleanup" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Cleans up the transport's resources.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/transport.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cleans up the transport&#39;s resources.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.send_audio_frame" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">send_audio_frame</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.send_audio_frame" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Public method used by the Intentional bot structure to publish audio of user's speech to the Pipecat pipeline.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/transport.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">send_audio_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">audio</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Public method used by the Intentional bot structure to publish audio of user&#39;s speech to the Pipecat pipeline.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ready</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Audio input transport not ready yet, won&#39;t send this audio frame&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">InputAudioRawFrame</span><span class="p">(</span>
+        <span class="n">audio</span><span class="o">=</span><span class="n">audio</span><span class="p">,</span>
+        <span class="n">sample_rate</span><span class="o">=</span><span class="mi">16000</span><span class="p">,</span>
+        <span class="n">num_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="o">.</span><span class="n">audio_in_channels</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">push_audio_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.start" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">start</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioInputTransport.start" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Starts the transport's resources.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/transport.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">StartFrame</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Starts the transport&#39;s resources.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Starting audio input transport&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ready</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h5 id="plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport" class="doc doc-heading">
+            <code>AudioOutputTransport</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport" class="headerlink" title="Permanent link">#</a></h5>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pipecat.transports.base_output.BaseOutputTransport">BaseOutputTransport</span></code></p>
+
+
+        <p>Pipecat output transport class implementation that is compatible with Intentional (supports audio only).</p>
+<p>This class' task is to take the audio frames generated by the TTS and publish them through events that Intentional
+can understand.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/transport.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">AudioOutputTransport</span><span class="p">(</span><span class="n">BaseOutputTransport</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pipecat output transport class implementation that is compatible with Intentional (supports audio only).</span>
+
+<span class="sd">    This class&#39; task is to take the audio frames generated by the TTS and publish them through events that Intentional</span>
+<span class="sd">    can understand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">TransportParams</span><span class="p">,</span> <span class="n">emitter_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_emitter_callback</span> <span class="o">=</span> <span class="n">emitter_callback</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">StartFrame</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts the transport&#39;s resources.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cleans up the transport&#39;s resources.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">process_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">FrameDirection</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        When it receives a TTSAudioRawFrame, makes the llm emit a `on_audio_message_from_llm` event with the content</span>
+<span class="sd">        of the frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">TTSAudioRawFrame</span><span class="p">):</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_emitter_callback</span><span class="p">(</span><span class="s2">&quot;on_audio_message_from_llm&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="n">frame</span><span class="o">.</span><span class="n">audio</span><span class="p">})</span>
+        <span class="c1"># return await super().process_frame(frame, direction)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_audio_out_task_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal: overrides the method of the base class to not perform a few actions we don&#39;t need.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_audio_frame</span><span class="p">():</span>
+                <span class="c1"># Also, push frame downstream in case anyone else needs it.</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">push_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+                <span class="c1"># Send audio.</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_raw_audio_frames</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">audio</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-except</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2"> error writing to microphone: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.cleanup" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cleanup</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.cleanup" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Cleans up the transport's resources.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/transport.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cleans up the transport&#39;s resources.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.process_frame" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">process_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.process_frame" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>When it receives a TTSAudioRawFrame, makes the llm emit a <code>on_audio_message_from_llm</code> event with the content
+of the frame.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/transport.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">process_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">FrameDirection</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When it receives a TTSAudioRawFrame, makes the llm emit a `on_audio_message_from_llm` event with the content</span>
+<span class="sd">    of the frame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">TTSAudioRawFrame</span><span class="p">):</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_emitter_callback</span><span class="p">(</span><span class="s2">&quot;on_audio_message_from_llm&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="n">frame</span><span class="o">.</span><span class="n">audio</span><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.start" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">start</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioOutputTransport.start" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Starts the transport's resources.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/transport.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">StartFrame</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Starts the transport&#39;s resources.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h5 id="plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioTransport" class="doc doc-heading">
+            <code>AudioTransport</code>
+
+
+<a href="#plugins.intentional-pipecat.src.intentional_pipecat.transport.AudioTransport" class="headerlink" title="Permanent link">#</a></h5>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pipecat.transports.base_transport.BaseTransport">BaseTransport</span></code></p>
+
+
+        <p>Pipecat transport class implementation that is compatible with Intentional (supports audio only).</p>
+<p>This class is a simple wrapper around AudioInputTransport and AudioOutputTransport, that makes sure both classes
+receive the same parameters at initialization.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>plugins/intentional-pipecat/src/intentional_pipecat/transport.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">AudioTransport</span><span class="p">(</span><span class="n">BaseTransport</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pipecat transport class implementation that is compatible with Intentional (supports audio only).</span>
+
+<span class="sd">    This class is a simple wrapper around AudioInputTransport and AudioOutputTransport, that makes sure both classes</span>
+<span class="sd">    receive the same parameters at initialization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">TransportParams</span><span class="p">,</span> <span class="n">emitter_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_emitter_callback</span> <span class="o">=</span> <span class="n">emitter_callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input</span> <span class="o">=</span> <span class="n">AudioInputTransport</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output</span> <span class="o">=</span> <span class="n">AudioOutputTransport</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_emitter_callback</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AudioInputTransport</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span>
+
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AudioOutputTransport</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>

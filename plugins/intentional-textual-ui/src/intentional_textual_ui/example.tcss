@@ -1,0 +1,12 @@
+.bordered {
+    border: solid white;
+    height: 1fr;
+    padding: 2;
+}
+.column {
+    width: 1fr;
+}
+.chat {
+    grid-size: 3;
+    grid-columns: 1fr 5fr 1fr;
+}
