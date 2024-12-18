@@ -4,7 +4,7 @@
 Functions to load bot structure classes from config files.
 """
 
-from typing import Dict, Any, Optional, Set, Callable
+from typing import Dict, Any, Optional, Set
 
 from abc import abstractmethod
 
@@ -43,12 +43,6 @@ class BotStructure(EventListener):
     etc.
     """
 
-    def __init__(self) -> None:
-        """
-        Initialize the bot structure.
-        """
-        self.event_handlers: Dict[str, Callable] = {}
-
     async def connect(self) -> None:
         """
         Connect to the bot.
@@ -81,38 +75,6 @@ class BotStructure(EventListener):
                 This value could be number of characters, number of words, milliseconds, number of audio frames, etc.
                 depending on the bot structure that implements it.
         """
-
-    def add_event_handler(self, event_name: str, handler: Callable) -> None:
-        """
-        Add an event handler for a specific event type.
-
-        Args:
-            event_name: The name of the event to handle.
-            handler: The handler function to call when the event is received.
-        """
-        if event_name in self.event_handlers:
-            log.debug(
-                "Event handler for '%s' was already assigned. The older handler will be replaced by the new one.",
-                event_name,
-                event_name=event_name,
-                event_handler=self.event_handlers[event_name],
-            )
-        log.debug("Adding event handler", event_name=event_name, event_handler=handler)
-        self.event_handlers[event_name] = handler
-
-    async def handle_event(self, event_name: str, event: Dict[str, Any]) -> None:
-        """
-        Handle different types of events that the LLM may generate.
-        """
-        if "*" in self.event_handlers:
-            log.debug("Calling wildcard event handler", event_name=event_name)
-            await self.event_handlers["*"](event)
-
-        if event_name in self.event_handlers:
-            log.debug("Calling event handler", event_name=event_name)
-            await self.event_handlers[event_name](event)
-        else:
-            log.debug("No event handler for event", event_name=event_name)
 
 
 def load_bot_structure_from_dict(intent_router: IntentRouter, config: Dict[str, Any]) -> BotStructure:

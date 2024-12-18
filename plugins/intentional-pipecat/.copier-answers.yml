@@ -1,0 +1,6 @@
+# Changes here will be overwritten by Copier
+_src_path: .template/
+description: Plugin that lets you build transcribed audio voice bots using Pipecat
+module_name: pipecat
+name: Pipecat
+package_name: pipecat

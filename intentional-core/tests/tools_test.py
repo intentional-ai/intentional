@@ -134,3 +134,26 @@ def test_missing_run():
 
     with pytest.raises(ValueError, match="Unknown tool"):
         load_tools_from_dict([{"id": "no-run-test-tool"}])
+
+
+def test_load_tool_must_specify_id():
+
+    class TestTool(Tool):
+        id = "test-tool"
+        name = "No Run Test Tool"
+        description = "A test tool for testing purposes."
+        parameters = [
+            ToolParameter(
+                name="test_param",
+                description="A test parameter.",
+                type=str,
+                required=True,
+                default=None,
+            )
+        ]
+
+        async def run(self, params=None):
+            return True
+
+    with pytest.raises(ValueError, match="Tool definitions must have an 'id' field."):
+        load_tools_from_dict([{"name": "no-run-test-tool"}])
