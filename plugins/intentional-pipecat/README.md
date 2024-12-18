@@ -20,7 +20,7 @@ Plugin that lets you build transcribed audio voice bots using Pipecat.
 You can install `intentional-pipecat` without extras:
 
 ```console
-pip install intentional-pipecat[silero,deepgram,openai]
+pip install intentional-pipecat
 ```
 
 However, it will be unusable as-is, because it will come with nearly no dependencies.
