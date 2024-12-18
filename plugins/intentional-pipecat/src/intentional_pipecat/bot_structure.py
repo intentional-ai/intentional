@@ -4,19 +4,17 @@
 Pipecat bot structure implementation.
 """
 
-from typing import Dict, Any, AsyncGenerator
+from typing import Dict, Any, AsyncGenerator, Optional
 
 import os
 import asyncio
+import importlib
 
 import structlog
 
 from pipecat.processors.frame_processor import FrameDirection
-from pipecat.services.azure import AzureTTSService
-from pipecat.audio.vad.silero import SileroVADAnalyzer
-from pipecat.audio.vad.vad_analyzer import VADParams
-from pipecat.services.deepgram import DeepgramSTTService
 from pipecat.pipeline.pipeline import Pipeline
+from pipecat.audio.vad.vad_analyzer import VADParams
 from pipecat.frames.frames import TextFrame, LLMFullResponseStartFrame, LLMFullResponseEndFrame
 from pipecat.pipeline.task import PipelineParams, PipelineTask
 from pipecat.processors.aggregators.llm_response import LLMUserResponseAggregator
@@ -33,7 +31,14 @@ from intentional_pipecat.transport import AudioTransport
 log = structlog.get_logger(logger_name=__name__)
 
 
-class PipecatBotStructure(BotStructure):
+PIPECAT_MODULES_FOR_KEY = {
+    "vad": "pipecat.audio.vad.",
+    "stt": "pipecat.services.",
+    "tts": "pipecat.services.",
+}
+
+
+class PipecatBotStructure(BotStructure):  # pylint: disable=too-many-instance-attributes
     """
     Bot structure that uses Pipecat to make text-only models able to handle spoken input.
     """
@@ -56,11 +61,37 @@ class PipecatBotStructure(BotStructure):
             raise ValueError(f"{self.__class__.__name__} requires a 'llm' configuration key.")
         self.llm: LLMClient = load_llm_client_from_dict(parent=self, intent_router=intent_router, config=llm_config)
 
+        # Import the correct VAD, STT and TTS clients from Pipecat
+        self.vad_class, self.vad_params = self._load_class_from_config(
+            config.pop("vad", None), "vad", {"start_secs": 0.1, "stop_secs": 0.1, "min_volume": 0.6}
+        )
+        self.stt_class, self.stt_params = self._load_class_from_config(
+            config.pop("stt", None), "stt", {"sample_rate": 16000}
+        )
+        self.tts_class, self.tts_params = self._load_class_from_config(config.pop("tts", None), "tts", {})
+
         # Pipecat pipeline
         self.pipecat_task = None
         self.publisher = None
         self.transport = None
         self.assistant_reply = ""
+
+    def _load_class_from_config(self, config: Dict[str, Any], key: str, defaults: Optional[Dict[str, Any]] = None):
+        if not config:
+            raise ValueError(f"{self.__class__.__name__} requires a '{key}' configuration key.")
+        module = importlib.import_module(PIPECAT_MODULES_FOR_KEY[key] + config["module"])
+        class_ = getattr(module, config["class"])
+        params = config.get("params", {})
+
+        # Load env vars if necessary
+        usable_params = defaults or {}
+        for param_key in params.keys():
+            if param_key.endswith("__envvar"):
+                usable_params[param_key.removesuffix("__envvar")] = os.getenv(params[param_key])
+            else:
+                usable_params[param_key] = params[param_key]
+
+        return class_, usable_params
 
     async def connect(self) -> None:
         """
@@ -72,13 +103,13 @@ class PipecatBotStructure(BotStructure):
             audio_out_enabled=True,
             transcription_enabled=True,
             vad_enabled=True,
-            vad_analyzer=SileroVADAnalyzer(params=VADParams(start_secs=0.1, stop_secs=0.1, min_volume=0.6)),
+            vad_analyzer=self.vad_class(params=VADParams(**self.vad_params)),
             vad_audio_passthrough=True,
         )
         self.transport = AudioTransport(transport_params, self.llm.emit)
 
-        stt = DeepgramSTTService(api_key=os.getenv("DEEPGRAM_API_KEY"), sample_rate=16000)
-        tts = AzureTTSService(api_key=os.getenv("AZURE_SPEECH_API_KEY"), region=os.getenv("AZURE_SPEECH_REGION"))
+        stt = self.stt_class(**self.stt_params)
+        tts = self.tts_class(**self.tts_params)
         user_response = LLMUserResponseAggregator()
         send_to_llm = UserToLLMFrameProcessor(self.llm)
         self.publisher = LLMToUserFrameProcessor()
