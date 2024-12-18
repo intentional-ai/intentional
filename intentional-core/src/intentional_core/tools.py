@@ -82,7 +82,7 @@ def load_tools_from_dict(config: List[Dict[str, Any]]) -> Dict[str, Tool]:
             continue
 
         if subclass.id in _TOOL_CLASSES:
-            log.warning(
+            log.debug(
                 "Duplicate tool '%s' found. The older class will be replaced by the newly imported one.",
                 subclass.id,
                 old_tool_id=subclass.id,
@@ -94,20 +94,22 @@ def load_tools_from_dict(config: List[Dict[str, Any]]) -> Dict[str, Tool]:
     # Initialize the tools
     tools = {}
     for tool_config in config:
-        tool_class = tool_config.pop("id")
-        log.debug("Creating tool", tool_class=tool_class)
-        if tool_class not in _TOOL_CLASSES:
+        tool_id = tool_config.pop("id", None)
+        if not tool_id:
+            raise ValueError("Tool definitions must have an 'id' field.")
+        log.debug("Creating tool", tool_id=tool_id)
+        if tool_id not in _TOOL_CLASSES:
             raise ValueError(
-                f"Unknown tool '{tool_class}'. Available tools: {list(_TOOL_CLASSES)}. "
+                f"Unknown tool '{tool_id}'. Available tools: {list(_TOOL_CLASSES)}. "
                 "Did you forget to install a plugin?"
             )
-        tool_instance: Tool = _TOOL_CLASSES[tool_class](**tool_config)
+        tool_instance: Tool = _TOOL_CLASSES[tool_id](**tool_config)
         if getattr(tool_instance, "name", None) is None:
-            raise ValueError(f"Tool '{tool_class}' must have a name.")
+            raise ValueError(f"Tool '{tool_id}' must have a name.")
         if getattr(tool_instance, "description", None) is None:
-            raise ValueError(f"Tool '{tool_class}' must have a description.")
+            raise ValueError(f"Tool '{tool_id}' must have a description.")
         if getattr(tool_instance, "parameters", None) is None:
-            raise ValueError(f"Tool '{tool_class}' must have parameters.")
+            raise ValueError(f"Tool '{tool_id}' must have parameters.")
         tools[tool_instance.name] = tool_instance
 
     return tools
