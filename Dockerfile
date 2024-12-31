@@ -10,10 +10,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
-# --> All the API keys your container needs
-ARG OPENAI_API_KEY
-ENV OPENAI_API_KEY ${OPENAI_API_KEY}
-
 WORKDIR /app
 
 # Copy the source code into the container.
@@ -39,4 +35,4 @@ EXPOSE 8000
 
 # Run Intentional
 # --> Set the config file here
-CMD intentional config.yml
+CMD ["intentional", "config.yml"]
