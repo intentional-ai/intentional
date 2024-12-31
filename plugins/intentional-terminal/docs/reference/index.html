@@ -1,0 +1,4049 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../">
+      
+      
+        <link rel="next" href="../../../intentional-textual-ui/">
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>API Reference - Intentional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference-local-terminal-output" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Intentional" class="md-header__button md-logo" aria-label="Intentional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Intentional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/intentional-ai/intentional" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Intentional" class="md-nav__button md-logo" aria-label="Intentional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Intentional
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/intentional-ai/intentional" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/concepts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    High-level Concepts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/config-file/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration File
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Main Package
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/core-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Core Package
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Plugins
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            Plugins
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_1" id="__nav_6_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    FastAPI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            FastAPI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-fastapi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-fastapi/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_2" id="__nav_6_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    OpenAI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            OpenAI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-openai/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-openai/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_3" id="__nav_6_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Pipecat
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Pipecat
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-pipecat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-pipecat/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_4" id="__nav_6_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Telegram UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Telegram UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-telegram/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-telegram/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_5" id="__nav_6_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Terminal
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Terminal
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      intentional-terminal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src" class="md-nav__link">
+    <span class="md-ellipsis">
+      src
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      intentional_terminal
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="intentional_terminal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.__about__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __about__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      bot_interface
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="bot_interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      TerminalBotInterface
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TerminalBotInterface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.check_for_transcripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_for_transcripts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_audio_messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_audio_messages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_conversation_ended" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_conversation_ended
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_finish_text_response" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_finish_text_response
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_llm_connection" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_llm_connection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_start_text_response" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_start_text_response
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_text_messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_text_messages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.speech_started" class="md-nav__link">
+    <span class="md-ellipsis">
+      speech_started
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.speech_stopped" class="md-nav__link">
+    <span class="md-ellipsis">
+      speech_stopped
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      handlers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="handlers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      audio_handler
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="audio_handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioHandler
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      input_handler
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="input_handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler" class="md-nav__link">
+    <span class="md-ellipsis">
+      InputHandler
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_6" id="__nav_6_3_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Textual UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            Textual UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-textual-ui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../intentional-textual-ui/docs/reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contribute
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/cla/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      intentional-terminal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src" class="md-nav__link">
+    <span class="md-ellipsis">
+      src
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="src">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal" class="md-nav__link">
+    <span class="md-ellipsis">
+      intentional_terminal
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="intentional_terminal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.__about__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __about__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      bot_interface
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="bot_interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface" class="md-nav__link">
+    <span class="md-ellipsis">
+      TerminalBotInterface
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TerminalBotInterface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.check_for_transcripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_for_transcripts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_audio_messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_audio_messages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_conversation_ended" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_conversation_ended
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_finish_text_response" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_finish_text_response
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_llm_connection" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_llm_connection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_start_text_response" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_start_text_response
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_text_messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      handle_text_messages
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      run
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.speech_started" class="md-nav__link">
+    <span class="md-ellipsis">
+      speech_started
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.speech_stopped" class="md-nav__link">
+    <span class="md-ellipsis">
+      speech_stopped
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      handlers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="handlers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      audio_handler
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="audio_handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioHandler
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      input_handler
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="input_handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler" class="md-nav__link">
+    <span class="md-ellipsis">
+      InputHandler
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="api-reference-local-terminal-output">API Reference - Local terminal output<a class="headerlink" href="#api-reference-local-terminal-output" title="Permanent link">#</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="plugins.intentional-terminal"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="plugins.intentional-terminal.src" class="doc doc-heading">
+            <code>src</code>
+
+
+<a href="#plugins.intentional-terminal.src" class="headerlink" title="Permanent link">#</a></h2>
+
+    <div class="doc doc-contents ">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h3 id="plugins.intentional-terminal.src.intentional_terminal" class="doc doc-heading">
+            <code>intentional_terminal</code>
+
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal" class="headerlink" title="Permanent link">#</a></h3>
+
+    <div class="doc doc-contents ">
+
+        <p>Init file for <code>intentional_terminal</code>.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h4 id="plugins.intentional-terminal.src.intentional_terminal.__about__" class="doc doc-heading">
+            <code>__about__</code>
+
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.__about__" class="headerlink" title="Permanent link">#</a></h4>
+
+    <div class="doc doc-contents ">
+
+        <p>Package descriptors for intentional-terminal.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h4 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface" class="doc doc-heading">
+            <code>bot_interface</code>
+
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface" class="headerlink" title="Permanent link">#</a></h4>
+
+    <div class="doc doc-contents ">
+
+        <p>Local bot interface for Intentional.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h5 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface" class="doc doc-heading">
+            <code>TerminalBotInterface</code>
+
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface" class="headerlink" title="Permanent link">#</a></h5>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="intentional_core.BotInterface">BotInterface</span></code></p>
+
+
+        <p>Bot that uses the local command line interface to interact with the user.</p>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">TerminalBotInterface</span><span class="p">(</span><span class="n">BotInterface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bot that uses the local command line interface to interact with the user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;terminal&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent_router</span><span class="p">:</span> <span class="n">IntentRouter</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="c1"># Init the structure</span>
+        <span class="n">bot_structure_config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;bot&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bot_structure_config</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> requires a &#39;bot&#39; configuration key to know how to structure the bot.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating bot structure&quot;</span><span class="p">,</span> <span class="n">bot_structure_type</span><span class="o">=</span><span class="n">bot_structure_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intent_router</span> <span class="o">=</span> <span class="n">intent_router</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bot_structure_config</span> <span class="o">=</span> <span class="n">bot_structure_config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="p">:</span> <span class="n">BotStructure</span> <span class="o">=</span> <span class="n">load_bot_structure_from_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intent_router</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bot_structure_config</span><span class="p">)</span>
+
+        <span class="c1"># Check the modality</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modality</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;modality&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting interface modality&quot;</span><span class="p">,</span> <span class="n">modality</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">modality</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio_handler</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_handler</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Chooses the specific loop to use for this combination of bot and modality and kicks it off.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Running the bot&quot;</span><span class="p">,</span> <span class="n">bot_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">modality</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">modality</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality</span> <span class="o">==</span> <span class="s2">&quot;audio_stream&quot;</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_audio_stream</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality</span> <span class="o">==</span> <span class="s2">&quot;text_messages&quot;</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_text_messages</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Modality &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">modality</span><span class="si">}</span><span class="s2">&#39; is not yet supported for &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; bots.&quot;</span>
+                <span class="s2">&quot;These are the supported modalities: &#39;text_messages&#39;, &#39;audio_stream&#39;.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_run_text_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bot</span><span class="p">:</span> <span class="n">BotStructure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs the CLI interface for the text turns modality.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_text_message_from_llm&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_text_messages</span><span class="p">)</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_llm_starts_generating_response&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_start_text_response</span><span class="p">)</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_llm_stops_generating_response&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_finish_text_response</span><span class="p">)</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_llm_connection&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_llm_connection</span><span class="p">)</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_conversation_ended&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_conversation_ended</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">bot</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_run_audio_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bot</span><span class="p">:</span> <span class="n">BotStructure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs the CLI interface for the continuous audio streaming modality.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create the handlers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio_handler</span> <span class="o">=</span> <span class="n">AudioHandler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_handler</span> <span class="o">=</span> <span class="n">InputHandler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_handler</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
+
+        <span class="c1"># Connect the event handlers</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_for_transcripts</span><span class="p">)</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_conversation_ended&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_conversation_ended</span><span class="p">)</span>
+        <span class="c1"># bot.add_event_handler(&quot;on_text_message_from_llm&quot;, self.handle_text_messages)</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_audio_message_from_llm&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_audio_messages</span><span class="p">)</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_user_speech_started&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speech_started</span><span class="p">)</span>
+        <span class="n">bot</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="s2">&quot;on_user_speech_ended&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">speech_stopped</span><span class="p">)</span>
+
+        <span class="c1"># Start keyboard listener in a separate thread</span>
+        <span class="n">listener</span> <span class="o">=</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">Listener</span><span class="p">(</span><span class="n">on_press</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_handler</span><span class="o">.</span><span class="n">on_press</span><span class="p">)</span>
+        <span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Connecting to the LLM&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">bot</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">bot</span><span class="o">.</span><span class="n">run</span><span class="p">())</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Chat is ready. Start speaking!&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Press &#39;q&#39; to quit&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Start continuous audio streaming</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audio_handler</span><span class="o">.</span><span class="n">start_streaming</span><span class="p">(</span><span class="n">bot</span><span class="o">.</span><span class="n">send</span><span class="p">))</span>
+
+            <span class="c1"># Simple input loop for quit command</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">command</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_handler</span><span class="o">.</span><span class="n">command_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;q&quot;</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-except</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;An error occurred&quot;</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">audio_handler</span><span class="o">.</span><span class="n">stop_streaming</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">audio_handler</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">bot</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Chat is finished. Bye!&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">check_for_transcripts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks for transcripts from the bot.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event dictionary containing the transcript.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;transcript&quot;</span> <span class="ow">in</span> <span class="n">event</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] Transcript: </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;transcript&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_start_text_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints to the console when the bot starts generating a text response.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Assistant: &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_finish_text_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints to the console when the bot starts generating a text response.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send</span><span class="p">({</span><span class="s2">&quot;text_message&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;User: &quot;</span><span class="p">)}})</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_llm_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints to the console when the bot connects to the LLM.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event dictionary containing the LLM connection event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==&gt; Chat is ready!&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_finish_text_response</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_text_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints to the console any text message from the bot.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event dictionary containing the message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_audio_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plays audio responses from the bot.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event dictionary containing the audio message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio_handler</span><span class="o">.</span><span class="n">play_audio</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">speech_started</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints to the console when the bot starts speaking.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event dictionary containing the speech start event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[User is speaking]&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Handle interruptions if it is the case</span>
+        <span class="n">played_milliseconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio_handler</span><span class="o">.</span><span class="n">stop_playback_immediately</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Audio response played&quot;</span><span class="p">,</span> <span class="n">play_duration</span><span class="o">=</span><span class="n">played_milliseconds</span><span class="p">)</span>
+
+        <span class="c1"># If we&#39;re interrupting the bot, handle the interruption on the LLM side too</span>
+        <span class="k">if</span> <span class="n">played_milliseconds</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Handling interruption&quot;</span><span class="p">,</span> <span class="n">play_duration</span><span class="o">=</span><span class="n">played_milliseconds</span><span class="p">)</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">handle_interruption</span><span class="p">(</span><span class="n">played_milliseconds</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">speech_stopped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints to the console when the bot stops speaking.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event dictionary containing the speech stop event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[User stopped speaking]&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_conversation_ended</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The conversation is over, so let&#39;s ask the user if they want to have another go.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">restart</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;==&gt; The conversation was ended by the bot. Do you want to restart? (y/N)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;y&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">restart</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="p">:</span> <span class="n">BotStructure</span> <span class="o">=</span> <span class="n">load_bot_structure_from_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intent_router</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bot_structure_config</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.check_for_transcripts" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">check_for_transcripts</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.check_for_transcripts" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Checks for transcripts from the bot.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>event</code>
+            </td>
+            <td>
+                  <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The event dictionary containing the transcript.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">check_for_transcripts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks for transcripts from the bot.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event: The event dictionary containing the transcript.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;transcript&quot;</span> <span class="ow">in</span> <span class="n">event</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] Transcript: </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s1">&#39;transcript&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_audio_messages" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_audio_messages</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_audio_messages" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Plays audio responses from the bot.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>event</code>
+            </td>
+            <td>
+                  <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The event dictionary containing the audio message.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_audio_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plays audio responses from the bot.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event: The event dictionary containing the audio message.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">audio_handler</span><span class="o">.</span><span class="n">play_audio</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">])</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_conversation_ended" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_conversation_ended</span><span class="p">(</span><span class="n">_</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_conversation_ended" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The conversation is over, so let's ask the user if they want to have another go.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_conversation_ended</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The conversation is over, so let&#39;s ask the user if they want to have another go.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">restart</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;==&gt; The conversation was ended by the bot. Do you want to restart? (y/N)&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;y&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">restart</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="p">:</span> <span class="n">BotStructure</span> <span class="o">=</span> <span class="n">load_bot_structure_from_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intent_router</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bot_structure_config</span><span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_finish_text_response" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_finish_text_response</span><span class="p">(</span><span class="n">_</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_finish_text_response" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Prints to the console when the bot starts generating a text response.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_finish_text_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints to the console when the bot starts generating a text response.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">send</span><span class="p">({</span><span class="s2">&quot;text_message&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;User: &quot;</span><span class="p">)}})</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_llm_connection" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_llm_connection</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_llm_connection" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Prints to the console when the bot connects to the LLM.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>event</code>
+            </td>
+            <td>
+                  <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The event dictionary containing the LLM connection event.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_llm_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints to the console when the bot connects to the LLM.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event: The event dictionary containing the LLM connection event.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==&gt; Chat is ready!&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_finish_text_response</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_start_text_response" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_start_text_response</span><span class="p">(</span><span class="n">_</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_start_text_response" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Prints to the console when the bot starts generating a text response.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_start_text_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints to the console when the bot starts generating a text response.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Assistant: &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_text_messages" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">handle_text_messages</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.handle_text_messages" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Prints to the console any text message from the bot.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>event</code>
+            </td>
+            <td>
+                  <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The event dictionary containing the message.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">handle_text_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints to the console any text message from the bot.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event: The event dictionary containing the message.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">],</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.run" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Chooses the specific loop to use for this combination of bot and modality and kicks it off.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Chooses the specific loop to use for this combination of bot and modality and kicks it off.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Running the bot&quot;</span><span class="p">,</span> <span class="n">bot_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">modality</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">modality</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality</span> <span class="o">==</span> <span class="s2">&quot;audio_stream&quot;</span><span class="p">:</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_audio_stream</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality</span> <span class="o">==</span> <span class="s2">&quot;text_messages&quot;</span><span class="p">:</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_text_messages</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Modality &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">modality</span><span class="si">}</span><span class="s2">&#39; is not yet supported for &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; bots.&quot;</span>
+            <span class="s2">&quot;These are the supported modalities: &#39;text_messages&#39;, &#39;audio_stream&#39;.&quot;</span>
+        <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.speech_started" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">speech_started</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.speech_started" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Prints to the console when the bot starts speaking.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>event</code>
+            </td>
+            <td>
+                  <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The event dictionary containing the speech start event.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">speech_started</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints to the console when the bot starts speaking.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event: The event dictionary containing the speech start event.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[User is speaking]&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Handle interruptions if it is the case</span>
+    <span class="n">played_milliseconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio_handler</span><span class="o">.</span><span class="n">stop_playback_immediately</span><span class="p">()</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Audio response played&quot;</span><span class="p">,</span> <span class="n">play_duration</span><span class="o">=</span><span class="n">played_milliseconds</span><span class="p">)</span>
+
+    <span class="c1"># If we&#39;re interrupting the bot, handle the interruption on the LLM side too</span>
+    <span class="k">if</span> <span class="n">played_milliseconds</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Handling interruption&quot;</span><span class="p">,</span> <span class="n">play_duration</span><span class="o">=</span><span class="n">played_milliseconds</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">bot</span><span class="o">.</span><span class="n">handle_interruption</span><span class="p">(</span><span class="n">played_milliseconds</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.speech_stopped" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">speech_stopped</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.bot_interface.TerminalBotInterface.speech_stopped" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Prints to the console when the bot stops speaking.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>event</code>
+            </td>
+            <td>
+                  <code><span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The event dictionary containing the speech stop event.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/bot_interface.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">speech_stopped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints to the console when the bot stops speaking.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event: The event dictionary containing the speech stop event.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[User stopped speaking]&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h4 id="plugins.intentional-terminal.src.intentional_terminal.handlers" class="doc doc-heading">
+            <code>handlers</code>
+
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers" class="headerlink" title="Permanent link">#</a></h4>
+
+    <div class="doc doc-contents ">
+
+        <p>Init file for <code>intentional_terminal</code>.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h5 id="plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler" class="doc doc-heading">
+            <code>audio_handler</code>
+
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler" class="headerlink" title="Permanent link">#</a></h5>
+
+    <div class="doc doc-contents ">
+
+        <p>CLI handler for the bot's audio input and output.</p>
+<p>Uses PyAudio for audio input and output, and runs a separate thread for recording and playing audio.</p>
+<p>When playing audio, it uses a buffer to store audio data and plays it continuously to ensure smooth playback.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler" class="doc doc-heading">
+            <code>AudioHandler</code>
+
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>Handles audio input and output for the chatbot.</p>
+<p>Uses PyAudio for audio input and output, and runs a separate thread for recording and playing audio.</p>
+<p>When playing audio, it uses a buffer to store audio data and plays it continuously to ensure smooth playback.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>audio_format</code>
+            </td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The audio format (paInt16).</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="pyaudio.paInt16">paInt16</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>channels</code>
+            </td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The number of audio channels (1).</p>
+              </div>
+            </td>
+            <td>
+                  <code>1</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>rate</code>
+            </td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The sample rate (24000).</p>
+              </div>
+            </td>
+            <td>
+                  <code>24000</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>chunk</code>
+            </td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The size of the audio buffer (1024).</p>
+              </div>
+            </td>
+            <td>
+                  <code>1024</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/handlers/audio_handler.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">AudioHandler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles audio input and output for the chatbot.</span>
+
+<span class="sd">    Uses PyAudio for audio input and output, and runs a separate thread for recording and playing audio.</span>
+
+<span class="sd">    When playing audio, it uses a buffer to store audio data and plays it continuously to ensure smooth playback.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        audio_format:</span>
+<span class="sd">            The audio format (paInt16).</span>
+<span class="sd">        channels:</span>
+<span class="sd">            The number of audio channels (1).</span>
+<span class="sd">        rate:</span>
+<span class="sd">            The sample rate (24000).</span>
+<span class="sd">        chunk:</span>
+<span class="sd">            The size of the audio buffer (1024).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">audio_format</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">paInt16</span><span class="p">,</span>
+        <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">rate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24000</span><span class="p">,</span>
+        <span class="n">chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="c1"># Audio parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio_format</span> <span class="o">=</span> <span class="n">audio_format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channels</span> <span class="o">=</span> <span class="n">channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk</span> <span class="o">=</span> <span class="n">chunk</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">PyAudio</span><span class="p">()</span>
+
+        <span class="c1"># Recording attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recording_stream</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pyaudio</span><span class="o">.</span><span class="n">Stream</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recording_thread</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recording</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># LLM streaming attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Playback attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_stream</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_play_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_event</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currently_playing</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">start_streaming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client_streaming_callback</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start continuous audio streaming.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+            <span class="nb">format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">audio_format</span><span class="p">,</span>
+            <span class="n">channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="p">,</span>
+            <span class="n">rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">,</span>
+            <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">frames_per_buffer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Read raw PCM data</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk</span><span class="p">,</span> <span class="n">exception_on_overflow</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="c1"># Stream directly without trying to decode</span>
+                <span class="k">await</span> <span class="n">client_streaming_callback</span><span class="p">({</span><span class="s2">&quot;audio_chunk&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-except</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Error streaming&quot;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">stop_streaming</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stop audio streaming.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">play_audio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">audio_data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add audio data to the buffer</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            audio_data: The audio data to play.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">audio_segment</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="p">(</span><span class="n">audio_data</span><span class="p">,</span> <span class="n">sample_width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frame_rate</span><span class="o">=</span><span class="mi">24000</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="n">audio_segment</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Full</span><span class="p">:</span>
+            <span class="c1"># If the buffer is full, remove the oldest chunk and add the new one</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="n">audio_segment</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_event</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_continuous_playback</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_continuous_playback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Continuously play audio from the buffer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+            <span class="nb">format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">audio_format</span><span class="p">,</span>
+            <span class="n">channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="p">,</span>
+            <span class="n">rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">,</span>
+            <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">frames_per_buffer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">audio_segment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">playback_play_time</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">audio_segment</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_play_audio_chunk</span><span class="p">(</span><span class="n">audio_segment</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">playback_play_time</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Audio buffer empty&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_stream</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_stream</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_stream</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_play_audio_chunk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">audio_segment</span><span class="p">:</span> <span class="n">AudioSegment</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Ensure the audio is in the correct format for playback</span>
+            <span class="n">audio_data</span> <span class="o">=</span> <span class="n">audio_segment</span><span class="o">.</span><span class="n">raw_data</span>
+
+            <span class="c1"># Play the audio chunk in smaller portions to allow for quicker interruption</span>
+            <span class="n">chunk_size</span> <span class="o">=</span> <span class="mi">1024</span>  <span class="c1"># Adjust this value as needed</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">audio_data</span><span class="p">),</span> <span class="n">chunk_size</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                    <span class="k">break</span>
+                <span class="n">chunk</span> <span class="o">=</span> <span class="n">audio_data</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">chunk_size</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">playback_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-except</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Error playing audio chunk&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">stop_playback_immediately</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stop audio playback immediately. Sets the relevant flags and empties the queue.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">played_milliseconds</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_play_time</span><span class="p">:</span>
+            <span class="n">played_milliseconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_play_time</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_play_time</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>  <span class="c1"># Clear any pending audio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currently_playing</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">played_milliseconds</span>
+
+    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean up audio resources.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback_immediately</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">recording</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">recording_stream</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recording_stream</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recording_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h7 id="plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.cleanup" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cleanup</span><span class="p">()</span></code>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.cleanup" class="headerlink" title="Permanent link">#</a></h7>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Clean up audio resources.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/handlers/audio_handler.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clean up audio resources.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback_immediately</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">recording</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">recording_stream</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recording_stream</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recording_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h7 id="plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.play_audio" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">play_audio</span><span class="p">(</span><span class="n">audio_data</span><span class="p">)</span></code>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.play_audio" class="headerlink" title="Permanent link">#</a></h7>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Add audio data to the buffer</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>audio_data</code>
+            </td>
+            <td>
+                  <code>bytes</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The audio data to play.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/handlers/audio_handler.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">play_audio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">audio_data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add audio data to the buffer</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        audio_data: The audio data to play.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">audio_segment</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="p">(</span><span class="n">audio_data</span><span class="p">,</span> <span class="n">sample_width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frame_rate</span><span class="o">=</span><span class="mi">24000</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="n">audio_segment</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Full</span><span class="p">:</span>
+        <span class="c1"># If the buffer is full, remove the oldest chunk and add the new one</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="n">audio_segment</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_event</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_continuous_playback</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h7 id="plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.start_streaming" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">start_streaming</span><span class="p">(</span><span class="n">client_streaming_callback</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.start_streaming" class="headerlink" title="Permanent link">#</a></h7>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Start continuous audio streaming.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/handlers/audio_handler.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">async</span> <span class="k">def</span> <span class="nf">start_streaming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client_streaming_callback</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Start continuous audio streaming.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+        <span class="nb">format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">audio_format</span><span class="p">,</span>
+        <span class="n">channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="p">,</span>
+        <span class="n">rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">,</span>
+        <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">frames_per_buffer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Read raw PCM data</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk</span><span class="p">,</span> <span class="n">exception_on_overflow</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="c1"># Stream directly without trying to decode</span>
+            <span class="k">await</span> <span class="n">client_streaming_callback</span><span class="p">({</span><span class="s2">&quot;audio_chunk&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-except</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Error streaming&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h7 id="plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.stop_playback_immediately" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">stop_playback_immediately</span><span class="p">()</span></code>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.stop_playback_immediately" class="headerlink" title="Permanent link">#</a></h7>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Stop audio playback immediately. Sets the relevant flags and empties the queue.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/handlers/audio_handler.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">stop_playback_immediately</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stop audio playback immediately. Sets the relevant flags and empties the queue.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">played_milliseconds</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_play_time</span><span class="p">:</span>
+        <span class="n">played_milliseconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">playback_play_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playback_play_time</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">stop_playback</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">playback_buffer</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>  <span class="c1"># Clear any pending audio</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">currently_playing</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">playback_event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">played_milliseconds</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h7 id="plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.stop_streaming" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">stop_streaming</span><span class="p">()</span></code>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.audio_handler.AudioHandler.stop_streaming" class="headerlink" title="Permanent link">#</a></h7>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Stop audio streaming.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/handlers/audio_handler.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">stop_streaming</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stop audio streaming.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">streaming</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">stop_stream</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm_stream</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h5 id="plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler" class="doc doc-heading">
+            <code>input_handler</code>
+
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler" class="headerlink" title="Permanent link">#</a></h5>
+
+    <div class="doc doc-contents ">
+
+        <p>Handles keyboard input for the bot's CLI interface.</p>
+<p>This module is responsible for capturing keyboard input and translating it into commands for the bot.</p>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h6 id="plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler" class="doc doc-heading">
+            <code>InputHandler</code>
+
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler" class="headerlink" title="Permanent link">#</a></h6>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>Handles keyboard input for the chatbot.</p>
+<p>This class is responsible for capturing keyboard input and translating it into commands for the chatbot.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler.text_input">text_input</span></code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The current text input from the user.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler.text_ready">text_ready</span></code></td>
+            <td>
+                  <code><span title="asyncio.Event">Event</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An event that is set when the user has finished typing.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler.command_queue">command_queue</span></code></td>
+            <td>
+                  <code><span title="asyncio.Queue">Queue</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A queue that stores commands for the chatbot.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler.loop">loop</span></code></td>
+            <td>
+                  <code><span title="asyncio.AbstractEventLoop">AbstractEventLoop</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The event loop for the input handler.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/handlers/input_handler.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">InputHandler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles keyboard input for the chatbot.</span>
+
+<span class="sd">    This class is responsible for capturing keyboard input and translating it into commands for the chatbot.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        text_input (str): The current text input from the user.</span>
+<span class="sd">        text_ready (asyncio.Event): An event that is set when the user has finished typing.</span>
+<span class="sd">        command_queue (asyncio.Queue): A queue that stores commands for the chatbot.</span>
+<span class="sd">        loop (asyncio.AbstractEventLoop): The event loop for the input handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handles keyboard input for the chatbot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_ready</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Keyboard event handler.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">space</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;space&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">enter</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">KeyCode</span><span class="o">.</span><span class="n">from_char</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">KeyCode</span><span class="o">.</span><span class="n">from_char</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;char&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">backspace</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span> <span class="o">+=</span> <span class="n">key</span><span class="o">.</span><span class="n">char</span>
+
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Error processing key event&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h7 id="plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">()</span></code>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler.__init__" class="headerlink" title="Permanent link">#</a></h7>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Handles keyboard input for the chatbot.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/handlers/input_handler.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles keyboard input for the chatbot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">text_ready</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h7 id="plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler.on_press" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">on_press</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></code>
+
+<a href="#plugins.intentional-terminal.src.intentional_terminal.handlers.input_handler.InputHandler.on_press" class="headerlink" title="Permanent link">#</a></h7>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Keyboard event handler.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>plugins/intentional-terminal/src/intentional_terminal/handlers/input_handler.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">on_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Keyboard event handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">space</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;space&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">enter</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;enter&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">KeyCode</span><span class="o">.</span><span class="n">from_char</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">KeyCode</span><span class="o">.</span><span class="n">from_char</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;char&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">Key</span><span class="o">.</span><span class="n">backspace</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">text_input</span> <span class="o">+=</span> <span class="n">key</span><span class="o">.</span><span class="n">char</span>
+
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Error processing key event&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>

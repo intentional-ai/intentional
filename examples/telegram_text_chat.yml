@@ -1,0 +1,152 @@
+plugins:
+- intentional_telegram
+- intentional_openai
+
+interface: telegram
+modality: text_messages
+bot:
+  type: direct_to_llm
+  llm:
+    client: openai
+    name: gpt-4o
+
+
+conversation:
+  background: "You're Jane, an interviewer calling a person to ask a few questions."
+
+  stages:
+    ask_for_availability:
+      accessible_from: _start_
+      goal: ask if the user has some time to answer some questions.
+      outcomes:
+        ok:
+          description: user says they have time to answer questions
+          move_to: ask_for_name
+        later:
+          description: user says they don't have time to answer questions now
+          move_to: reschedule_interview
+        not_ok:
+          description: user says they don't want to answer questions
+          move_to: withdraw_interview
+
+    withdraw_interview:
+      accessible_from: _all_
+      description: user doesn't want to answer questions anymore.
+      goal: say sorry for having wasted the user's time and say goodbye to them.
+      outcomes:
+        ok:
+          description: user says goodbye too
+          move_to: _end_
+        second_thoughts:
+          description: user says they can continue talking to you now
+          move_to: ask_for_availability
+
+    reschedule_interview:
+      accessible_from: _all_
+      description: user wants to reschedule the interview to another time.
+      goal: ask the user if they want to reschedule the interview. If the user says a relative time (such as, "in one hour"), use the get_current_date_and_time tool to convert it to an absolute time. Once you have an absolute date and time, use the reschedule_interview tool to reschedule the interview. You MUST use the  reschedule_interview tools before moving onto the next step.
+      tools:
+        - id: get_current_date_and_time
+        - id: reschedule_interview
+      outcomes:
+        ok:
+          description: user says they want to reschedule the interview
+          move_to: say_goodbye_after_reschedule
+        not_ok:
+          description: user says they don't want to reschedule the interview at any time
+          move_to: withdraw_interview
+        second_thoughts:
+          description: user says they can continue talking to you now
+          move_to: _backtrack_
+
+    say_goodbye_after_reschedule:
+      goal: say goodbye to the user and tell them you're looking forward to talking to them again. Make sure to mention when you rescheduled the call, including both the date and the time, such as "tomorrow at 3 PM." or "next Thursday at 10 AM."
+      outcomes:
+        ok:
+          description: user says goodbye too
+          move_to: _end_
+        second_thoughts:
+          description: user wants to reschedule at a different time.
+          move_to: reschedule_interview
+
+    ask_to_continue:
+      accessible_from:
+        - ask_for_availability
+        - ask_for_name
+        - ask_for_age
+        - ask_for_city
+      description: user doesn't want to answer one of your questions, or keeps talking about other things and getting distracted.
+      goal: ask the user if they want to continue the conversation. Make sure they understand that they need to answer your questions for the call to proceed.
+      outcomes:
+        ok:
+          description: user says they want to continue the conversation
+          move_to: _backtrack_
+        not_ok:
+          description: user says they don't want to continue the conversation
+          move_to: _end_
+
+    ask_for_name:
+      goal: ask the user for their name.
+      outcomes:
+        ok:
+          description: user tells you their name
+          move_to: ask_for_age
+        not_ok:
+          description: user doesn't want to tell you their name
+          move_to: ask_to_continue
+        corrected:
+          description: user was correcting their name and now they're satisfied
+          move_to: _backtrack_
+
+    ask_for_age:
+      goal: ask the user for their age.
+      outcomes:
+        ok:
+          description: user tells you their age
+          move_to: ask_for_city
+        not_ok:
+          description: user doesn't want to tell you their age
+          move_to: ask_to_continue
+
+    ask_for_city:
+      goal: ask the user for the city where they live right now.
+      outcomes:
+        ok:
+          description: user tells you the city where they live
+          move_to: confirm
+        not_ok:
+          description: user doesn't want to tell you the city where they live
+          move_to: ask_to_continue
+
+    confirm:
+      goal: Repeat all the information you have gathered from the user and ask them to confirm it.
+      outcomes:
+        ok:
+          description: user says goodbye
+          move_to: thank_and_goodbye
+        second_thoughts:
+          description: user wants to correct some information
+          move_to: correct_information
+
+    correct_information:
+      accessible_from:
+        - ask_for_name
+        - ask_for_age
+        - ask_for_city
+        - confirm
+      description: user wants to correct some information they provided.
+      goal: ask the user which information they want to correct and ask them to provide the correct information. If they already provided it while asking you to correct said information, ask them to confirm it to double check.
+      outcomes:
+        ok:
+          description: user provides the correct information
+          move_to: _backtrack_
+        not_ok:
+          description: user says they don't want to correct any information
+          move_to: _backtrack_
+
+    thank_and_goodbye:
+      goal: thank the user for their time and say goodbye to them.
+      outcomes:
+        ok:
+          description: user says goodbye too
+          move_to: _end_

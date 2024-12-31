@@ -1,0 +1,87 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "intentional"
+dynamic = ["version"]
+description = 'Intentional is an open-source framework to build reliable, multimodal and multi-channel LLM chatbots that actually talk and behave as you expect.'
+readme = "README.md"
+requires-python = ">=3.9"
+license = "AGPL-3.0-or-later"
+keywords = []
+authors = [
+  { name = "ZanSara", email = "github@zansara.dev" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+dependencies = [
+  "intentional-core",
+  "python-json-logger",
+
+  # Basic plugins to get you started. If you don't need the, install intentional-core.
+  "intentional-openai",
+  "intentional-terminal",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-asyncio",
+]
+docs = [
+  "mkdocs-material",
+  "mkdocstrings[python]",
+  "mkdocs-same-dir",
+  "mkdocs-exclude",
+  "mkdocs-redirects",
+  "mkdocs-mermaid2-plugin",
+  "mkdocs-include-markdown-plugin",
+]
+lint = [
+  "intentional[docs]",  # There's a precommit hook checking that the docs build
+  "black",
+  "pre-commit",
+  "ruff",
+  "pylint",
+  "isort",
+]
+dev = [
+  "intentional[test,docs,lint]",
+]
+
+[project.urls]
+Documentation = "https://github.com/intentional-ai/intentional#readme"
+Issues = "https://github.com/intentional-ai/intentional/issues"
+Source = "https://github.com/intentional-ai/intentional"
+
+[tool.hatch.version]
+path = "src/intentional/__about__.py"
+
+[tool.black]
+line-length = 120
+fast = true
+
+[tool.pylint]
+disable=[
+  "fixme",
+  "too-few-public-methods",
+]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.main]
+ignore = ["tests"]
+
+[project.scripts]
+intentional = "intentional.cli:main"
