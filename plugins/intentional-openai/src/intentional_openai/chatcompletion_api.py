@@ -184,6 +184,7 @@ class ChatCompletionAPIClient(LLMClient):
 
         # Routing function call - this is special because it should not be recorded in the conversation history
         if function_name == self.intent_router.name:
+            function_args["last_user_message"] = message.get("content", "no input")
             await self._route(function_args)
             # Send the same message again with the new system prompt and no trace of the routing call.
             # We don't append the user message to the history in order to avoid message duplication.

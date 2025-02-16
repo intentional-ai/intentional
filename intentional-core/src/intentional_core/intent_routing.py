@@ -136,6 +136,24 @@ class IntentRouter(Tool):
         """
         selected_outcome = params["outcome"]
         transitions = self.get_external_transitions()
+        origin_stage = self.current_stage_name
+        next_stage = None
+        transition_type = None
+        last_user_message = params.get("last_user_message", None)
+
+        log.info(
+            "Evaluating transition",
+            current_stage=self.current_stage_name,
+            current_goal=self.current_stage.goal,
+            available_outcomes=list(self.current_stage.outcomes.keys()),
+            available_transitions=transitions,
+            selected_outcome=selected_outcome,
+            last_user_message=(
+                last_user_message
+                if last_user_message
+                else "Last user message not reported for transition loging purposes."
+            ),
+        )
 
         if selected_outcome not in self.current_stage.outcomes and selected_outcome not in transitions:
             raise ValueError(f"Unknown outcome '{params['outcome']}' for stage '{self.current_stage_name}'")
@@ -145,14 +163,28 @@ class IntentRouter(Tool):
 
             if next_stage != BACKTRACKING_CONNECTION:
                 # Direct stage to stage connection
+                transition_type = "direct"
                 self.current_stage_name = next_stage
             else:
                 # Backtracking connection
+                transition_type = "backtrack"
                 self.current_stage_name = self.backtracking_stack.pop()
+                next_stage = self.current_stage_name
         else:
             # Indirect transition, needs to be tracked in the stack
+            transition_type = "external"
             self.backtracking_stack.append(self.current_stage_name)
             self.current_stage_name = selected_outcome
+            next_stage = selected_outcome
+
+        log.info(
+            "Transition details: ",
+            original_stage=origin_stage,
+            destination_stage=self.current_stage_name,
+            transition_type=transition_type,
+            outcome_selected=selected_outcome,
+            backtrack_stack_size=len(self.backtracking_stack),
+        )
 
         return self.get_prompt(), self.current_stage.tools
 
